@@ -122,5 +122,19 @@ public class EntityUtils {
 		return rtr != null;
 	}
 
+	public static Location interpolateLocation(Location first, Location second, float weight) {
+		if(weight <= 0) return first.clone();
+		if(weight >= 1) return second.clone();
+		float w1 = 1-weight;
+		float w2 = weight;
+		Location loc = new Location(first.getWorld(), 
+				first.getX() * w1 + second.getX() * w2,
+				first.getY() * w1 + second.getY() * w2,
+				first.getZ() * w1 + second.getZ() * w2
+				);
+		loc.setDirection(first.getDirection().multiply(w1).add(second.getDirection().multiply(w2)));
+		return loc;
+	}
+
 	
 }

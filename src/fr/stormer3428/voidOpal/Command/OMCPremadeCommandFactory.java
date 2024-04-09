@@ -143,7 +143,7 @@ public class OMCPremadeCommandFactory {
 
 					@Override
 					public boolean execute(CommandSender sender, ArrayList<String> args) {
-						Player p = Bukkit.getPlayer(args.get(1));
+						Player p = Bukkit.getPlayer(args.get(0));
 						if(p == null) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(0)));
 
 						try {
@@ -161,7 +161,7 @@ public class OMCPremadeCommandFactory {
 							}
 						}
 
-						return OMCLogger.normal(sender, OMCLang.RELOADED_CONFIG.toString());
+						return OMCLogger.normal(sender, "Reset player " + p.getName());
 					}
 				}
 				,

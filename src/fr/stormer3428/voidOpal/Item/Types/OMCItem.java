@@ -13,7 +13,7 @@ import fr.stormer3428.voidOpal.Item.OMCItemManager;
  */
 public interface OMCItem {
 
-//	public List<OMCPower> getPowers();
+	//	public List<OMCPower> getPowers();
 	public ItemStack createItemsStack(int amount);
 	public boolean equals(ItemStack other);
 	public String getRegistryName();

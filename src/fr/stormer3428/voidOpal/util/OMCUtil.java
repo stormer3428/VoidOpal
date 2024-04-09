@@ -1,5 +1,6 @@
 package fr.stormer3428.voidOpal.util;
 
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -86,6 +87,10 @@ public class OMCUtil {
 			builder.append(c);
 		}
 		return OMCUtil.translateChatColor(builder.toString());		
+	}
+
+	public static String randomColorCode() {
+		return String.format("#%06x", new Random().nextInt(0xFFFFFF));
 	}
 
 }

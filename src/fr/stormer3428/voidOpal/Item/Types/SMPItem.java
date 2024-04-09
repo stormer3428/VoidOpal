@@ -2,6 +2,7 @@ package fr.stormer3428.voidOpal.Item.Types;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
@@ -28,6 +29,8 @@ public class SMPItem implements OMCItem {
 	private ArrayList<ItemFlag> itemFlags = new ArrayList<>();
 	private ArrayList<OMCPower> omcPowers = new ArrayList<>();
 	private HashMap<Enchantment, Integer> enchants = new HashMap<>();
+	
+	private boolean unbreakeable = false;
 
 	@Override public String getRegistryName() { return registryName;}
 //	@Override public List<OMCPower> getPowers() {return omcPowers;}
@@ -38,14 +41,20 @@ public class SMPItem implements OMCItem {
 	public ArrayList<String> getLore(){return lore;}
 	public ArrayList<ItemFlag> getItemFlags(){return itemFlags;}
 	public HashMap<Enchantment,Integer> getEnchants(){return enchants;}
+	public ArrayList<OMCPower> getOmcPowers() {return omcPowers;}
 
 	public SMPItem setMaterial(Material material){ this.material = material; return this;}
 	public SMPItem setDisplayname(String displayname){ this.displayName = displayname; return this;}
 	public SMPItem setCmd(int cmd){ this.CMD = cmd; return this;}
-	public SMPItem setLore(ArrayList<String> lore){ this.lore = lore; return this;}
-	public SMPItem setItemflags(ArrayList<ItemFlag> itemflags){ this.itemFlags = itemflags; return this;}
+	public SMPItem setLore(List<String> lore){ this.lore.clear(); this.lore.addAll(lore); return this;}
+	public SMPItem setItemflags(List<ItemFlag> itemflags){ this.itemFlags.clear(); this.itemFlags.addAll(itemflags); return this;}
 	public SMPItem setEnchants(HashMap<Enchantment,Integer> enchants){ this.enchants = enchants; return this;}
+
+	public SMPItem addItemflag(ItemFlag itemflag){ this.itemFlags.add(itemflag); return this;}
+	public SMPItem addEnchant(Enchantment enchant, int level){ this.enchants.put(enchant, level); return this;}
 	public SMPItem addPower(OMCPower omcPower) { omcPowers.add(omcPower); return this;}
+
+	public SMPItem unbreakable() { this.unbreakeable = true; return this;}
 
 	@Override
 	public ItemStack createItemsStack(int amount) {
@@ -67,6 +76,7 @@ public class SMPItem implements OMCItem {
 		}
 		if(!itemFlags.isEmpty()) for(ItemFlag flag : itemFlags) itm.addItemFlags(flag);
 		if(!enchants.isEmpty()) for(Entry<Enchantment, Integer> entry : enchants.entrySet()) itm.addEnchant(entry.getKey(), entry.getValue(), true);
+		if(unbreakeable) itm.setUnbreakable(true);
 		it.setItemMeta(itm);
 		return it;
 	}
