@@ -145,7 +145,7 @@ public class OMCPremadeCommandFactory {
 					public boolean execute(CommandSender sender, ArrayList<String> args) {
 						Player p = Bukkit.getPlayer(args.get(0));
 						if(p == null) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(0)));
-
+						p.setGravity(true);
 						try {
 							for(Attribute attribute : Attribute.values()) {
 								AttributeInstance att = p.getAttribute(attribute);

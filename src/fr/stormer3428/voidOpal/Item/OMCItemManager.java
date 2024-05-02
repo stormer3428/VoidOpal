@@ -1,10 +1,14 @@
 package fr.stormer3428.voidOpal.Item;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -12,6 +16,7 @@ import org.bukkit.inventory.Recipe;
 import fr.stormer3428.voidOpal.Command.OMCCommand;
 import fr.stormer3428.voidOpal.Command.OMCVariable;
 import fr.stormer3428.voidOpal.Item.Types.OMCItem;
+import fr.stormer3428.voidOpal.Item.Types.SMPItem;
 import fr.stormer3428.voidOpal.data.OMCLang;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.OMCPlugin;
@@ -21,6 +26,7 @@ import fr.stormer3428.voidOpal.util.ItemStackUtils;
 public abstract class OMCItemManager implements Listener, PluginTied{
 
 	private final ArrayList<OMCItem> registeredItems = new ArrayList<>();
+	private final HashMap<SMPItem, YamlConfiguration> smpitemConfigs = new HashMap<>();
 
 	protected abstract void registerItems();
 
@@ -29,7 +35,50 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 		OMCPlugin.i.getServer().getPluginManager().registerEvents(this, OMCPlugin.i);
 		registerItems();
 		registerRecipes();
+		registerConfigs();
 	}
+
+	private void registerConfigs() {
+		OMCLogger.systemNormal("Reloading all item configs...");
+		smpitemConfigs.clear();
+		for(OMCItem it : registeredItems) {
+			if(!(it instanceof SMPItem smpItem)) continue;
+			String registryName = smpItem.getRegistryName();
+			if(registryName == null || registryName.isBlank()) {
+				OMCLogger.systemError("Skipped null regirstry name item " + smpItem.getClass().getSimpleName());
+				continue;
+			}
+			String fileName = registryName + ".yml";
+			OMCLogger.systemNormal("Reloading " + fileName);
+			File file = new File(OMCPlugin.i.getDataFolder(), "items/" + fileName);
+			if(!file.exists()) try {
+				OMCLogger.systemNormal("File was missing, creating...");
+				file.getParentFile().mkdirs();
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+				OMCLogger.systemError("Skipped");
+				continue;
+			}
+			YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+			smpitemConfigs.put(smpItem, config);
+			syncItemToConfigFile(smpItem, config, file);
+		}
+	}
+
+
+	private void syncItemToConfigFile(SMPItem it, YamlConfiguration config, File file) {
+		config.setDefaults(it.getConfig());
+		config.options().copyDefaults(true);
+		try { 
+			config.save(file); 
+		} catch (IOException e) {
+			e.printStackTrace();
+			OMCLogger.systemError("Failed to save config file for SMPItem " + it.getRegistryName());
+		}
+		it.syncToConfig(config);
+	}
+	
 
 	@Override
 	public void onPluginDisable() {}
@@ -38,12 +87,13 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 		for(OMCItem item : registeredItems) if(item instanceof OMCCraftable craftable) for(Recipe recipe : craftable.getRecipes()){
 			Bukkit.removeRecipe(ItemStackUtils.getNameSpacedKeyFromRecipe(recipe));
 			Bukkit.addRecipe(recipe);
-		}		
+		}
 	}
 
 	@Override
 	public void onPluginReload() {
 		registerRecipes();
+		registerConfigs();
 	}
 
 	/**
@@ -139,7 +189,7 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 	public OMCItem fromItemStack(ItemStack item) {
 		return fromItemStack(item, registeredItems);
 	}
-	
+
 	public OMCItem fromItemStack(ItemStack item, Collection<OMCItem> registeredItems) {
 		if(item == null) return null;
 		for(OMCItem omcItem : registeredItems) if(omcItem.equals(item)) return omcItem;

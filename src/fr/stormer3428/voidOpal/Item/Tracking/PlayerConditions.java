@@ -16,7 +16,7 @@ public class PlayerConditions {
 	}
 	
 	public static final boolean holdsItemInHand(Player p, OMCItem omcItem) {
-		return holdsItemInHand(p, omcItem) || holdsItemInOffHand(p, omcItem);
+		return holdsItemInMainHand(p, omcItem) || holdsItemInOffHand(p, omcItem);
 	}
 
 	public static final boolean holdsItemInInventory(Player p, OMCItem omcItem) {

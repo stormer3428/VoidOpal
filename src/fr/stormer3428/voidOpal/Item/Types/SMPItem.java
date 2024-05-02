@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
+import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.util.OMCUtil;
 
 public class SMPItem implements OMCItem {
@@ -20,7 +24,7 @@ public class SMPItem implements OMCItem {
 	public SMPItem(String registryName) {
 		this.registryName = registryName;
 	}
-	
+
 	private Material material = Material.ENCHANTED_BOOK;
 	private String displayName = null;
 	private int CMD = 0;
@@ -29,12 +33,9 @@ public class SMPItem implements OMCItem {
 	private ArrayList<ItemFlag> itemFlags = new ArrayList<>();
 	private ArrayList<OMCPower> omcPowers = new ArrayList<>();
 	private HashMap<Enchantment, Integer> enchants = new HashMap<>();
-	
 	private boolean unbreakeable = false;
 
 	@Override public String getRegistryName() { return registryName;}
-//	@Override public List<OMCPower> getPowers() {return omcPowers;}
-
 	public Material getMaterial(){return material;}
 	public String getDisplayName(){return displayName;}
 	public int getCMD(){return CMD;}
@@ -55,6 +56,50 @@ public class SMPItem implements OMCItem {
 	public SMPItem addPower(OMCPower omcPower) { omcPowers.add(omcPower); return this;}
 
 	public SMPItem unbreakable() { this.unbreakeable = true; return this;}
+
+	public YamlConfiguration getConfig() {
+		YamlConfiguration config = new YamlConfiguration();
+		config.addDefault("material", material.name());
+		config.addDefault("displayname", displayName);
+		config.addDefault("cmd", CMD);
+		config.addDefault("lore", lore);
+		config.addDefault("itemflags", itemFlags.stream().map(f -> f.name()).collect(Collectors.toList()));
+		for(Enchantment e : enchants.keySet()) config.addDefault("enchants." + e.getKey(), enchants.get(e));
+		config.addDefault("unbreakable", unbreakeable);
+		for(String s : config.getDefaults().getKeys(true)) config.set(s, config.get(s));
+		return config;
+	}
+
+	public void syncToConfig(YamlConfiguration config) {
+		String materialString = config.getString("material"); Material mat = Material.valueOf(materialString);
+		if(mat == null) OMCLogger.systemError("Tried to set material of " + registryName + " to invalid material, " + materialString);
+		else setMaterial(mat);
+		setDisplayname(config.getString("displayname"));
+		setCmd(config.getInt("cmd"));
+		setLore(config.getStringList("lore"));
+		setItemflags(config.getStringList("itemflags").stream().map(s -> {
+			try {
+				return ItemFlag.valueOf(s);
+			}catch (Exception e) {
+				OMCLogger.systemError("Invalid itemFlag " + s);
+				return null;
+			}
+		}).filter(f -> f!=null).collect(Collectors.toList()));
+		x:{
+			getEnchants().clear();
+			ConfigurationSection section = config.getConfigurationSection("enchants");
+			if(section == null) break x;
+			for(String key : section.getKeys(false)) {
+				@SuppressWarnings("deprecation") Enchantment ench = Enchantment.getByName(key);
+				if(ench == null) {
+					OMCLogger.systemNormal("Invalid enchantment " + key);
+					continue;
+				}
+				addEnchant(ench, section.getInt(key));
+			}
+		}
+		unbreakeable = config.getBoolean("unbreakable");
+	}
 
 	@Override
 	public ItemStack createItemsStack(int amount) {
