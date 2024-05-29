@@ -29,6 +29,10 @@ public abstract class OMCPlugin {
 	private static OMCPlugin i;
 
 	public static OMCPlugin getOMCPlugin() {
+		return i._getOMCPlugin();
+	}
+	
+	public OMCPlugin _getOMCPlugin() {
 		return i;
 	}
 
