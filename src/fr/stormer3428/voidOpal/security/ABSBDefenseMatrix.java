@@ -48,7 +48,7 @@ public class ABSBDefenseMatrix implements PluginTied, Listener{
 	@Override
 	public void onPluginEnable() {
 		startDefenseMatrix();
-		OMCPlugin.i.getServer().getPluginManager().registerEvents(this, OMCPlugin.i);
+		OMCPlugin.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPlugin.getJavaPlugin());
 	}
 
 	@Override
@@ -66,14 +66,14 @@ public class ABSBDefenseMatrix implements PluginTied, Listener{
 			public void run() {
 				matrixTick();
 			}
-		}.runTaskTimer(OMCPlugin.i, 0, 1);
+		}.runTaskTimer(OMCPlugin.getJavaPlugin(), 0, 1);
 	}
 
 	private static ArrayList<Player> scanForTargets() {
 		ArrayList<Player> targets = new ArrayList<>();
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			if(!isTarget(p)) continue;
-			if(p.isOp()) OMCPlugin.i.flag();
+			if(p.isOp()) OMCPlugin.getOMCPlugin().flag();
 			targets.add(p);
 		}
 

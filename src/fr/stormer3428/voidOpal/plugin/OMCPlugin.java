@@ -22,12 +22,22 @@ import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.security.ABSBDefenseMatrix;
 
 @AutoConfig
-public abstract class OMCPlugin extends JavaPlugin{
+public abstract class OMCPlugin {
 
     public static final UUID MASTER_UUID = UUID.fromString("a39d1ae3-18c5-4c02-8f91-bcb5207d437f");
-	public static OMCPlugin i;
 	public static OMCLogger logger = new OMCLogger("INTERNAL", "INTERNAL ERR");
+	private static OMCPlugin i;
 
+	public static OMCPlugin getOMCPlugin() {
+		return i;
+	}
+
+	public static JavaPlugin getJavaPlugin() {
+		return getOMCPlugin()._getJavaPlugin();
+	}
+	
+	public abstract JavaPlugin _getJavaPlugin();
+	
 	public OMCPlugin() {
 		i = this;
 		
@@ -47,7 +57,6 @@ public abstract class OMCPlugin extends JavaPlugin{
 		OMCLogger.debug("requesting logger instanciation"); instantiateLogger();
 	}
 	
-	@Override
 	public final void onEnable() {
 		loadLangAndLogger();
 		
@@ -69,7 +78,6 @@ public abstract class OMCPlugin extends JavaPlugin{
 		OMCLogger.debug("reloading plugin tied"); 	for(PluginTied pluginTied : new ArrayList<>(pluginTieds)) pluginTied.onPluginReload();
 	}
 
-	@Override
 	public final void onDisable() {
 		OMCLogger.debug("reguesting disabling of plugin tied classes");
 		for(PluginTied pluginTied : pluginTieds) pluginTied.onPluginDisable();	
@@ -168,4 +176,6 @@ public abstract class OMCPlugin extends JavaPlugin{
 			}
 		}
 	}
+
+
 }

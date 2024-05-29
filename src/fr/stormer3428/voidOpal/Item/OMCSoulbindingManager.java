@@ -35,7 +35,7 @@ public abstract class OMCSoulbindingManager implements PluginTied, Listener{
 
 	@Override
 	public void onPluginEnable() {
-		OMCPlugin.i.getServer().getPluginManager().registerEvents(this, OMCPlugin.i);
+		OMCPlugin.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPlugin.getJavaPlugin());
 	}
 
 	@Override

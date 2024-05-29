@@ -29,10 +29,10 @@ public abstract class OMCPowerManager extends BukkitRunnable implements Listener
 	
 	@Override
 	public void onPluginEnable() {
-		OMCPlugin.i.getServer().getPluginManager().registerEvents(this, OMCPlugin.i);
+		OMCPlugin.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPlugin.getJavaPlugin());
 		registerPowers();
 		for(OMCPower power : registeredPowers) power.onPluginEnable();
-		runTaskTimer(OMCPlugin.i, 0, 1);	
+		runTaskTimer(OMCPlugin.getJavaPlugin(), 0, 1);	
 	}
 	
 	@Override
@@ -104,7 +104,7 @@ public abstract class OMCPowerManager extends BukkitRunnable implements Listener
 			OMCLogger.systemError(OMCLang.ERROR_POWER_MANAGER_REGISTER_NULL_NAME.toString());
 			return;
 		}
-		OMCPlugin.i.getServer().getPluginManager().registerEvents(power, OMCPlugin.i);
+		OMCPlugin.getJavaPlugin().getServer().getPluginManager().registerEvents(power, OMCPlugin.getJavaPlugin());
 		registeredPowers.add(power);
 	}
 
