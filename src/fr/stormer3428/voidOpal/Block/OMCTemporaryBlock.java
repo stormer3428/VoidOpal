@@ -59,7 +59,7 @@ public class OMCTemporaryBlock {
 				}
 				OMCTemporaryBlock.this.remainingTicks --;
 			}
-		}.runTaskTimer(OMCPlugin.i, 0, 1);
+		}.runTaskTimer(OMCPlugin.getJavaPlugin(), 0, 1);
 	}
 
 	public int getRemainingTicks() {

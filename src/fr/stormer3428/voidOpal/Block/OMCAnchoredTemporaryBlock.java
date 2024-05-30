@@ -59,7 +59,7 @@ public class OMCAnchoredTemporaryBlock {
 				OMCAnchoredTemporaryBlock.this.oldLocation = OMCAnchoredTemporaryBlock.this.anchor.getLocation().add(OMCAnchoredTemporaryBlock.this.relativeLocation).getBlock().getLocation();
 				OMCAnchoredTemporaryBlock.this.remainingTicks --;
 			}
-		}.runTaskTimer(OMCPlugin.i, 0, 1);
+		}.runTaskTimer(OMCPlugin.getJavaPlugin(), 0, 1);
 	}
 
 	public Material getMaterial() {

@@ -42,7 +42,7 @@ public class OMCTrueDamageManager implements Listener,PluginTied{
 		damageBuffer.add(request);
 		if(source == null) damageable.damage(damage);
 		else damageable.damage(damage, source);
-		Bukkit.getScheduler().scheduleSyncDelayedTask(OMCPlugin.i, () -> {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(OMCPlugin.getJavaPlugin(), () -> {
 			damageBuffer.remove(request);
 		},1l);
 	}
@@ -75,7 +75,7 @@ public class OMCTrueDamageManager implements Listener,PluginTied{
 
 	@Override
 	public void onPluginEnable() {
-		OMCPlugin.i.getServer().getPluginManager().registerEvents(this, OMCPlugin.i);
+		OMCPlugin.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPlugin.getJavaPlugin());
 	}
 
 	@Override

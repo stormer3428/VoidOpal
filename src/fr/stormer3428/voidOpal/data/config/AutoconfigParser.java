@@ -34,7 +34,7 @@ public class AutoconfigParser {
 
 			String configName = autoConfig.config();
 
-			File file = new File(OMCPlugin.i.getDataFolder(), configName);
+			File file = new File(OMCPlugin.getJavaPlugin().getDataFolder(), configName);
 			if(!file.exists()) {
 				OMCLogger.systemNormal("could not find file \"" + configName + "\", creating...");
 				file.getParentFile().mkdirs();
@@ -127,9 +127,9 @@ public class AutoconfigParser {
 	}
 
 	public void createConfigFile(String resourcePath) {
-		File dataFolder = OMCPlugin.i.getDataFolder();
+		File dataFolder = OMCPlugin.getJavaPlugin().getDataFolder();
 
-		InputStream in = OMCPlugin.i.getResource(resourcePath);
+		InputStream in = OMCPlugin.getJavaPlugin().getResource(resourcePath);
 		if (in == null) {
 			try {
 				new File(dataFolder, resourcePath).createNewFile();

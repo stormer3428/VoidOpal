@@ -32,7 +32,7 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 
 	@Override
 	public void onPluginEnable() {
-		OMCPlugin.i.getServer().getPluginManager().registerEvents(this, OMCPlugin.i);
+		OMCPlugin.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPlugin.getJavaPlugin());
 		registerItems();
 		registerRecipes();
 		registerConfigs();
@@ -50,7 +50,7 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 			}
 			String fileName = registryName + ".yml";
 			OMCLogger.systemNormal("Reloading " + fileName);
-			File file = new File(OMCPlugin.i.getDataFolder(), "items/" + fileName);
+			File file = new File(OMCPlugin.getJavaPlugin().getDataFolder(), "items/" + fileName);
 			if(!file.exists()) try {
 				OMCLogger.systemNormal("File was missing, creating...");
 				file.getParentFile().mkdirs();

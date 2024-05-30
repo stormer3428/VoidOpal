@@ -102,7 +102,7 @@ public class OMCPremadeCommandFactory {
 
 					@Override
 					public boolean execute(CommandSender sender, ArrayList<String> args) {
-						OMCPlugin.i.reload();
+						OMCPlugin.getOMCPlugin().reload();
 						return OMCLogger.normal(sender, OMCLang.RELOADED_CONFIG.toString());}
 				}
 		};

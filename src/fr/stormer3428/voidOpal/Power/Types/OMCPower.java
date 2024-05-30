@@ -51,7 +51,7 @@ public abstract class OMCPower extends BukkitRunnable implements PluginTied, Lis
 	
 	@Override
 	public void onPluginEnable() {
-		runTaskTimer(OMCPlugin.i, 0, 1);
+		runTaskTimer(OMCPlugin.getJavaPlugin(), 0, 1);
 	}
 
 	public OMCPower(String registryName) {

@@ -19,7 +19,7 @@ import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public class OMCInventoryItemTracker implements PluginTied, Listener{
 
-	@Override public void onPluginEnable() {OMCPlugin.i.getServer().getPluginManager().registerEvents(this, OMCPlugin.i);}
+	@Override public void onPluginEnable() {OMCPlugin.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPlugin.getJavaPlugin());}
 	@Override public void onPluginDisable() {}
 	@Override public void onPluginReload() {}
 

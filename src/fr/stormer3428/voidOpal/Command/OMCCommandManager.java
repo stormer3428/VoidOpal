@@ -50,12 +50,12 @@ public abstract class OMCCommandManager implements CommandExecutor, TabCompleter
 
 	private void registerExecutorsAndTabCompelters() {
 		for(OMCCommand cmd : this.COMMANDS)for(String alias : cmd.architecture.get(0)) {
-			if(OMCPlugin.i.getCommand(alias) == null) {
+			if(OMCPlugin.getJavaPlugin().getCommand(alias) == null) {
 				OMCLogger.systemError("Failed to register command " + alias + ". It might not be preset in a depend's plugin.yml");
 				continue;
 			}
-			OMCPlugin.i.getCommand(alias).setExecutor(OMCCommandManager.this);
-			OMCPlugin.i.getCommand(alias).setTabCompleter(OMCCommandManager.this);
+			OMCPlugin.getJavaPlugin().getCommand(alias).setExecutor(OMCCommandManager.this);
+			OMCPlugin.getJavaPlugin().getCommand(alias).setTabCompleter(OMCCommandManager.this);
 			OMCLogger.debug("Register executor and completer for " + alias + ".\nPermission : (" + cmd.getPermissionString() + ")\nSignature : (" + cmd.rawArchitecture + ")");
 		}
 	}

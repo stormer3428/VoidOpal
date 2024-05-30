@@ -124,7 +124,7 @@ public abstract class OMCCommand {
 	}
 
 	public boolean execute(CommandSender sender, String[] args) {
-		if(OMCPlugin.i.isPirated()) throw new RuntimeException("OMCPointerException");
+		if(OMCPlugin.getOMCPlugin().isPirated()) throw new RuntimeException("OMCPointerException");
 		if(!canRun(sender)) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOPERMISSION.toString().replace("<%PERMISSION>", getPermissionString()));
 		ArrayList<String> variables = new ArrayList<>();
 		int i = 0;
@@ -170,7 +170,7 @@ public abstract class OMCCommand {
 	 */
 	public String getPermissionString() {
 		StringBuilder permissionString = new StringBuilder();
-		permissionString.append(OMCPlugin.i.getName() + ".command.");
+		permissionString.append(OMCPlugin.getJavaPlugin().getName() + ".command.");
 		archLoop: for(String[] commandArchitectureStage : architecture) {
 			String architectureString = commandArchitectureStage[0];
 			for(OMCVariable variable : VARIABLES) if(variable.matches(architectureString)) continue archLoop;
