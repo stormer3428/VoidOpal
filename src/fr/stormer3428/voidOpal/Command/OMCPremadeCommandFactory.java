@@ -1,6 +1,7 @@
 package fr.stormer3428.voidOpal.Command;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -9,7 +10,9 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -45,14 +48,17 @@ public class OMCPremadeCommandFactory {
 
 					@Override
 					public boolean execute(CommandSender sender, ArrayList<String> args) {
-						Player p = Bukkit.getPlayer(args.get(0));
-						if(p == null) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(0)));
+						List<Entity> targets = OMCPlugin.i.getServer().selectEntities(sender, args.get(0));
+						if(targets.isEmpty()) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(0)));
 						OMCItem item = itemManager.fromName(args.get(1));
 						if(item == null) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOITEM.toString().replace("<%ITEM>", args.get(1))); 
 						ItemStack it = item.createItemsStack(1);
 						if(it == null) return OMCLogger.error(sender, OMCLang.ERROR_ITEM_GENERATION_FAILED.toString().replace("<%ITEM>", item.getRegistryName())); 
-						p.getInventory().addItem(it);
-						return OMCLogger.normal(sender, OMCLang.ITEM_GIVE.toString().replace("<%AMOUNT>", "1").replace("<%PLAYER>", p.getName()).replace("<%ITEM>", item.getRegistryName()));
+						for(Entity e : targets) if(e instanceof InventoryHolder i) {
+							i.getInventory().addItem(it);
+							OMCLogger.normal(sender, OMCLang.ITEM_GIVE.toString().replace("<%AMOUNT>", "1").replace("<%PLAYER>", e.getName()).replace("<%ITEM>", item.getRegistryName()));
+						}
+						return true;
 					}
 				}
 				,
@@ -60,14 +66,17 @@ public class OMCPremadeCommandFactory {
 
 					@Override
 					public boolean execute(CommandSender sender, ArrayList<String> args) {
-						Player p = Bukkit.getPlayer(args.get(0));
-						if(p == null) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(0)));
+						List<Entity> targets = OMCPlugin.i.getServer().selectEntities(sender, args.get(0));
+						if(targets.isEmpty()) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(0)));
 						OMCItem item = itemManager.fromName(args.get(1));
 						if(item == null) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOITEM.toString().replace("<%ITEM>", args.get(1))); 
 						try {
 							int amount = Integer.parseInt(args.get(2));
-							p.getInventory().addItem(item.createItemsStack(amount));
-							return OMCLogger.normal(sender, OMCLang.ITEM_GIVE.toString().replace("<%AMOUNT>", amount + "").replace("<%PLAYER>", p.getName()).replace("<%ITEM>", item.getRegistryName()));
+							for(Entity e : targets) if(e instanceof InventoryHolder i) {
+								i.getInventory().addItem(item.createItemsStack(amount));
+								OMCLogger.normal(sender, OMCLang.ITEM_GIVE.toString().replace("<%AMOUNT>", amount + "").replace("<%PLAYER>", e.getName()).replace("<%ITEM>", item.getRegistryName()));
+							}
+							return true;
 						}catch (NumberFormatException e) {
 							return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_INTEGER.toString().replace("<%VALUE>", args.get(2)));
 						}
@@ -125,12 +134,15 @@ public class OMCPremadeCommandFactory {
 
 					@Override
 					public boolean execute(CommandSender sender, ArrayList<String> args) {
-						Player p = Bukkit.getPlayer(args.get(1));
-						if(p == null) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(0)));
+						List<Entity> targets = OMCPlugin.i.getServer().selectEntities(sender, args.get(0));
+						if(targets.isEmpty()) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(0)));
 						OMCPower power = powerManager.fromName(args.get(0));
 						if(power == null) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOPOWER.toString().replace("<%POWER>", args.get(0)));
-						power.tryCast(null, p);
-						return OMCLogger.normal(sender, OMCLang.POWER_MANUALCAST.toString().replace("<%POWER>", power.getRegistryName()));
+						for(Entity e : targets) if(e instanceof Player p) {
+							power.tryCast(null, p);
+							OMCLogger.normal(sender, OMCLang.POWER_MANUALCAST.toString().replace("<%POWER>", power.getRegistryName()));
+						}
+						return true;
 					}
 				}
 		};
