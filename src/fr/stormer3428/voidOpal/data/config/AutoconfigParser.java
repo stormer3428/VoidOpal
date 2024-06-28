@@ -16,7 +16,7 @@ import fr.stormer3428.voidOpal.data.config.annotations.DoubleConfigValue;
 import fr.stormer3428.voidOpal.data.config.annotations.IntConfigValue;
 import fr.stormer3428.voidOpal.data.config.annotations.StringConfigValue;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
-import fr.stormer3428.voidOpal.plugin.OMCPlugin;
+import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
 
 public class AutoconfigParser {
 
@@ -34,7 +34,7 @@ public class AutoconfigParser {
 
 			String configName = autoConfig.config();
 
-			File file = new File(OMCPlugin.getJavaPlugin().getDataFolder(), configName);
+			File file = new File(OMCPluginImpl.getJavaPlugin().getDataFolder(), configName);
 			if(!file.exists()) {
 				OMCLogger.systemNormal("could not find file \"" + configName + "\", creating...");
 				file.getParentFile().mkdirs();
@@ -127,9 +127,9 @@ public class AutoconfigParser {
 	}
 
 	public void createConfigFile(String resourcePath) {
-		File dataFolder = OMCPlugin.getJavaPlugin().getDataFolder();
+		File dataFolder = OMCPluginImpl.getJavaPlugin().getDataFolder();
 
-		InputStream in = OMCPlugin.getJavaPlugin().getResource(resourcePath);
+		InputStream in = OMCPluginImpl.getJavaPlugin().getResource(resourcePath);
 		if (in == null) {
 			try {
 				new File(dataFolder, resourcePath).createNewFile();

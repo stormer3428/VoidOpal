@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.stormer3428.voidOpal.plugin.OMCPlugin;
+import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
 import fr.stormer3428.voidOpal.util.OMCUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -81,11 +81,12 @@ public class OMCLogger {
 
 	public static boolean debug(String message){return instance._debug(message);}
 	public boolean _debug(String message){
-		if(OMCPlugin.DEBUG) return systemNormal("[DEBUG] " + message);
+		if(OMCPluginImpl.DEBUG) return systemNormal("[DEBUG] " + message);
 		return false;
 	}
 
 	public static boolean actionBar(Player p,String message){return instance._actionBar(p,message);}
+	@SuppressWarnings("deprecation")
 	public boolean _actionBar(Player p,String message){
 		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(OMCUtil.translateChatColor(message)));
 		return true;

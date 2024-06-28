@@ -8,7 +8,7 @@ import org.bukkit.util.Vector;
 public class Point implements Drawable{
 
 	protected Vector location;
-	protected Particle particle = Particle.CRIT_MAGIC;
+	protected Particle particle = Particle.CRIT;
 	protected Object particleData = null;
 	protected int particleAmount = 1;
 	protected float particleSpreadX = 0;
@@ -18,10 +18,11 @@ public class Point implements Drawable{
 	protected boolean forceRender = true;
 
 	@Override
-	public void draw(Location location, double scale) {
+	public Point draw(Location location, double scale) {
 		World world = location.getWorld();
 		Location particleLoc = location.clone().add(this.location.clone().multiply(scale));
 		world.spawnParticle(particle, particleLoc, particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData, forceRender);
+		return this;
 	}
 
 	@Override

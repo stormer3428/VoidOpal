@@ -1,10 +1,14 @@
 package fr.stormer3428.voidOpal.util;
 
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -13,6 +17,117 @@ public class OMCUtil {
 	private static final Pattern hexColorCodePattern = Pattern.compile("#[a-fA-F0-9]{6}");
 	public static final int[] values = 			{1000,  900, 500,  400, 100,   90,  50,   40,  10,    9,   5,    4,   1};
 	public static final String[] romanLetters = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+	public static final Map<BlockFace, int[][]> BLOCKFACE_ADJACENCY_MAP = Map.of(
+			BlockFace.UP,new int[][] {{-1, 0,-1},{ 0, 0,-1},{ 1, 0,-1},{-1, 0, 0},{ 0, 0, 0},{ 1, 0, 0},{-1, 0, 1},{ 0, 0, 1},{ 1, 0, 1}},
+			BlockFace.DOWN,new int[][] {{-1, 0,-1},{ 0, 0,-1},{ 1, 0,-1},{-1, 0, 0},{ 0, 0, 0},{ 1, 0, 0},{-1, 0, 1},{ 0, 0, 1},{ 1, 0, 1}},
+			BlockFace.EAST,new int[][] {{ 0,-1,-1},{ 0, 0,-1},{ 0, 1,-1},{ 0,-1, 0},{ 0, 0, 0},{ 0, 1, 0},{ 0,-1, 1},{ 0, 0, 1},{ 0, 1, 1}},
+			BlockFace.WEST,new int[][] {{ 0,-1,-1},{ 0, 0,-1},{ 0, 1,-1},{ 0,-1, 0},{ 0, 0, 0},{ 0, 1, 0},{ 0,-1, 1},{ 0, 0, 1},{ 0, 1, 1}},
+			BlockFace.NORTH,new int[][] {{-1,-1, 0},{ 0,-1, 0},{ 1,-1, 0},{-1, 0, 0},{ 0, 0, 0},{ 1, 0, 0},{-1, 1, 0},{ 0, 1, 0},{ 1, 1, 0}},
+			BlockFace.SOUTH,new int[][] {{-1,-1, 0},{ 0,-1, 0},{ 1,-1, 0},{-1, 0, 0},{ 0, 0, 0},{ 1, 0, 0},{-1, 1, 0},{ 0, 1, 0},{ 1, 1, 0}}
+			);
+
+	public static final ArrayList<Material> PICKAXES = new ArrayList<Material>();
+	public static final ArrayList<Material> SHOVELS = new ArrayList<Material>();
+	public static final ArrayList<Material> HOES = new ArrayList<Material>();
+	public static final ArrayList<Material> SWORDS = new ArrayList<Material>();
+	public static final ArrayList<Material> AXES = new ArrayList<Material>();
+
+	public static final ArrayList<Material> TOOLS = new ArrayList<Material>();
+	
+	static {
+		PICKAXES.add(Material.DIAMOND_PICKAXE);
+		PICKAXES.add(Material.GOLDEN_PICKAXE);
+		PICKAXES.add(Material.IRON_PICKAXE);
+		PICKAXES.add(Material.NETHERITE_PICKAXE);
+		PICKAXES.add(Material.STONE_PICKAXE);
+		PICKAXES.add(Material.WOODEN_PICKAXE);
+
+		SHOVELS.add(Material.DIAMOND_SHOVEL);
+		SHOVELS.add(Material.GOLDEN_SHOVEL);
+		SHOVELS.add(Material.IRON_SHOVEL);
+		SHOVELS.add(Material.NETHERITE_SHOVEL);
+		SHOVELS.add(Material.STONE_SHOVEL);
+		SHOVELS.add(Material.WOODEN_SHOVEL);
+		
+		HOES.add(Material.DIAMOND_HOE);
+		HOES.add(Material.GOLDEN_HOE);
+		HOES.add(Material.IRON_HOE);
+		HOES.add(Material.NETHERITE_HOE);
+		HOES.add(Material.STONE_HOE);
+		HOES.add(Material.WOODEN_HOE);
+		
+		SWORDS.add(Material.DIAMOND_SWORD);
+		SWORDS.add(Material.GOLDEN_SWORD);
+		SWORDS.add(Material.IRON_SWORD);
+		SWORDS.add(Material.NETHERITE_SWORD);
+		SWORDS.add(Material.STONE_SWORD);
+		SWORDS.add(Material.WOODEN_SWORD);
+		
+		AXES.add(Material.DIAMOND_AXE);
+		AXES.add(Material.GOLDEN_AXE);
+		AXES.add(Material.IRON_AXE);
+		AXES.add(Material.NETHERITE_AXE);
+		AXES.add(Material.STONE_AXE);
+		AXES.add(Material.WOODEN_AXE);
+
+		TOOLS.addAll(PICKAXES);
+		TOOLS.addAll(SHOVELS);
+		TOOLS.addAll(HOES);
+		TOOLS.addAll(SWORDS);
+		TOOLS.addAll(AXES);
+		TOOLS.add(Material.TRIDENT);
+		TOOLS.add(Material.SHIELD);
+		TOOLS.add(Material.BOW);
+		TOOLS.add(Material.CROSSBOW);
+		TOOLS.add(Material.FISHING_ROD);
+		TOOLS.add(Material.FLINT_AND_STEEL);
+		TOOLS.add(Material.CARROT_ON_A_STICK);
+		TOOLS.add(Material.WARPED_FUNGUS_ON_A_STICK);
+	}
+
+	public static final ArrayList<Material> HELMETS = new ArrayList<Material>();
+	public static final ArrayList<Material> CHESTPLATES = new ArrayList<Material>();
+	public static final ArrayList<Material> LEGGINGS = new ArrayList<Material>();
+	public static final ArrayList<Material> BOOTS = new ArrayList<Material>();
+	
+	public static final ArrayList<Material> ARMOR = new ArrayList<Material>();
+
+	static {
+
+		HELMETS.add(Material.CHAINMAIL_HELMET);
+		HELMETS.add(Material.DIAMOND_HELMET);
+		HELMETS.add(Material.GOLDEN_HELMET);
+		HELMETS.add(Material.IRON_HELMET);
+		HELMETS.add(Material.LEATHER_HELMET);
+		HELMETS.add(Material.NETHERITE_HELMET);
+		
+		CHESTPLATES.add(Material.CHAINMAIL_CHESTPLATE);
+		CHESTPLATES.add(Material.DIAMOND_CHESTPLATE);
+		CHESTPLATES.add(Material.GOLDEN_CHESTPLATE);
+		CHESTPLATES.add(Material.IRON_CHESTPLATE);
+		CHESTPLATES.add(Material.LEATHER_CHESTPLATE);
+		CHESTPLATES.add(Material.NETHERITE_CHESTPLATE);
+		
+		LEGGINGS.add(Material.CHAINMAIL_LEGGINGS);
+		LEGGINGS.add(Material.DIAMOND_LEGGINGS);
+		LEGGINGS.add(Material.GOLDEN_LEGGINGS);
+		LEGGINGS.add(Material.IRON_LEGGINGS);
+		LEGGINGS.add(Material.LEATHER_LEGGINGS);
+		LEGGINGS.add(Material.NETHERITE_LEGGINGS);
+
+		BOOTS.add(Material.CHAINMAIL_BOOTS);
+		BOOTS.add(Material.DIAMOND_BOOTS);
+		BOOTS.add(Material.GOLDEN_BOOTS);
+		BOOTS.add(Material.IRON_BOOTS);
+		BOOTS.add(Material.LEATHER_BOOTS);
+		BOOTS.add(Material.NETHERITE_BOOTS);
+
+		ARMOR.addAll(HELMETS);
+		ARMOR.addAll(CHESTPLATES);
+		ARMOR.addAll(LEGGINGS);
+		ARMOR.addAll(BOOTS);
+		ARMOR.add(Material.TURTLE_HELMET);
+	}
 
 	public static String intToRoman(int num){
 		StringBuilder roman = new StringBuilder();

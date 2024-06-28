@@ -6,7 +6,7 @@ import org.bukkit.util.Vector;
 
 public interface Drawable {
 
-	public void draw(Location location, double scale);
+	public Drawable draw(Location location, double scale);
 
 	public Drawable rotateAroundAxis(Vector axis, double radians);
 	public Drawable rotateAroundX(double radians);

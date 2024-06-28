@@ -2,15 +2,12 @@ package fr.stormer3428.voidOpal.Command;
 
 import java.util.ArrayList;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.server.TabCompleteEvent;
 
 import fr.stormer3428.voidOpal.data.OMCLang;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
-import fr.stormer3428.voidOpal.plugin.OMCPlugin;
+import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
 
 /**
  * This object represents a Minecraft command in the form of a signature and {@link OMCVariable} system, </br>
@@ -40,52 +37,6 @@ import fr.stormer3428.voidOpal.plugin.OMCPlugin;
 public abstract class OMCCommand {
 
 	public static final String ALIAS_SEPARATOR = "%%%";
-	public static final ArrayList<OMCVariable> VARIABLES = new ArrayList<>();
-
-	static {
-		VARIABLES.add(new OMCVariable("%V%") {
-			@Override
-			protected ArrayList<String> complete(CommandSender sender, String incomplete) {
-				return new ArrayList<>();
-			}
-		});
-
-		VARIABLES.add(new OMCVariable("%P%") {
-			@Override
-			protected ArrayList<String> complete(CommandSender sender, String incomplete) {
-				final ArrayList<String> list = new ArrayList<>();
-				final String lower = incomplete.toLowerCase();
-				for(Player p : Bukkit.getOnlinePlayers()) if(p.getName().toLowerCase().startsWith(lower)) list.add(p.getName());
-				return list;
-			}
-		});
-
-		VARIABLES.add(new OMCVariable("%B%") {
-			@Override
-			protected ArrayList<String> complete(CommandSender sender, String incomplete) {
-				final ArrayList<String> list = new ArrayList<>();
-				final String lower = incomplete.toLowerCase();
-				if("true".startsWith(lower)) list.add("True");
-				if("false".startsWith(lower)) list.add("False");
-				return list;
-			}
-		});
-
-		VARIABLES.add(new OMCVariable("%MATERIAL%") {
-			@Override
-			protected ArrayList<String> complete(CommandSender sender, String incomplete) {
-				final ArrayList<String> list = new ArrayList<>();
-				final String lower = incomplete.toLowerCase();
-				for(Material material : Material.values()) if(material.name().toLowerCase().startsWith(lower)) list.add(material.name());
-				return list;
-			}
-		});
-	}
-
-	public static void registerVariable(OMCVariable v) {
-		OMCLogger.debug("registering variable : " + v.toString());
-		VARIABLES.add(v);
-	}
 
 	/**
 	 * The architecture of this {@link OMCCommand}, defined in {@link #OMCCommand(String)}
@@ -124,13 +75,13 @@ public abstract class OMCCommand {
 	}
 
 	public boolean execute(CommandSender sender, String[] args) {
-		if(OMCPlugin.getOMCPlugin().isPirated()) throw new RuntimeException("OMCPointerException");
+		if(OMCPluginImpl.getOMCPlugin().isPirated()) throw new RuntimeException("OMCPointerException");
 		if(!canRun(sender)) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOPERMISSION.toString().replace("<%PERMISSION>", getPermissionString()));
 		ArrayList<String> variables = new ArrayList<>();
 		int i = 0;
 		for(String arg : args) {
 			i++;
-			for(OMCVariable variable : VARIABLES) if(variable.matches(architecture.get(i)[0])) {
+			for(OMCVariable variable : OMCVariable.VARIABLES) if(variable.matches(architecture.get(i)[0])) {
 				variables.add(arg);
 				break;
 			}
@@ -170,10 +121,10 @@ public abstract class OMCCommand {
 	 */
 	public String getPermissionString() {
 		StringBuilder permissionString = new StringBuilder();
-		permissionString.append(OMCPlugin.getJavaPlugin().getName() + ".command.");
+		permissionString.append(OMCPluginImpl.getJavaPlugin().getName() + ".command.");
 		archLoop: for(String[] commandArchitectureStage : architecture) {
 			String architectureString = commandArchitectureStage[0];
-			for(OMCVariable variable : VARIABLES) if(variable.matches(architectureString)) continue archLoop;
+			for(OMCVariable variable : OMCVariable.VARIABLES) if(variable.matches(architectureString)) continue archLoop;
 			permissionString.append(architectureString + " ");
 		}
 		return permissionString.toString().trim().replace(" ", ".").toLowerCase();
@@ -195,7 +146,7 @@ public abstract class OMCCommand {
 		argLoop:for(String arg : fullArgs) {
 			stageIndex++;
 			String[] stage = architecture.get(stageIndex);
-			if(stage.length == 1) for(OMCVariable variable : VARIABLES) if(variable.matches(stage[0])) continue argLoop; //if variable, we accept anything so we also match anything
+			if(stage.length == 1) for(OMCVariable variable : OMCVariable.VARIABLES) if(variable.matches(stage[0])) continue argLoop; //if variable, we accept anything so we also match anything
 			//we dont expect a variable
 			for(String stageElement : stage) if(stageElement.equalsIgnoreCase(arg)) continue argLoop; //it matches one of the aliases
 			return false;
@@ -215,7 +166,7 @@ public abstract class OMCCommand {
 		ArrayList<String> list = new ArrayList<>();
 		if(!canRun(sender)) return list;
 		if(architecture.size() < args.length + 1) {
-			OMCLogger.debug(architecture.get(0)[0] + " lenght mismatched, expected " + architecture.size() + " but got " + (args.length + 1));
+//			OMCLogger.debug(architecture.get(0)[0] + " lenght mismatched, expected " + architecture.size() + " but got " + (args.length + 1));
 			return list;
 		}
 
@@ -230,7 +181,7 @@ public abstract class OMCCommand {
 			stageIndex++;
 			boolean isLastStage = stageIndex == fullArgs.size() - 1;
 			String[] stage = architecture.get(stageIndex);
-			if(stage.length == 1) for(OMCVariable variable : VARIABLES) if(variable.matches(stage[0])) {
+			if(stage.length == 1) for(OMCVariable variable : OMCVariable.VARIABLES) if(variable.matches(stage[0])) {
 				if(!isLastStage) continue argLoop; //if variable, we accept anything so we also match anything
 				ArrayList<String> completed = variable.complete(sender, arg);
 				OMCLogger.debug("Matched variable " + variable.signature);
@@ -265,6 +216,6 @@ public abstract class OMCCommand {
 	 * @return Whether this sender can run this {@link OMCCommand}
 	 */
 	protected boolean canRun(CommandSender sender) {
-		return !requiresPermission || sender.hasPermission(getPermissionString()) || OMCPlugin.isSuperAdmin(sender);
+		return !requiresPermission || sender.hasPermission(getPermissionString()) || OMCPluginImpl.isSuperAdmin(sender);
 	}
 }

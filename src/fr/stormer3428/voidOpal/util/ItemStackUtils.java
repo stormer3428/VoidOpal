@@ -40,15 +40,7 @@ public class ItemStackUtils {
 
 		ItemMeta itm = it.getItemMeta();
 		itm.setDisplayName(name);
-		if(hideData) {
-			itm.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-			itm.addItemFlags(ItemFlag.HIDE_DESTROYS);
-			itm.addItemFlags(ItemFlag.HIDE_DYE);
-			itm.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-			itm.addItemFlags(ItemFlag.HIDE_PLACED_ON);
-			itm.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-			itm.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-		}
+		if(hideData) for(ItemFlag flag : ItemFlag.values()) itm.addItemFlags(flag);
 		it.setItemMeta(itm);
 		return it;
 	}

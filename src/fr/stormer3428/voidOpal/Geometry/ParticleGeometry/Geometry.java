@@ -10,7 +10,7 @@ import org.bukkit.util.Vector;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.util.GeometryUtils;
 
-public class Geometry {
+public class Geometry implements Drawable{
 
 	ArrayList<Drawable> drawables = new ArrayList<>();
 	private Vector direction = GeometryUtils.VERTICAL.clone();
@@ -27,11 +27,13 @@ public class Geometry {
 		return draw(location, 1.0);
 	}
 	
+	@Override
 	public Geometry draw(Location location, double scale) {
 		for(Drawable drawable : drawables) drawable.draw(location, scale);
 		return this;
 	}
-	
+
+	@Override
 	public Geometry rotateAroundAxis(Vector axis, double radians) {
 		try {
 			axis.checkFinite();
@@ -44,21 +46,24 @@ public class Geometry {
 		relativeUp.rotateAroundAxis(axis, radians);
 		return this;
 	}
-	
+
+	@Override
 	public Geometry rotateAroundX(double radians) {
 		for(Drawable drawable : drawables) drawable.rotateAroundX(radians);
 		direction.rotateAroundX(radians);
 		relativeUp.rotateAroundX(radians);
 		return this;
 	}
-	
+
+	@Override
 	public Geometry rotateAroundY(double radians) {
 		for(Drawable drawable : drawables) drawable.rotateAroundY(radians);
 		direction.rotateAroundY(radians);
 		relativeUp.rotateAroundY(radians);
 		return this;
 	}
-	
+
+	@Override
 	public Geometry rotateAroundZ(double radians) {
 		for(Drawable drawable : drawables) drawable.rotateAroundZ(radians);
 		direction.rotateAroundZ(radians);
@@ -114,21 +119,25 @@ public class Geometry {
 		return relativeUp;
 	}
 
+	@Override
 	public Geometry setParticleSpeed(float speed) {
 		for(Drawable drawable : drawables) drawable.setParticleSpeed(speed);
 		return this;
 	}
-	
+
+	@Override
 	public Geometry setParticle(Particle particle) {
 		for(Drawable drawable : drawables) drawable.setParticle(particle);
 		return this;
 	}
 
+	@Override
 	public <T> Geometry setParticleData(T particleData) {
 		for(Drawable drawable : drawables) drawable.setParticleData(particleData);
 		return this;
 	}
 
+	@Override
 	public Geometry setForceRendering(boolean forceRender) {
 		for(Drawable drawable : drawables) drawable.setForceRendering(forceRender);
 		return this;
@@ -148,6 +157,18 @@ public class Geometry {
 	public Geometry merge(Geometry other) {
 		for(Drawable drawable : other.getDrawables()) add(drawable);
 		return this;
+	}
+
+	@Override
+	public Particle getParticle() {
+		if(getDrawables().isEmpty()) return null;
+		return getDrawables().get(0).getParticle();
+	}
+
+	@Override
+	public boolean isForceRendering() {
+		if(getDrawables().isEmpty()) return false;
+		return getDrawables().get(0).isForceRendering();
 	}
 
 

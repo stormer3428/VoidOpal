@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import fr.stormer3428.voidOpal.plugin.OMCPlugin;
+import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
 
 public class OMCAnchoredTemporaryBlock {
 
@@ -59,7 +59,7 @@ public class OMCAnchoredTemporaryBlock {
 				OMCAnchoredTemporaryBlock.this.oldLocation = OMCAnchoredTemporaryBlock.this.anchor.getLocation().add(OMCAnchoredTemporaryBlock.this.relativeLocation).getBlock().getLocation();
 				OMCAnchoredTemporaryBlock.this.remainingTicks --;
 			}
-		}.runTaskTimer(OMCPlugin.getJavaPlugin(), 0, 1);
+		}.runTaskTimer(OMCPluginImpl.getJavaPlugin(), 0, 1);
 	}
 
 	public Material getMaterial() {

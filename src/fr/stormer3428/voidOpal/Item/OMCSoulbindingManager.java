@@ -1,11 +1,12 @@
 package fr.stormer3428.voidOpal.Item;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,7 +25,7 @@ import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.stormer3428.voidOpal.plugin.OMCPlugin;
+import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public abstract class OMCSoulbindingManager implements PluginTied, Listener{
@@ -35,7 +36,7 @@ public abstract class OMCSoulbindingManager implements PluginTied, Listener{
 
 	@Override
 	public void onPluginEnable() {
-		OMCPlugin.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPlugin.getJavaPlugin());
+		OMCPluginImpl.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPluginImpl.getJavaPlugin());
 	}
 
 	@Override
@@ -101,7 +102,7 @@ public abstract class OMCSoulbindingManager implements PluginTied, Listener{
 		boolean shiftClick = e.isShiftClick();
 
 		if 		((clickedTop && (!shiftClick && (offHandsoulbound || cursorSoulbound || hotbarSoulbound))) 
-		|| (!clickedTop && shiftClick && !inSurvivalInv && currentSoulbound)) e.setCancelled(true);
+				|| (!clickedTop && shiftClick && !inSurvivalInv && currentSoulbound)) e.setCancelled(true);
 	}
 
 	protected final HashMap<UUID, ArrayList<ItemStack>> restituteMap = new HashMap<>();
@@ -143,9 +144,9 @@ public abstract class OMCSoulbindingManager implements PluginTied, Listener{
 
 	public ArrayList<ItemStack> getSoulboundItems(Player p){
 		ArrayList<ItemStack> soulboundItems = new ArrayList<>(); 
-		ArrayList<ItemStack> toCheck = new ArrayList<ItemStack>(Arrays.asList(p.getInventory().getContents()));
-		ItemStack cursor = p.getOpenInventory().getCursor();
-		if(cursor != null) toCheck.add(cursor);
+		List<ItemStack> toCheck = StreamSupport.stream(p.getInventory().spliterator(), false)
+				.collect(Collectors.toList());
+		toCheck.add(p.getOpenInventory().getCursor());
 		for(ItemStack it : toCheck) {
 			if(it == null) continue;
 			if(!isSoulboundItem(it)) continue;
