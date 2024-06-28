@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import fr.stormer3428.voidOpal.plugin.OMCPlugin;
+import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
 
 public abstract class SetDurationPower extends UnsetDurationPower{
 	
@@ -17,7 +17,7 @@ public abstract class SetDurationPower extends UnsetDurationPower{
 	public boolean empower(ItemStack it, Player p) {
 		if(!cast(it, p)) return false;
 		empowered.add(p.getUniqueId());
-		Bukkit.getScheduler().scheduleSyncDelayedTask(OMCPlugin.getJavaPlugin(), () -> putOnCooldown(p), getDuration());
+		Bukkit.getScheduler().scheduleSyncDelayedTask(OMCPluginImpl.getJavaPlugin(), () -> putOnCooldown(p), getDuration());
 		return true;
 	}
 }

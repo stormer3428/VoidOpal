@@ -9,17 +9,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.inventory.InventoryEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import fr.stormer3428.voidOpal.Item.Types.OMCItem;
-import fr.stormer3428.voidOpal.plugin.OMCPlugin;
+import fr.stormer3428.voidOpal.logging.OMCLogger;
+import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public class OMCInventoryItemTracker implements PluginTied, Listener{
 
-	@Override public void onPluginEnable() {OMCPlugin.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPlugin.getJavaPlugin());}
+	@Override public void onPluginEnable() {OMCPluginImpl.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPluginImpl.getJavaPlugin());}
 	@Override public void onPluginDisable() {}
 	@Override public void onPluginReload() {}
 
@@ -47,27 +51,44 @@ public class OMCInventoryItemTracker implements PluginTied, Listener{
 		return inventoryTrackerMap.get(uuid);
 	}
 
+	public void clearCache(Player p) {
+		OMCLogger.debug("Item cache cleared for " + p.getName());
+		clearCache(p.getUniqueId());
+	}
+	
+	public void clearCache(UUID uuid) {
+		inventoryTrackerMap.remove(uuid);
+	}
+	
 	@EventHandler
-	public void onInventoryUpdate(InventoryEvent e) {
-		for(HumanEntity he : e.getViewers()) if(he instanceof Player p) 
-		inventoryTrackerMap.remove(p.getUniqueId());
+	public void onInventoryClick(InventoryClickEvent e) {
+		for(HumanEntity he : e.getViewers()) if(he instanceof Player p) clearCache(p);
+		if(e.getInventory().getHolder() instanceof Player p) clearCache(p);
+	}
+	
+	@EventHandler
+	public void onDeath(PlayerDeathEvent e) {
+		clearCache(e.getEntity());
+	}
+	
+	@EventHandler
+	public void onQuit(PlayerQuitEvent e) {
+		clearCache(e.getPlayer());
+	}
+	
+	@EventHandler
+	public void onJoin(PlayerJoinEvent e) {
+		clearCache(e.getPlayer());
 	}
 
 	@EventHandler
 	public void onDrop(PlayerDropItemEvent e) {
-		Player p = e.getPlayer();
-		for(OMCItem omcItem : getInventoryTrackedItemsForPlayer(p)) if(omcItem.equals(e.getItemDrop().getItemStack())) {
-			inventoryTrackerMap.remove(p.getUniqueId());
-			return;
-		}
+		clearCache(e.getPlayer());
 	}
 
 	@EventHandler
 	public void onPickup(EntityPickupItemEvent e) {
 		if(!(e.getEntity() instanceof Player p)) return;
-		for(OMCItem omcItem : inventoryTrackedItems) if(omcItem.equals(e.getItem().getItemStack())) {
-			getInventoryTrackedItemsForPlayer(p).add(omcItem);
-			return;
-		}
+		clearCache(p);
 	}
 }

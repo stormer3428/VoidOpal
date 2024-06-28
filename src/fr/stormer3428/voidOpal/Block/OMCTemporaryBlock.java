@@ -13,7 +13,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.stormer3428.voidOpal.plugin.OMCPlugin;
+import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
 
 public class OMCTemporaryBlock {
 
@@ -59,7 +59,7 @@ public class OMCTemporaryBlock {
 				}
 				OMCTemporaryBlock.this.remainingTicks --;
 			}
-		}.runTaskTimer(OMCPlugin.getJavaPlugin(), 0, 1);
+		}.runTaskTimer(OMCPluginImpl.getJavaPlugin(), 0, 1);
 	}
 
 	public int getRemainingTicks() {

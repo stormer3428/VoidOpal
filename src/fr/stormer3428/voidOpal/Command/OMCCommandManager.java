@@ -11,7 +11,7 @@ import org.bukkit.command.TabCompleter;
 
 import fr.stormer3428.voidOpal.data.OMCLang;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
-import fr.stormer3428.voidOpal.plugin.OMCPlugin;
+import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public abstract class OMCCommandManager implements CommandExecutor, TabCompleter, PluginTied{
@@ -50,12 +50,12 @@ public abstract class OMCCommandManager implements CommandExecutor, TabCompleter
 
 	private void registerExecutorsAndTabCompelters() {
 		for(OMCCommand cmd : this.COMMANDS)for(String alias : cmd.architecture.get(0)) {
-			if(OMCPlugin.getJavaPlugin().getCommand(alias) == null) {
+			if(OMCPluginImpl.getJavaPlugin().getCommand(alias) == null) {
 				OMCLogger.systemError("Failed to register command " + alias + ". It might not be preset in a depend's plugin.yml");
 				continue;
 			}
-			OMCPlugin.getJavaPlugin().getCommand(alias).setExecutor(OMCCommandManager.this);
-			OMCPlugin.getJavaPlugin().getCommand(alias).setTabCompleter(OMCCommandManager.this);
+			OMCPluginImpl.getJavaPlugin().getCommand(alias).setExecutor(OMCCommandManager.this);
+			OMCPluginImpl.getJavaPlugin().getCommand(alias).setTabCompleter(OMCCommandManager.this);
 			OMCLogger.debug("Register executor and completer for " + alias + ".\nPermission : (" + cmd.getPermissionString() + ")\nSignature : (" + cmd.rawArchitecture + ")");
 		}
 	}
@@ -68,7 +68,7 @@ public abstract class OMCCommandManager implements CommandExecutor, TabCompleter
 
 	public void registerVariable(OMCVariable ... variable) {
 		for(OMCVariable v : variable)
-		OMCCommand.registerVariable(v);
+		OMCVariable.registerVariable(v);
 	}
 	
 	public void registerCommand(OMCCommand ...command) {

@@ -3,6 +3,7 @@ package fr.stormer3428.voidOpal.Item.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
@@ -11,10 +12,12 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import fr.stormer3428.voidOpal.Power.OMCTickable;
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.util.OMCUtil;
@@ -24,14 +27,16 @@ public class SMPItem implements OMCItem {
 	public SMPItem(String registryName) {
 		this.registryName = registryName;
 	}
-
+	
 	private Material material = Material.ENCHANTED_BOOK;
 	private String displayName = null;
 	private int CMD = 0;
 	private String registryName = getClass().getSimpleName();
-	private ArrayList<String> lore = new ArrayList<>();
-	private ArrayList<ItemFlag> itemFlags = new ArrayList<>();
-	private ArrayList<OMCPower> omcPowers = new ArrayList<>();
+	private final ArrayList<String> lore = new ArrayList<>();
+	private final ArrayList<ItemFlag> itemFlags = new ArrayList<>();
+	private final ArrayList<OMCPower> omcPowers = new ArrayList<>();
+	private final ArrayList<OMCTickable> omcTickeables = new ArrayList<>();
+	private final ArrayList<Listener> listeners = new ArrayList<>();
 	private HashMap<Enchantment, Integer> enchants = new HashMap<>();
 	private boolean unbreakeable = false;
 
@@ -39,10 +44,12 @@ public class SMPItem implements OMCItem {
 	public Material getMaterial(){return material;}
 	public String getDisplayName(){return displayName;}
 	public int getCMD(){return CMD;}
-	public ArrayList<String> getLore(){return lore;}
-	public ArrayList<ItemFlag> getItemFlags(){return itemFlags;}
-	public HashMap<Enchantment,Integer> getEnchants(){return enchants;}
-	public ArrayList<OMCPower> getOmcPowers() {return omcPowers;}
+	public List<String> getLore(){return lore;}
+	public List<ItemFlag> getItemFlags(){return itemFlags;}
+	public Map<Enchantment,Integer> getEnchants(){return enchants;}
+	public List<OMCPower> getOmcPowers() {return omcPowers;}
+	public List<OMCTickable> getOmcTickeables() {return omcTickeables;}
+	public List<Listener> getListener() {return listeners;}
 
 	public SMPItem setMaterial(Material material){ this.material = material; return this;}
 	public SMPItem setDisplayname(String displayname){ this.displayName = displayname; return this;}
@@ -54,6 +61,8 @@ public class SMPItem implements OMCItem {
 	public SMPItem addItemflag(ItemFlag itemflag){ this.itemFlags.add(itemflag); return this;}
 	public SMPItem addEnchant(Enchantment enchant, int level){ this.enchants.put(enchant, level); return this;}
 	public SMPItem addPower(OMCPower omcPower) { omcPowers.add(omcPower); return this;}
+	public SMPItem addTickeable(OMCTickable omcTickeable) { omcTickeables.add(omcTickeable); return this;}
+	public SMPItem addListener(Listener listener) { listeners.add(listener); return this;}
 
 	public SMPItem unbreakable() { this.unbreakeable = true; return this;}
 
@@ -106,9 +115,9 @@ public class SMPItem implements OMCItem {
 		Material material = getMaterial();
 		String displayName = getDisplayName();
 		int CMD = getCMD();
-		ArrayList<String> lore = getLore();
-		ArrayList<ItemFlag> itemFlags = getItemFlags();
-		HashMap<Enchantment,Integer> enchants = getEnchants();
+		List<String> lore = getLore();
+		List<ItemFlag> itemFlags = getItemFlags();
+		Map<Enchantment,Integer> enchants = getEnchants();
 		ItemStack it = new ItemStack(material, amount);
 		if(amount == 0 || !material.isItem()) return it;
 		ItemMeta itm = it.getItemMeta();
@@ -117,7 +126,7 @@ public class SMPItem implements OMCItem {
 		if(!lore.isEmpty()) {
 			ArrayList<String> translated = new ArrayList<>();
 			for(String s : lore) translated.add(OMCUtil.translateChatColor(s));
-			itm.setLore(lore);
+			itm.setLore(translated);
 		}
 		if(!itemFlags.isEmpty()) for(ItemFlag flag : itemFlags) itm.addItemFlags(flag);
 		if(!enchants.isEmpty()) for(Entry<Enchantment, Integer> entry : enchants.entrySet()) itm.addEnchant(entry.getKey(), entry.getValue(), true);

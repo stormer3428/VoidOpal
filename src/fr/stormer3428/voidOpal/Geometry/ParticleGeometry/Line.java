@@ -11,7 +11,7 @@ public class Line implements Drawable{
 
 	private Vector a;
 	private Vector b;
-	private Particle particle = Particle.CRIT_MAGIC;
+	private Particle particle = Particle.CRIT;
 	private Object particleData = null;
 	private int particleAmount = 1;
 	private float particleSpreadX = 0;
@@ -47,10 +47,11 @@ public class Line implements Drawable{
 	}
 
 	@Override
-	public void draw(Location location, double scale) {
+	public Line draw(Location location, double scale) {
 		World world = location.getWorld();
 		Vector locationVector = location.toVector();
 		for(Vector point : getInterpolatedPoints(a.clone().multiply(scale) , b.clone().multiply(scale))) drawPoint(world, point.add(locationVector));		
+		return this;
 	}
 
 	public ArrayList<Vector> getInterpolatedPoints(Vector a, Vector b){

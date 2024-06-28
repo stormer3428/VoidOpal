@@ -19,7 +19,7 @@ import fr.stormer3428.voidOpal.Power.OMCPowerManager;
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
 import fr.stormer3428.voidOpal.data.OMCLang;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
-import fr.stormer3428.voidOpal.plugin.OMCPlugin;
+import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
 
 public class OMCPremadeCommandFactory {
 
@@ -93,7 +93,7 @@ public class OMCPremadeCommandFactory {
 
 					@Override
 					public boolean execute(CommandSender sender, ArrayList<String> args) {
-						OMCPlugin.getOMCPlugin().reload();
+						OMCPluginImpl.getOMCPlugin().reload();
 						return OMCLogger.normal(sender, OMCLang.RELOADED_CONFIG.toString());}
 				}
 		};

@@ -11,7 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.stormer3428.voidOpal.plugin.OMCPlugin;
+import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public abstract class OMCPower extends BukkitRunnable implements PluginTied, Listener{
@@ -51,7 +51,7 @@ public abstract class OMCPower extends BukkitRunnable implements PluginTied, Lis
 	
 	@Override
 	public void onPluginEnable() {
-		runTaskTimer(OMCPlugin.getJavaPlugin(), 0, 1);
+		runTaskTimer(OMCPluginImpl.getJavaPlugin(), 0, 1);
 	}
 
 	public OMCPower(String registryName) {

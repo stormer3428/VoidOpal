@@ -8,7 +8,7 @@ import org.bukkit.util.Vector;
 public class MovingPoint implements Drawable{
 
 	private Vector location;
-	private Particle particle = Particle.CRIT_MAGIC;
+	private Particle particle = Particle.CRIT;
 	private Object particleData = null;
 	private Vector particleDirection = new Vector(0,0,0);
 	private Vector particleOffsetDirection = new Vector(0,0,0);
@@ -16,7 +16,7 @@ public class MovingPoint implements Drawable{
 	private boolean staticDirection = false;
 
 	@Override
-	public void draw(Location location, double scale) {
+	public MovingPoint draw(Location location, double scale) {
 		World world = location.getWorld();
 		Location particleLoc = location.clone().add(this.location.clone().multiply(scale));
 		world.spawnParticle(particle, particleLoc, 
@@ -25,6 +25,7 @@ public class MovingPoint implements Drawable{
 				particleDirection.getY() + particleOffsetDirection.getY(), 
 				particleDirection.getZ() + particleOffsetDirection.getZ(), 
 				particleDirection.clone().add(particleOffsetDirection).length(), particleData, forceRender);
+		return this;
 	}
 
 	public void draw(Location location) {
