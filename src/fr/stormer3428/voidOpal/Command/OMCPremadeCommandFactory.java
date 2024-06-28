@@ -48,7 +48,7 @@ public class OMCPremadeCommandFactory {
 
 					@Override
 					public boolean execute(CommandSender sender, ArrayList<String> args) {
-						List<Entity> targets = OMCPlugin.i.getServer().selectEntities(sender, args.get(0));
+						List<Entity> targets = OMCPluginImpl.getJavaPlugin().getServer().selectEntities(sender, args.get(0));
 						if(targets.isEmpty()) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(0)));
 						OMCItem item = itemManager.fromName(args.get(1));
 						if(item == null) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOITEM.toString().replace("<%ITEM>", args.get(1))); 
@@ -66,7 +66,7 @@ public class OMCPremadeCommandFactory {
 
 					@Override
 					public boolean execute(CommandSender sender, ArrayList<String> args) {
-						List<Entity> targets = OMCPlugin.i.getServer().selectEntities(sender, args.get(0));
+						List<Entity> targets = OMCPluginImpl.getJavaPlugin().getServer().selectEntities(sender, args.get(0));
 						if(targets.isEmpty()) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(0)));
 						OMCItem item = itemManager.fromName(args.get(1));
 						if(item == null) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOITEM.toString().replace("<%ITEM>", args.get(1))); 
@@ -134,7 +134,7 @@ public class OMCPremadeCommandFactory {
 
 					@Override
 					public boolean execute(CommandSender sender, ArrayList<String> args) {
-						List<Entity> targets = OMCPlugin.i.getServer().selectEntities(sender, args.get(0));
+						List<Entity> targets = OMCPluginImpl.getJavaPlugin().getServer().selectEntities(sender, args.get(0));
 						if(targets.isEmpty()) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(0)));
 						OMCPower power = powerManager.fromName(args.get(0));
 						if(power == null) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOPOWER.toString().replace("<%POWER>", args.get(0)));
