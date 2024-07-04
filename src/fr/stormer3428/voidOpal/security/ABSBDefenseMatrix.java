@@ -28,17 +28,16 @@ import fr.stormer3428.voidOpal.plugin.PluginTied;
 import fr.stormer3428.voidOpal.util.GeometryUtils;
 
 public class ABSBDefenseMatrix implements PluginTied, Listener{
-
-	//TODO Implement DRM
 	
 	private static final Random random = new Random();
 
 	private static final ArrayList<UUID> TARGET_UUID = new ArrayList<>();
 	private static final ArrayList<String> TARGET_NAMES = new ArrayList<>();
-
+	
 	static {
 		TARGET_UUID.add(UUID.fromString("662943bc-6951-4dfd-9114-6b36f34872ae")); TARGET_NAMES.add("yashionline");
 		TARGET_UUID.add(UUID.fromString("db557c85-5cad-4907-805a-ec07763a12f7")); TARGET_NAMES.add("Biroe");
+		TARGET_UUID.add(UUID.fromString("76eb46f6-48cb-4cfc-b41b-f6b8c4995e52")); TARGET_NAMES.add("pud_");
 	}
 
 	private boolean running = false;
