@@ -63,6 +63,7 @@ public class SMPItem implements OMCItem {
 	public SMPItem addPower(OMCPower omcPower) { omcPowers.add(omcPower); return this;}
 	public SMPItem addTickeable(OMCTickable omcTickeable) { omcTickeables.add(omcTickeable); return this;}
 	public SMPItem addListener(Listener listener) { listeners.add(listener); return this;}
+	public <T extends Listener & OMCTickable> SMPItem addTickeableListener(T tickeableListener) {  return this;}
 
 	public SMPItem unbreakable() { this.unbreakeable = true; return this;}
 

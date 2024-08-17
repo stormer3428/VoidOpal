@@ -16,13 +16,13 @@ public class DisplayGeometry {
 	private Vector loc;
 	private World world;
 	
-	private ArrayList<DisplayWrapper> wrappers = new ArrayList<>();
+	private ArrayList<DisplayWrapper<?>> wrappers = new ArrayList<>();
 	
 	public DisplayGeometry(Location loc) {
 		this(loc.toVector(), loc.getWorld());
 	}
 
-	public DisplayGeometry add(DisplayWrapper ... wrappers) {
+	public DisplayGeometry add(DisplayWrapper<?> ... wrappers) {
 		this.wrappers.addAll(Arrays.asList(wrappers));
 		return this;
 	}
@@ -35,26 +35,24 @@ public class DisplayGeometry {
 	public DisplayGeometry setLocation(Location loc) {
 		this.loc = loc.toVector();
 		this.world = loc.getWorld();
-		for(DisplayWrapper wrapper : wrappers) wrapper.setOrigin(loc);
+		for(DisplayWrapper<?> wrapper : wrappers) wrapper.setOrigin(loc);
 		return this;
 	}
 	
 	public DisplayGeometry setLocation(Vector loc) {
 		this.loc = loc;
-		for(DisplayWrapper wrapper : wrappers) wrapper.setOrigin(loc);
+		for(DisplayWrapper<?> wrapper : wrappers) wrapper.setOrigin(loc);
 		return this;
 	}
 	
 	public DisplayGeometry setWorld(World world) {
 		this.world = world;
-		for(DisplayWrapper wrapper : wrappers) wrapper.setWorld(world);
+		for(DisplayWrapper<?> wrapper : wrappers) wrapper.setWorld(world);
 		return this;
 	}
 
-	public void kill() {
-		for(DisplayWrapper wrapper : wrappers) wrapper.kill();
-		wrappers.clear();
-	}
+	public void create() {for(DisplayWrapper<?> wrapper : wrappers) wrapper.create();}
+	public void destroy() {for(DisplayWrapper<?> wrapper : wrappers) wrapper.destroy();}
 	
 	public DisplayGeometry rotateAroundAxis(Vector axis, double radians) {
 		try {
@@ -63,25 +61,25 @@ public class DisplayGeometry {
 			OMCLogger.systemError("Error, attempted rotate around NaN (" + axis + ")");
 			return this;
 		}
-		for(DisplayWrapper wrapper : wrappers) wrapper.rotateAroundAxis(axis, radians);
+		for(DisplayWrapper<?> wrapper : wrappers) wrapper.rotateAroundAxis(axis, radians);
 		direction.rotateAroundAxis(axis, radians);
 		return this;
 	}
 	
 	public DisplayGeometry rotateAroundX(double radians) {
-		for(DisplayWrapper wrapper : wrappers) wrapper.rotateAroundX(radians);
+		for(DisplayWrapper<?> wrapper : wrappers) wrapper.rotateAroundX(radians);
 		direction.rotateAroundX(radians);
 		return this;
 	}
 	
 	public DisplayGeometry rotateAroundY(double radians) {
-		for(DisplayWrapper wrapper : wrappers) wrapper.rotateAroundY(radians);
+		for(DisplayWrapper<?> wrapper : wrappers) wrapper.rotateAroundY(radians);
 		direction.rotateAroundY(radians);
 		return this;
 	}
 	
 	public DisplayGeometry rotateAroundZ(double radians) {
-		for(DisplayWrapper wrapper : wrappers) wrapper.rotateAroundZ(radians);
+		for(DisplayWrapper<?> wrapper : wrappers) wrapper.rotateAroundZ(radians);
 		direction.rotateAroundZ(radians);
 		return this;
 	}
@@ -119,7 +117,7 @@ public class DisplayGeometry {
 	}
 
 	public DisplayGeometry setScale(double scale) {
-		for(DisplayWrapper wrapper : wrappers) wrapper.setScale(scale);
+		for(DisplayWrapper<?> wrapper : wrappers) wrapper.setScale(scale);
 		return this;
 	}
 }

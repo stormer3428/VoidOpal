@@ -1,9 +1,9 @@
-package fr.stormer3428.voidOpal.util;
+package fr.stormer3428.voidOpal.util.providers;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
-public class LocationProvider {
+public class LocationProvider implements OMCProvider<Location>{
 
 	private Location location = null;
 	private Entity entity = null;
@@ -16,16 +16,18 @@ public class LocationProvider {
 		this.entity = entity;
 	}
 
-	public Location getLocation() {
+	@Override
+	public Location getData() {
 		return location == null ? entity.getLocation() : location.clone();
 	}
 
-	public void setLocation(Entity entity) {
+	public void setData(Entity entity) {
 		this.entity = entity;
 		this.location = null;
 	}
 
-	public void setLocation(Location location) {
+	@Override
+	public void setData(Location location) {
 		this.entity = null;
 		this.location = location;
 	}

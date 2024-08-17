@@ -31,7 +31,10 @@ public class GeometryUtils {
 	}
 
 	public static Vector getRandomVector() {
-		Random r = new Random();
+		return getRandomVector(new Random());
+	}
+
+	public static Vector getRandomVector(Random r) {
 		return new Vector((r.nextDouble() * 2)-1d,(r.nextDouble() * 2)-1d,(r.nextDouble() * 2)-1d).normalize();
 	}
 

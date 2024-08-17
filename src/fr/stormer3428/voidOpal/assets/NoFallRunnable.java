@@ -9,7 +9,7 @@ public class NoFallRunnable extends BukkitRunnable {
 
 	public static NoFallRunnable run(LivingEntity p) {
 		NoFallRunnable noFallRunnable = new NoFallRunnable(p);
-		noFallRunnable.runTaskTimer(OMCPluginImpl.getJavaPlugin(), 0, 1);
+		noFallRunnable.runTaskTimer(OMCPluginImpl.getJavaPlugin(), 1, 1);
 		return noFallRunnable;
 	}
 	

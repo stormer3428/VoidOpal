@@ -12,9 +12,9 @@ import fr.stormer3428.voidOpal.util.GeometryUtils;
 
 public class Geometry implements Drawable{
 
-	ArrayList<Drawable> drawables = new ArrayList<>();
-	private Vector direction = GeometryUtils.VERTICAL.clone();
-	private Vector relativeUp = new Vector(-1,0,0);
+	protected ArrayList<Drawable> drawables = new ArrayList<>();
+	protected Vector direction = GeometryUtils.VERTICAL.clone();
+	protected Vector relativeUp = new Vector(-1,0,0);
 
 	public Geometry() {}
 	
@@ -143,7 +143,7 @@ public class Geometry implements Drawable{
 		return this;
 	}
 	
-	private ArrayList<Drawable> getDrawables() {
+	protected ArrayList<Drawable> getDrawables() {
 		return drawables;
 	}
 	
@@ -170,7 +170,4 @@ public class Geometry implements Drawable{
 		if(getDrawables().isEmpty()) return false;
 		return getDrawables().get(0).isForceRendering();
 	}
-
-
-
 }

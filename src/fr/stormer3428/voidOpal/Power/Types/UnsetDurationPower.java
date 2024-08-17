@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 public abstract class UnsetDurationPower extends OMCPower{
 
 	protected ArrayList<UUID> empowered = new ArrayList<>();
-
+	
 	public void onDepower(Player p) {}
 	public boolean onEmpoweredTryCast(ItemStack it, Player p) {return false;}
 
@@ -26,7 +26,6 @@ public abstract class UnsetDurationPower extends OMCPower{
 		empower(it, p);
 		return true;
 	}
-
 
 	/*
 	 * It is expected to call "putOnCooldown when ability ends"

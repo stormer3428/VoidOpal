@@ -91,14 +91,12 @@ public class OMCTemporaryBlock {
 			block.setBlockData(blockData);
 			return block;
 		}
-		return new OMCTemporaryBlock(blockData, visibleTime, loc);
+		return new OMCTemporaryBlock(blockData, visibleTime, loc, playerWhitelist);
 	}
 
 	private void startLoop() {
 		new BukkitRunnable() {
-
-			@Override
-			public void run() {
+			@Override public void run() {
 				if(OMCTemporaryBlock.this.remainingTicks <= 0) {
 					for(Player p : Bukkit.getOnlinePlayers()) if(playerWhitelist.isEmpty() || playerWhitelist.contains(p.getUniqueId())) sendBlockChange(p, OMCTemporaryBlock.this.location, OMCTemporaryBlock.this.location.getBlock().getBlockData());
 					all.remove(OMCTemporaryBlock.this.instance);
