@@ -42,7 +42,10 @@ public abstract class OMCPowerManager extends BukkitRunnable implements Listener
 	
 	@Override
 	public void onPluginReload() {
-		for(OMCPower power : registeredPowers) power.onPluginReload();
+		for(OMCPower power : registeredPowers) {
+			power.onPluginReload();
+			power.clearCooldowns();
+		}
 	}
 
 	public abstract void registerPowers();

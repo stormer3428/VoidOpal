@@ -76,4 +76,5 @@ public abstract class OMCPower extends BukkitRunnable implements PluginTied, Lis
 	public int getCooldown(Player p) {return getCooldown(p.getUniqueId());}
 	public int getCooldown(UUID uuid) {if(!isOnCooldown(uuid)) return 0;return onCooldown.get(uuid);}
 	public OMCPower(String registryName) {this.registryName = registryName;}
+	public void clearCooldowns() {onCooldown.clear();}
 }
