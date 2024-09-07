@@ -36,8 +36,9 @@ public class OMCExplosion {
 			double damage = Math.max(1, (impact * impact + impact) * 7 * yield + 1);
 			if(source != null) le.damage(damage, source);
 			else le.damage(damage);
-			Vector delta = le.getLocation().toVector().subtract(loc.toVector()).normalize();
-			le.setVelocity(delta);
+			Vector delta = le.getLocation().toVector().subtract(loc.toVector());
+			if(delta.isZero()) continue;
+			le.setVelocity(delta.normalize());
 		}
 	}
 	
