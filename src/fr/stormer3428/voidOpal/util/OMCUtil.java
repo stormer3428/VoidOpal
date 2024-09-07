@@ -194,6 +194,7 @@ public class OMCUtil {
 		int i = 0;
 		for(char c : text.toCharArray()) {
 			i++;
+//			builder.append(String.format("§x§%01§%01§%01§%01§%01§%01", 
 			builder.append(String.format("#%02x%02x%02x", 
 					(int) map(0, text.length(), rA, rB, i),
 					(int) map(0, text.length(), gA, gB, i),
