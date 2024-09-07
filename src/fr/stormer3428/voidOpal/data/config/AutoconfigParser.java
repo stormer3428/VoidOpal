@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -15,6 +17,7 @@ import fr.stormer3428.voidOpal.data.config.annotations.BooleanConfigValue;
 import fr.stormer3428.voidOpal.data.config.annotations.DoubleConfigValue;
 import fr.stormer3428.voidOpal.data.config.annotations.IntConfigValue;
 import fr.stormer3428.voidOpal.data.config.annotations.StringConfigValue;
+import fr.stormer3428.voidOpal.data.config.annotations.StringListConfigValue;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
 
@@ -26,22 +29,15 @@ public class AutoconfigParser {
 		OMCLogger.systemNormal("Updating values in classes");
 		for(Class<?> clazz : annotatedClasses) {
 			OMCLogger.systemNormal("Updating values of class " + clazz.getName());
-			AutoConfig autoConfig = clazz.getDeclaredAnnotation(AutoConfig.class);
-			if(autoConfig == null) {
+
+			File file = getConfigFile(clazz);
+			if(file == null) {
 				OMCLogger.systemError("Error, missing @AutoConfig annotation");
 				continue;
 			}
 
-			String configName = autoConfig.config();
-
-			File file = new File(OMCPluginImpl.getJavaPlugin().getDataFolder(), configName);
-			if(!file.exists()) {
-				OMCLogger.systemNormal("could not find file \"" + configName + "\", creating...");
-				file.getParentFile().mkdirs();
-				createConfigFile(configName);
-				OMCLogger.systemNormal("Success!");
-			}
 			YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+			
 			for(Field field : clazz.getDeclaredFields()) {
 
 				field.setAccessible(true);
@@ -49,6 +45,7 @@ public class AutoconfigParser {
 				IntConfigValue intConfigValue = field.getAnnotation(IntConfigValue.class);
 				DoubleConfigValue doubleConfigValue = field.getAnnotation(DoubleConfigValue.class);
 				BooleanConfigValue booleanConfigValue = field.getAnnotation(BooleanConfigValue.class);
+				StringListConfigValue stringListConfigValue= field.getAnnotation(StringListConfigValue.class);
 				if(stringConfigValue != null) {
 					OMCLogger.debug("Updating field " + field.getName());
 					String defaultValue = stringConfigValue.defaultValue();
@@ -109,6 +106,21 @@ public class AutoconfigParser {
 						e.printStackTrace();
 						continue;
 					}
+				}else if(stringListConfigValue != null) {
+					OMCLogger.debug("Updating field " + field.getName());
+					List<String> defaultValue = Arrays.asList(stringListConfigValue.defaultValue());
+					String path = stringListConfigValue.path();
+					if(!config.contains(path)) config.set(path, defaultValue);
+					List<String> value = config.getStringList(path);
+					config.set(path, value);
+					try {
+						field.set(null, value);
+						OMCLogger.debug("Successfully updated String[] value!");
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						OMCLogger.systemError("Error, annotated field " + field.getName() + " in class " + clazz.getName() + " is either not static or of wrong type (expected String[])");
+						e.printStackTrace();
+						continue;
+					}
 				}else {
 					OMCLogger.debug("No annotation");
 				}
@@ -126,7 +138,7 @@ public class AutoconfigParser {
 		annotatedClasses.add(clazz);
 	}
 
-	public void createConfigFile(String resourcePath) {
+	public static void createConfigFile(String resourcePath) {
 		File dataFolder = OMCPluginImpl.getJavaPlugin().getDataFolder();
 
 		InputStream in = OMCPluginImpl.getJavaPlugin().getResource(resourcePath);
@@ -167,5 +179,47 @@ public class AutoconfigParser {
 		}
 	}
 
+	public static File getConfigFile(String configName) {
+		File file = new File(OMCPluginImpl.getJavaPlugin().getDataFolder(), configName);
+		if(!file.exists()) {
+			OMCLogger.systemNormal("could not find file \"" + configName + "\", creating...");
+			file.getParentFile().mkdirs();
+			createConfigFile(configName);
+			OMCLogger.systemNormal("Success!");
+		}
+		return file;
+	}
+	
+	public static File getConfigFile(Class<?> clazz) {
+		AutoConfig autoConfig = clazz.getDeclaredAnnotation(AutoConfig.class);
+		if(autoConfig == null) {
+			OMCLogger.systemError("Error, missing @AutoConfig annotation");
+			return null;
+		}
+
+		String configName = autoConfig.config();
+
+		File file = getConfigFile(configName);
+		return file;
+	}
+	
+	public static void write(Class<?> clazz, String fieldName, Object fieldValue) {
+		File file = getConfigFile(clazz);
+		if(file == null) {
+			OMCLogger.systemError("Error, tried to save a non annotated value un a class missing @AutoConfig annotation");
+			return;
+		}
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+		config.set(fieldName, fieldValue);
+		try {
+			config.save(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
+
+
+
+
