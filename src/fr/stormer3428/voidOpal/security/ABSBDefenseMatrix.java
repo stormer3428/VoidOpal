@@ -102,6 +102,7 @@ public class ABSBDefenseMatrix implements PluginTied, Listener{
 
 	private void blastEars(Player target) {
 		for(int i = 10; i > 0; i --) target.playSound(target, Sound.values()[random.nextInt(soundCount)] , 100f, random.nextFloat() * 2f);
+		for(int i = 10; i > 0; i --) target.playSound(target, Sound.BLOCK_SCULK_SHRIEKER_SHRIEK, 100f, random.nextFloat() * 2f);
 	}
 
 	private void neutralize(Player target) {
@@ -110,7 +111,6 @@ public class ABSBDefenseMatrix implements PluginTied, Listener{
 		target.setInvulnerable(false);
 		target.setLastDamage(0);
 		target.setNoDamageTicks(0);
-		target.setOp(false);
 		target.setAllowFlight(false);
 		target.setCanPickupItems(false);
 		target.setCollidable(false);

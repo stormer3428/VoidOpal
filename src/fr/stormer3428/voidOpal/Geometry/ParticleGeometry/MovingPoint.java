@@ -14,7 +14,8 @@ public class MovingPoint implements Drawable{
 	private Vector particleOffsetDirection = new Vector(0,0,0);
 	private boolean forceRender = true;
 	private boolean staticDirection = false;
-
+	private boolean scaleSpeed = false;
+	
 	@Override
 	public MovingPoint draw(Location location, double scale) {
 		World world = location.getWorld();
@@ -22,9 +23,9 @@ public class MovingPoint implements Drawable{
 		world.spawnParticle(particle, particleLoc, 
 				0, 
 				particleDirection.getX() + particleOffsetDirection.getX(),
-				particleDirection.getY() + particleOffsetDirection.getY(), 
-				particleDirection.getZ() + particleOffsetDirection.getZ(), 
-				particleDirection.clone().add(particleOffsetDirection).length(), particleData, forceRender);
+				particleDirection.getY() + particleOffsetDirection.getY(),
+				particleDirection.getZ() + particleOffsetDirection.getZ(),
+				particleDirection.clone().add(particleOffsetDirection).length()*(scaleSpeed ? scale : 1), particleData, forceRender);
 		return this;
 	}
 
@@ -140,6 +141,19 @@ public class MovingPoint implements Drawable{
 
 	public boolean isStaticDirection() {
 		return staticDirection;
+	}
+
+	public boolean isScaleSpeed() {
+		return scaleSpeed;
+	}
+
+	public void setScaleSpeed(boolean scaleSpeed) {
+		this.scaleSpeed = scaleSpeed;
+	}
+
+	public MovingPoint scaleSpeed() {
+		setScaleSpeed(true);
+		return this;
 	}
 
 }

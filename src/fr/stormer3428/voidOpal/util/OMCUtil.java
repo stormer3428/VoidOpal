@@ -7,7 +7,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.block.BlockFace;
 
 import net.md_5.bungee.api.ChatColor;
@@ -209,6 +212,22 @@ public class OMCUtil {
 		return String.format("#%06x", new Random().nextInt(0xFFFFFF));
 	}
 
+	public static Location translateLocationToEnvironment(Location toTranslate, World targetWorld) {
+		Environment targetEnvironment = targetWorld.getEnvironment();
+		Environment sourceEnvironment = toTranslate.getWorld().getEnvironment();
+		Location translated = toTranslate.clone();
+		translated.setWorld(targetWorld);
+		
+		if(sourceEnvironment == targetEnvironment) return translated;
+		if((targetEnvironment == Environment.NETHER) == (sourceEnvironment == Environment.NETHER)) return translated;
+		
+		double factor = sourceEnvironment == Environment.NETHER ? 8.0 : 1/8.0;
+		translated.setX(translated.getX() * factor);
+		translated.setZ(translated.getZ() * factor);
+		translated.setWorld(targetWorld);
+		return translated;
+	}
+	
 }
 
 
