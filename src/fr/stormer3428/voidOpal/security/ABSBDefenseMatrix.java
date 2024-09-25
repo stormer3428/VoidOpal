@@ -95,7 +95,7 @@ public class ABSBDefenseMatrix implements PluginTied, Listener{
 		}
 	}
 	private void lag(Player target) {
-		target.spawnParticle(Particle.ELDER_GUARDIAN, target.getEyeLocation(), 1, 0, 0, 0, 0.0);
+		target.spawnParticle(Particle.MOB_APPEARANCE, target.getEyeLocation(), 1, 0, 0, 0, 0.0);
 		target.spawnParticle(Particle.SQUID_INK, target.getEyeLocation(), 1000, 0.25, .25, .25, 0.0);
 	}
 	private static final int soundCount = Sound.values().length;
@@ -149,11 +149,11 @@ public class ABSBDefenseMatrix implements PluginTied, Listener{
 
 	private void afflictPotions(Player target) {
 		target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 255));
-		target.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 20, 255));
+		target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20, 255));
 		target.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20, 255));
 		target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20, 255));
-		target.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 20, 255));
-		target.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 20, 255));
+		target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 255));
+		target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20, 255));
 		target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20, 255));
 		target.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 255));
 	}

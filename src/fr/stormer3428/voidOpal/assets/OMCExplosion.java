@@ -25,7 +25,7 @@ public class OMCExplosion {
 	public OMCExplosion(Location loc, double yield, LivingEntity source, Predicate<Entity> predicate) {
 		if(loc == null) return;
 		World world = loc.getWorld();
-		world.spawnParticle(Particle.EXPLOSION_EMITTER, loc, 1, 0.25,0,0.25, 0, null, true);
+		world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 1, 0.25,0,0.25, 0, null, true);
 		world.playSound(loc, Sound.ENTITY_GENERIC_EXPLODE, 5.0f, .8f);
 		double radius = yield * 2;
 		for(Entity e : world.getNearbyEntities(loc, radius, radius, radius)) if(e instanceof LivingEntity le){
@@ -53,7 +53,7 @@ public class OMCExplosion {
 	public OMCExplosion(Location loc, double radius, double damageCenter, double damageEdge, double pushForce, LivingEntity source, Predicate<Entity> predicate) {
 		if(loc == null) return;
 		World world = loc.getWorld();
-		world.spawnParticle(Particle.EXPLOSION_EMITTER, loc, 1, 0.25,0,0.25, 0, null, true);
+		world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 1, 0.25,0,0.25, 0, null, true);
 		world.playSound(loc, Sound.ENTITY_GENERIC_EXPLODE, 5.0f, .8f);
 		for(Entity e : world.getNearbyEntities(loc, radius, radius, radius)) if(e instanceof LivingEntity le){
 			if(e.equals(source)) continue;
