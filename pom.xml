@@ -1,8 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.stormer3428</groupId>
 	<artifactId>VoidOpal</artifactId>
-	<version>0.1.2</version>
+	<version>0.2.0-Auth</version>
 	<name>VoidOpal</name>
 
 	<description>A library for plugins made by stormer3428</description>
@@ -21,6 +23,11 @@
 			<artifactId>spigot-api</artifactId>
 			<version>1.21-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm-commons</artifactId>
+			<version>9.7</version>
 		</dependency>
 	</dependencies>
 	<build>

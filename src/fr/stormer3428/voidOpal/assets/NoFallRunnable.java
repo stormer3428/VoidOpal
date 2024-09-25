@@ -3,13 +3,13 @@ package fr.stormer3428.voidOpal.assets;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 
 public class NoFallRunnable extends BukkitRunnable {
 
 	public static NoFallRunnable run(LivingEntity p) {
 		NoFallRunnable noFallRunnable = new NoFallRunnable(p);
-		noFallRunnable.runTaskTimer(OMCPluginImpl.getJavaPlugin(), 1, 1);
+		noFallRunnable.runTaskTimer(OMCCore.getJavaPlugin(), 1, 1);
 		return noFallRunnable;
 	}
 	

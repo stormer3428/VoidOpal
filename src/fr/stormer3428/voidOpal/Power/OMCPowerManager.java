@@ -11,7 +11,7 @@ import fr.stormer3428.voidOpal.Command.OMCVariable;
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
 import fr.stormer3428.voidOpal.data.OMCLang;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
-import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public abstract class OMCPowerManager extends BukkitRunnable implements Listener, PluginTied{
@@ -29,10 +29,10 @@ public abstract class OMCPowerManager extends BukkitRunnable implements Listener
 	
 	@Override
 	public void onPluginEnable() {
-		OMCPluginImpl.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPluginImpl.getJavaPlugin());
+		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin());
 		registerPowers();
 		for(OMCPower power : registeredPowers) power.onPluginEnable();
-		runTaskTimer(OMCPluginImpl.getJavaPlugin(), 0, 1);	
+		runTaskTimer(OMCCore.getJavaPlugin(), 0, 1);	
 	}
 	
 	@Override
@@ -107,7 +107,7 @@ public abstract class OMCPowerManager extends BukkitRunnable implements Listener
 			OMCLogger.systemError(OMCLang.ERROR_POWER_MANAGER_REGISTER_NULL_NAME.toString());
 			return;
 		}
-		OMCPluginImpl.getJavaPlugin().getServer().getPluginManager().registerEvents(power, OMCPluginImpl.getJavaPlugin());
+		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(power, OMCCore.getJavaPlugin());
 		registeredPowers.add(power);
 	}
 
