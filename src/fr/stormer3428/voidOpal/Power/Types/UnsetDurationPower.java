@@ -21,8 +21,8 @@ public abstract class UnsetDurationPower extends OMCPower{
 	@Override
 	public boolean tryCast(ItemStack it, Player p) {
 		if(!isEnabled()) return false;
-		if(isOnCooldown(p)) return false;
 		if(empowered.contains(p.getUniqueId())) return onEmpoweredTryCast(it, p);
+		if(isOnCooldown(p)) return false;
 		empower(it, p);
 		return true;
 	}
