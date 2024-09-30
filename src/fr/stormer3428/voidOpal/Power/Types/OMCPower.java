@@ -11,7 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public abstract class OMCPower extends BukkitRunnable implements PluginTied, Listener{
@@ -63,7 +63,7 @@ public abstract class OMCPower extends BukkitRunnable implements PluginTied, Lis
 		return true;
 	}
 
-	@Override public void onPluginEnable() {runTaskTimer(OMCPluginImpl.getJavaPlugin(), 0, 1);}
+	@Override public void onPluginEnable() {runTaskTimer(OMCCore.getJavaPlugin(), 0, 1);}
 	public String getRegistryName() {return registryName;}
 	public String path(String innerPath) {return getRegistryName() + "." + innerPath;}
 	public boolean isOnCooldown(Player p) {return isOnCooldown(p.getUniqueId());}

@@ -7,7 +7,7 @@ import org.bukkit.event.server.TabCompleteEvent;
 
 import fr.stormer3428.voidOpal.data.OMCLang;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
-import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 
 /**
  * This object represents a Minecraft command in the form of a signature and {@link OMCVariable} system, </br>
@@ -75,7 +75,7 @@ public abstract class OMCCommand {
 	}
 
 	public boolean execute(CommandSender sender, String[] args) {
-		if(OMCPluginImpl.getOMCPlugin().isPirated()) throw new RuntimeException("OMCPointerException");
+		if(OMCCore.isPirated()) throw new RuntimeException("OMCPointerException");
 		if(!canRun(sender)) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOPERMISSION.toString().replace("<%PERMISSION>", getPermissionString()));
 		ArrayList<String> variables = new ArrayList<>();
 		int i = 0;
@@ -121,7 +121,7 @@ public abstract class OMCCommand {
 	 */
 	public String getPermissionString() {
 		StringBuilder permissionString = new StringBuilder();
-		permissionString.append(OMCPluginImpl.getJavaPlugin().getName() + ".command.");
+		permissionString.append(OMCCore.getJavaPlugin().getName() + ".command.");
 		archLoop: for(String[] commandArchitectureStage : architecture) {
 			String architectureString = commandArchitectureStage[0];
 			for(OMCVariable variable : OMCVariable.VARIABLES) if(variable.matches(architectureString)) continue archLoop;
@@ -216,6 +216,6 @@ public abstract class OMCCommand {
 	 * @return Whether this sender can run this {@link OMCCommand}
 	 */
 	protected boolean canRun(CommandSender sender) {
-		return !requiresPermission || sender.hasPermission(getPermissionString()) || OMCPluginImpl.isSuperAdmin(sender);
+		return !requiresPermission || sender.hasPermission(getPermissionString()) || OMCCore.isSuperAdmin(sender);
 	}
 }

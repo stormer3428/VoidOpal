@@ -3,7 +3,7 @@ package fr.stormer3428.voidOpal.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 
 public abstract class OMCPrivateCommand extends OMCCommand{
 
@@ -18,7 +18,7 @@ public abstract class OMCPrivateCommand extends OMCCommand{
 	@Override
 	protected boolean canRun(CommandSender sender) {
 		if(!(sender instanceof Player p)) return false;
-		return OMCPluginImpl.isSuperAdmin(p);
+		return OMCCore.isSuperAdmin(p);
 	}
 	
 }

@@ -1,5 +1,7 @@
 package fr.stormer3428.voidOpal.util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
@@ -228,6 +230,18 @@ public class OMCUtil {
 		return translated;
 	}
 	
+	public static byte[] getClassBytes(Class<?> c) throws IOException {
+		String className = c.getName();
+		String classAsPath = className.replace('.', '/') + ".class";
+		InputStream stream = c.getClassLoader().getResourceAsStream(classAsPath);
+		return stream.readAllBytes();
+	}
+	
+	public static String byteArrayToHexString(byte[] byteArray) {
+	    StringBuilder sb = new StringBuilder();
+	    for (byte b : byteArray) sb.append(String.format("%02X ", b));  
+	    return sb.toString();
+	}
 }
 
 

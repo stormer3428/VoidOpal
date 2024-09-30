@@ -17,7 +17,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 
 public class OMCTemporaryBlock {
 
@@ -53,7 +53,7 @@ public class OMCTemporaryBlock {
 					changes.clear();
 				}
 			};
-			blockChangeRunnable.runTaskTimer(OMCPluginImpl.getJavaPlugin(), 0, 1);
+			blockChangeRunnable.runTaskTimer(OMCCore.getJavaPlugin(), 0, 1);
 		}
 		BlockState blockState = blockData.createBlockState().copy(location);
 //		List<BlockState> list = changes.get(p.getUniqueId());
@@ -104,7 +104,7 @@ public class OMCTemporaryBlock {
 				}
 				OMCTemporaryBlock.this.remainingTicks --;
 			}
-		}.runTaskTimer(OMCPluginImpl.getJavaPlugin(), 0, 1);
+		}.runTaskTimer(OMCCore.getJavaPlugin(), 0, 1);
 	}
 
 	public int getRemainingTicks() {

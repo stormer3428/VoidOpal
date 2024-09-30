@@ -25,7 +25,7 @@ import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public abstract class OMCSoulbindingManager implements PluginTied, Listener{
@@ -36,7 +36,7 @@ public abstract class OMCSoulbindingManager implements PluginTied, Listener{
 
 	@Override
 	public void onPluginEnable() {
-		OMCPluginImpl.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPluginImpl.getJavaPlugin());
+		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin());
 	}
 
 	@Override

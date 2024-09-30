@@ -11,7 +11,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 
-import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 @SuppressWarnings("deprecation")
@@ -42,7 +42,7 @@ public class OMCTrueDamageManager implements Listener,PluginTied{
 		damageBuffer.add(request);
 		if(source == null) damageable.damage(damage);
 		else damageable.damage(damage, source);
-		Bukkit.getScheduler().scheduleSyncDelayedTask(OMCPluginImpl.getJavaPlugin(), () -> {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(OMCCore.getJavaPlugin(), () -> {
 			damageBuffer.remove(request);
 		},1l);
 	}
@@ -75,7 +75,7 @@ public class OMCTrueDamageManager implements Listener,PluginTied{
 
 	@Override
 	public void onPluginEnable() {
-		OMCPluginImpl.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPluginImpl.getJavaPlugin());
+		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin());
 	}
 
 	@Override

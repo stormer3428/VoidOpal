@@ -18,12 +18,12 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.stormer3428.voidOpal.Item.Types.OMCItem;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
-import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public class OMCInventoryItemTracker implements PluginTied, Listener{
 
-	@Override public void onPluginEnable() {OMCPluginImpl.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPluginImpl.getJavaPlugin());}
+	@Override public void onPluginEnable() {OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin());}
 	@Override public void onPluginDisable() {}
 	@Override public void onPluginReload() {}
 

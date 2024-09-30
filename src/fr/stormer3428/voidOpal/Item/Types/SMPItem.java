@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -16,10 +17,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import fr.stormer3428.voidOpal.Power.OMCTickable;
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.util.OMCUtil;
 
 public class SMPItem implements OMCItem {
@@ -27,7 +31,7 @@ public class SMPItem implements OMCItem {
 	public SMPItem(String registryName) {
 		this.registryName = registryName;
 	}
-	
+
 	private Material material = Material.ENCHANTED_BOOK;
 	private String displayName = null;
 	private int CMD = 0;
@@ -38,6 +42,7 @@ public class SMPItem implements OMCItem {
 	private final ArrayList<OMCTickable> omcTickeables = new ArrayList<>();
 	private final ArrayList<Listener> listeners = new ArrayList<>();
 	private HashMap<Enchantment, Integer> enchants = new HashMap<>();
+	private HashMap<PersistentDataType<Object, ? extends Object>, HashMap<String, Object>> data = new HashMap<>();
 	private boolean unbreakeable = false;
 
 	@Override public String getRegistryName() { return registryName;}
@@ -63,7 +68,9 @@ public class SMPItem implements OMCItem {
 	public SMPItem addPower(OMCPower omcPower) { omcPowers.add(omcPower); return this;}
 	public SMPItem addTickeable(OMCTickable omcTickeable) { omcTickeables.add(omcTickeable); return this;}
 	public SMPItem addListener(Listener listener) { listeners.add(listener); return this;}
-	public <T extends Listener & OMCTickable> SMPItem addTickeableListener(T tickeableListener) {  return this;}
+	public <T extends Listener & OMCTickable> SMPItem addTickeableListener(T tickeableListener) { return this;}
+	@SuppressWarnings("unchecked")
+	public <P, C extends Object> SMPItem addData(String name, PersistentDataType<P, C> dataType, C value) {data.computeIfAbsent((PersistentDataType<Object, ? extends Object>) dataType, (t) -> new HashMap<String, Object>()).put(name, value);return this;}
 
 	public SMPItem unbreakable() { this.unbreakeable = true; return this;}
 
@@ -122,18 +129,40 @@ public class SMPItem implements OMCItem {
 		ItemStack it = new ItemStack(material, amount);
 		if(amount == 0 || !material.isItem()) return it;
 		ItemMeta itm = it.getItemMeta();
-		if(displayName != null) itm.setDisplayName(ChatColor.RESET + OMCUtil.translateChatColor(displayName));
-		if(CMD != 0) itm.setCustomModelData(CMD);
-		if(!lore.isEmpty()) {
-			ArrayList<String> translated = new ArrayList<>();
-			for(String s : lore) translated.add(OMCUtil.translateChatColor(s));
-			itm.setLore(translated);
+		if(itm != null) {
+			if(displayName != null) itm.setDisplayName(ChatColor.RESET + OMCUtil.translateChatColor(displayName));
+			if(CMD != 0) itm.setCustomModelData(CMD);
+			if(!lore.isEmpty()) {
+				ArrayList<String> translated = new ArrayList<>();
+				for(String s : lore) translated.add(OMCUtil.translateChatColor(s));
+				itm.setLore(translated);
+			}
+			if(!itemFlags.isEmpty()) for(ItemFlag flag : itemFlags) itm.addItemFlags(flag);
+			if(!enchants.isEmpty()) for(Entry<Enchantment, Integer> entry : enchants.entrySet()) itm.addEnchant(entry.getKey(), entry.getValue(), true);
+			if(unbreakeable) itm.setUnbreakable(true);
+			if(!data.isEmpty()) {
+				PersistentDataContainer dataContainer = itm.getPersistentDataContainer();
+				for(Entry<PersistentDataType<Object, ? extends Object>, HashMap<String, Object>> dataTypeEntry : data.entrySet()) {
+					@SuppressWarnings("unchecked")
+					PersistentDataType<Object, Object> dataType = (PersistentDataType<Object, Object>) dataTypeEntry.getKey();
+					HashMap<String, Object> valueMap = dataTypeEntry.getValue();
+					if(valueMap.isEmpty()) continue;
+					for(Entry<String, Object> entry : valueMap.entrySet()) {
+						String name = entry.getKey();
+						Object value = entry.getValue();
+						NamespacedKey key = getNSK(name);
+						dataContainer.set(key, dataType, value);
+					}
+				}
+			}
+			it.setItemMeta(itm);
 		}
-		if(!itemFlags.isEmpty()) for(ItemFlag flag : itemFlags) itm.addItemFlags(flag);
-		if(!enchants.isEmpty()) for(Entry<Enchantment, Integer> entry : enchants.entrySet()) itm.addEnchant(entry.getKey(), entry.getValue(), true);
-		if(unbreakeable) itm.setUnbreakable(true);
-		it.setItemMeta(itm);
 		return it;
+	}
+
+	private static final Map<String, NamespacedKey> NSKs = new HashMap<>();
+	private NamespacedKey getNSK(String name) {
+		return NSKs.computeIfAbsent(name, (s) -> new NamespacedKey(OMCCore.getJavaPlugin(), s));
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.stormer3428.voidOpal.logging.OMCLogger;
-import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 
 public enum OMCLang {
 
@@ -91,7 +91,7 @@ public enum OMCLang {
 	}
 
 	public static void loadFromConfig() {
-		File lang = new File(OMCPluginImpl.getJavaPlugin().getDataFolder(), "lang.yml");
+		File lang = new File(OMCCore.getJavaPlugin().getDataFolder(), "lang.yml");
 		YamlConfiguration langConfig = YamlConfiguration.loadConfiguration(lang);
 		if(!lang.exists()) try {
 			langConfig.save(lang);
@@ -99,7 +99,7 @@ public enum OMCLang {
 			e.printStackTrace();
 			OMCLogger.systemError("Failed to create language file");
 			OMCLogger.systemError("Disabling...");
-			OMCPluginImpl.getJavaPlugin().getServer().getPluginManager().disablePlugin(OMCPluginImpl.getJavaPlugin());
+			OMCCore.getJavaPlugin().getServer().getPluginManager().disablePlugin(OMCCore.getJavaPlugin());
 		}
 		for(OMCLang l : OMCLang.values()) if(langConfig.getString(l.getPath()) == null) langConfig.set(l.getPath(), l.getDef());
 		OMCLang.setFile(langConfig);
@@ -109,7 +109,7 @@ public enum OMCLang {
 			e.printStackTrace();
 			OMCLogger.systemError("Failed to save language file");
 			OMCLogger.systemError("Disabling...");
-			OMCPluginImpl.getJavaPlugin().getServer().getPluginManager().disablePlugin(OMCPluginImpl.getJavaPlugin());
+			OMCCore.getJavaPlugin().getServer().getPluginManager().disablePlugin(OMCCore.getJavaPlugin());
 		}
 	}
 }

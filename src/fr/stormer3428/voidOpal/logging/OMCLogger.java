@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.util.OMCUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -16,7 +16,7 @@ public class OMCLogger {
 	private static String PREFIX_COMMAND;
 	private static String PREFIX_ERROR;
 
-	public static OMCLogger instance;
+	public static OMCLogger instance = new OMCLogger("INTERNAL", "INTERNAL ERR");
 	
 	public OMCLogger(String prefix, String error) {
 		setPrefixCommand(prefix);
@@ -81,7 +81,7 @@ public class OMCLogger {
 
 	public static boolean debug(String message){return instance._debug(message);}
 	public boolean _debug(String message){
-		if(OMCPluginImpl.DEBUG) return systemNormal("[DEBUG] " + message);
+		if(OMCCore.isDebugModeActive()) return systemNormal("[DEBUG] " + message);
 		return false;
 	}
 

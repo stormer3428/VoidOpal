@@ -19,7 +19,7 @@ import fr.stormer3428.voidOpal.Item.Types.OMCItem;
 import fr.stormer3428.voidOpal.Item.Types.SMPItem;
 import fr.stormer3428.voidOpal.data.OMCLang;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
-import fr.stormer3428.voidOpal.plugin.OMCPluginImpl;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 import fr.stormer3428.voidOpal.util.ItemStackUtils;
 
@@ -32,7 +32,7 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 
 	@Override
 	public void onPluginEnable() {
-		OMCPluginImpl.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCPluginImpl.getJavaPlugin());
+		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin());
 		registerItems();
 		registerRecipes();
 		registerConfigs();
@@ -50,7 +50,7 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 			}
 			String fileName = registryName + ".yml";
 			OMCLogger.systemNormal("Reloading " + fileName);
-			File file = new File(OMCPluginImpl.getJavaPlugin().getDataFolder(), "items/" + fileName);
+			File file = new File(OMCCore.getJavaPlugin().getDataFolder(), "items/" + fileName);
 			if(!file.exists()) try {
 				OMCLogger.systemNormal("File was missing, creating...");
 				file.getParentFile().mkdirs();
@@ -150,7 +150,7 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 			OMCLogger.systemError(OMCLang.ERROR_ITEM_MANAGER_REGISTER_NULL_NAME.toString());
 			return;
 		}
-		if(item instanceof SMPItem smpItem) for(Listener listener : smpItem.getListener()) OMCPluginImpl.getJavaPlugin().getServer().getPluginManager().registerEvents(listener, OMCPluginImpl.getJavaPlugin());
+		if(item instanceof SMPItem smpItem) for(Listener listener : smpItem.getListener()) OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(listener, OMCCore.getJavaPlugin());
 		registeredItems.add(item);
 	}
 
