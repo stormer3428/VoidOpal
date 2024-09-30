@@ -14,14 +14,13 @@ public abstract class OMCCore{
 	
 	@OMCKeep public abstract void registerPluginTied(PluginTied pluginTied);
 	@OMCKeep public abstract void reload();
-	@OMCKeep public abstract boolean isPirated();
-	@OMCKeep public abstract void flag();
 	@OMCKeep public abstract void onEnable();
 	@OMCKeep public abstract void onReload();
 	@OMCKeep public abstract void onDisable();
 	
 	@OMCKeep protected abstract boolean _isDebugModeActive();
 	@OMCKeep protected abstract boolean _isSuperAdmin(CommandSender sender);
+	@OMCKeep protected abstract boolean _isPirated();
 
 	@OMCKeep public OMCCore() {omcCore = this;}
 	@OMCKeep private static OMCCore omcCore; 
@@ -37,4 +36,5 @@ public abstract class OMCCore{
 
 	@OMCKeep public static final boolean isDebugModeActive() {return omcCore._isDebugModeActive();}
 	@OMCKeep public static boolean isSuperAdmin(CommandSender sender) {return omcCore._isSuperAdmin(sender);}
+	@OMCKeep public static boolean isPirated() {return omcCore._isPirated();}
 }
