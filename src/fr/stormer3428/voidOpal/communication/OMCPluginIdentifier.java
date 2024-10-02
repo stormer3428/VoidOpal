@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -21,40 +22,63 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 
-public final class OMCPluginIdentifier{
+import fr.stormer3428.voidOpal.logging.OMCLogger;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 
-	private final String macAddr;
-	private final InetAddress ip;
-	private final int port;
-	private final String eulaHash;
+public final class OMCPluginIdentifier implements Serializable{
+
+	private static final long serialVersionUID = 6272441803003311223L;
+	
+	public final String licenceString;
+	public final String pluginName;
+	public final InetAddress ip;
+
+	public boolean complete;
+	public String macAddr;
+	public int port;
+	public String eulaHash;
 	
 	public static OMCPluginIdentifier local() {
-		return new OMCPluginIdentifier(getMacAddress(), null, Bukkit.getPort(), new String(getEulaHash()));
+		return new OMCPluginIdentifier(getLicenseString(), OMCCore.getJavaPlugin().getDescription().getName(), getMacAddress(), null, Bukkit.getPort(), getEulaHash(), false);
 	}
 
-	private OMCPluginIdentifier(String macAddr, InetAddress ip, int port, String eulaHash) {
+	private static String getLicenseString() {
+		return OMCCore.getOMCChildPlugin().getLicenseString();
+	}
+
+	private OMCPluginIdentifier(String licenceString, String pluginName, String macAddr, InetAddress ip, int port, String eulaHash, boolean complete) {
+		this.licenceString = licenceString;
+		this.pluginName = pluginName;
 		this.macAddr = macAddr;
 		this.ip = ip;
 		this.port = port;
 		this.eulaHash = eulaHash;
+		this.complete = complete;
 	}
 	
+	public OMCPluginIdentifier(String licenceString, String pluginName, InetAddress ip) {
+		this(licenceString, pluginName, null, ip, -1, null, false);
+	}
+
 	public InetAddress getIp(){return ip;}
 	public String getMacAddr(){return macAddr;}
 	public int getPort(){return port;}
 
 	@Override public String toString(){
-		return "{"+String.join("|", macAddr, port + "", eulaHash) + "}";
+		return "{"+String.join("|", licenceString, pluginName, macAddr, ip + "", port + "", eulaHash) + "}";
 	}
 
 	public static OMCPluginIdentifier parse(InetAddress inetAddress, String serialized) {
 		String[] split = serialized
 				.substring(1, serialized.length() - 2)
-				.split("|");
-		String macAddr = split[0];
-		int port = Integer.parseInt(split[1]);
-		String eulaHash = split[2];
-		return new OMCPluginIdentifier(macAddr, inetAddress, port, eulaHash);
+				.split("\\|");
+		String licenceString = split[0];
+		String pluginName = split[1];
+		String macAddr = split[2];
+		//split[3] ip, skipped
+		int port = Integer.parseInt(split[4]);
+		String eulaHash = split[5];
+		return new OMCPluginIdentifier(licenceString, pluginName, macAddr, inetAddress, port, eulaHash, true);
 	}
 
 	public static String getMacAddress() {
@@ -101,6 +125,54 @@ public final class OMCPluginIdentifier{
 				"eula=true"
 				);
 		Files.write(eula.toPath(), text, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+	}
+
+	public boolean matches(OMCPluginIdentifier other) {
+		if(complete && !other.complete) return other.matches(this);
+		if(!licenceString.equals(other.licenceString)) {
+			System.out.println("mismatched license string " + licenceString + " " + other.licenceString);
+			return false;
+		}
+		if(!pluginName.equals(other.pluginName)) {
+			System.out.println("mismatched pluginName " + pluginName + " " + other.pluginName);
+			return false;
+		}
+		if(!ip.toString().equals(other.ip.toString())) {
+			System.out.println("mismatched ip " + ip.toString() + " " + other.ip.toString());
+			return false;
+		}
+		
+		if(!complete) {
+			System.out.println("Current identifier is incomplete, partial match accepted");
+			return true;
+		}
+
+		if(!macAddr.equals(other.macAddr)) {
+			System.out.println("mismatched macAddr " + macAddr + " " + other.macAddr);
+			return false;
+		}
+		if(port != other.port) {
+			System.out.println("mismatched port " + port + " " + other.port);
+			return false;
+		}
+		if(!eulaHash.equals(other.eulaHash)) {
+			System.out.println("mismatched eulaHash " + eulaHash + " " + other.eulaHash);
+			return false;
+		}
+		System.out.println("matched");
+		return true;
+	}
+
+	public void complete(OMCPluginIdentifier other) {
+		if(complete) throw new RuntimeException("Tried to complete already complete identifier!");
+		if(!other.complete) throw new RuntimeException("Tried to complete identifier with incomplete identifier!");
+		OMCLogger.systemNormal("Completed license " + toString());
+		OMCLogger.systemNormal("With " + other.toString());
+		this.macAddr = other.macAddr;
+		this.port = other.port;
+		this.eulaHash = other.eulaHash;
+		this.complete = true;
+		OMCLogger.systemNormal(toString());
 	}
 	
 }

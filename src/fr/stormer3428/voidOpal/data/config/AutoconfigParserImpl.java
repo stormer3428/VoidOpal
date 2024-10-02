@@ -27,13 +27,13 @@ public final class AutoconfigParserImpl implements AutoconfigParser{
 
 	@Override
 	public void updateValues() {
-		OMCLogger.systemNormal("Updating values in classes");
+//		OMCLogger.systemNormal("Updating values in classes");
 		for(Class<?> clazz : annotatedClasses) {
-			OMCLogger.systemNormal("Updating values of class " + clazz.getName());
+//			OMCLogger.systemNormal("Updating values of class " + clazz.getName());
 
 			File file = getConfigFile(clazz);
 			if(file == null) {
-				OMCLogger.systemError("Error, missing @AutoConfig annotation");
+//				OMCLogger.systemError("Error, missing @AutoConfig annotation");
 				continue;
 			}
 

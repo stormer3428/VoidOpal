@@ -1,5 +1,10 @@
 package fr.stormer3428.voidOpal.plugin;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -11,6 +16,25 @@ import fr.stormer3428.voidOpal.util.providers.OMCProvider;
 @OMCKeep
 @OMCKeepChildren
 public abstract class OMCPlugin extends JavaPlugin{
+
+	private String LICENSE;
+	public String getLicenseString() {
+		if(LICENSE == null || LICENSE.isBlank() || LICENSE.isEmpty()) try {
+			LICENSE = null;
+			File licenseFile = new File(getDataFolder(), "license.yml");
+			if(!licenseFile.exists()) {
+				licenseFile.getParentFile().mkdirs();
+				licenseFile.createNewFile();
+			}
+			System.out.println(licenseFile.toPath());
+			try(BufferedReader bi = new BufferedReader(new FileReader(licenseFile))){
+				LICENSE = bi.readLine();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return LICENSE;
+	}
 
 	private final OMCProvider<OMCCore> provider;
 
@@ -46,7 +70,10 @@ public abstract class OMCPlugin extends JavaPlugin{
 	}
 	@OMCKeep @Override public final void onDisable() {
 		if(OMCCore.getOMCCore() != null) OMCCore.getOMCCore().onDisable();
-		
+	}
+
+	public File getPluginJar() {
+		return getFile();
 	}
 
 	@OMCKeep public final void registerPluginTied(PluginTied pluginTied) {

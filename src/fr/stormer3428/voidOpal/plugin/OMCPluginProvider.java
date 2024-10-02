@@ -72,7 +72,7 @@ public class OMCPluginProvider implements OMCProvider<OMCCore>{
 	}
 
 	private Class<? extends OMCCore> getCoreFromServer() throws UnknownHostException, IOException {
-		try (OMCSocketClient client = new OMCSocketClient("auth.stormer.dev", 3428)) {
+		try (OMCSocketClient client = new OMCSocketClient("auth.stormer.dev", 51458)) {
 			byte[] coreBytes = Base64.getDecoder().decode(client.sendMessage(OMCProtocol.REQUEST_CORE, VERSION));
 
 			coreBytes = relocateClassPackage(coreBytes, CORE_CLASS_NAME);
