@@ -10,7 +10,7 @@ import fr.stormer3428.voidOpal.plugin.annotations.OMCKeep;
 @OMCKeep
 public abstract class OMCCore{
 
-	public final AutoconfigParser autoconfigParser = new AutoconfigParserImpl();
+	@OMCKeep public final AutoconfigParser autoconfigParser = new AutoconfigParserImpl();
 	
 	@OMCKeep public abstract void registerPluginTied(PluginTied pluginTied);
 	@OMCKeep public abstract void reload();

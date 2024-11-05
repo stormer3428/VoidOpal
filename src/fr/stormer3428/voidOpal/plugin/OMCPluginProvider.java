@@ -51,7 +51,12 @@ public class OMCPluginProvider implements OMCProvider<OMCCore>{
 				OMCLogger.systemNormal("Core already present in classpath");
 			}catch (ClassNotFoundException e) {
 				OMCLogger.systemNormal("Retrieving core from auth server");
-				coreClass = getCoreFromServer();
+				try {
+					coreClass = getCoreFromServer();
+				}catch (Exception e1) {
+					OMCLogger.systemError("Failed to authenticate to Auth server");
+					return null;
+				}
 			}
 			return coreClass.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {

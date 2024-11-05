@@ -20,6 +20,7 @@ public abstract class DisplayWrapper<T extends Display> {
 	protected double scale = 1.0;
 
 	private int interpolationDelay = 0;
+	private int interpolationDuration = 0;
 	private int teleportDuration = 0;
 	private float shadowRadius = 0.0f;
 	private float viewRange = 32.0f;
@@ -44,10 +45,12 @@ public abstract class DisplayWrapper<T extends Display> {
 	public DisplayWrapper<T> setTransformation(Transformation transformation) {this.transformation = transformation;return this;}
 	public DisplayWrapper<T> setGlowColorOverride(Color glowColorOverride) {this.glowColorOverride = glowColorOverride;return this;}
 	public DisplayWrapper<T> setInterpolationDelay(int interpolationDelay) {this.interpolationDelay = interpolationDelay;return this;}
+	public DisplayWrapper<T> setInterpolationDuration(int interpolationDuration) {this.interpolationDuration = interpolationDuration;return this;}
 	public DisplayWrapper<T> setTransformationMatrix(Matrix4f transformationMatrix) {this.transformationMatrix = transformationMatrix;return this;}
 	
 	public T getDisplay() {return display;}
 	public int getInterpolationDelay() {return interpolationDelay;}
+	public int getInterpolationDuration() {return interpolationDuration;}
 	public float getShadowRadius() {return shadowRadius;}
 	public float getViewRange() {return viewRange;}
 	public Color getGlowColorOverride() {return glowColorOverride;}
@@ -111,6 +114,7 @@ public abstract class DisplayWrapper<T extends Display> {
 		if(brightness != null) display.setBrightness(brightness);
 		if(glowColorOverride != null) display.setGlowColorOverride(glowColorOverride);
 		display.setInterpolationDelay(interpolationDelay);
+		display.setInterpolationDuration(interpolationDuration);
 		display.setShadowRadius(shadowRadius);
 		display.setTeleportDuration(teleportDuration);
 		if(transformation != null) display.setTransformation(transformation);

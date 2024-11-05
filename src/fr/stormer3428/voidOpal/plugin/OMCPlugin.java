@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,12 +14,38 @@ import org.bukkit.plugin.java.JavaPlugin;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.annotations.OMCKeep;
 import fr.stormer3428.voidOpal.plugin.annotations.OMCKeepChildren;
+import fr.stormer3428.voidOpal.util.OMCUtil;
 import fr.stormer3428.voidOpal.util.providers.OMCProvider;
 
 @OMCKeep
 @OMCKeepChildren
 public abstract class OMCPlugin extends JavaPlugin{
 
+	private static final List<String> NOLICENSE = Arrays.asList(
+"""
+
+██╗███╗   ██╗██╗   ██╗ █████╗ ██╗     ██╗██████╗     ██╗     ██╗ ██████╗███████╗███╗   ██╗███████╗███████╗
+██║████╗  ██║██║   ██║██╔══██╗██║     ██║██╔══██╗    ██║     ██║██╔════╝██╔════╝████╗  ██║██╔════╝██╔════╝
+██║██╔██╗ ██║██║   ██║███████║██║     ██║██║  ██║    ██║     ██║██║     █████╗  ██╔██╗ ██║███████╗█████╗  
+██║██║╚██╗██║╚██╗ ██╔╝██╔══██║██║     ██║██║  ██║    ██║     ██║██║     ██╔══╝  ██║╚██╗██║╚════██║██╔══╝  
+██║██║ ╚████║ ╚████╔╝ ██║  ██║███████╗██║██████╔╝    ███████╗██║╚██████╗███████╗██║ ╚████║███████║███████╗
+╚═╝╚═╝  ╚═══╝  ╚═══╝  ╚═╝  ╚═╝╚══════╝╚═╝╚═════╝     ╚══════╝╚═╝ ╚═════╝╚══════╝╚═╝  ╚═══╝╚══════╝╚══════╝
+"""
+//,"""
+//
+//██▓ ███▄    █  ██▒   █▓ ▄▄▄       ██▓     ██▓▓█████▄     ██▓     ██▓ ▄████▄  ▓█████  ███▄    █   ██████ ▓█████ 
+//▓██▒ ██ ▀█   █ ▓██░   █▒▒████▄    ▓██▒    ▓██▒▒██▀ ██▌   ▓██▒    ▓██▒▒██▀ ▀█  ▓█   ▀  ██ ▀█   █ ▒██    ▒ ▓█   ▀ 
+//▒██▒▓██  ▀█ ██▒ ▓██  █▒░▒██  ▀█▄  ▒██░    ▒██▒░██   █▌   ▒██░    ▒██▒▒▓█    ▄ ▒███   ▓██  ▀█ ██▒░ ▓██▄   ▒███   
+//░██░▓██▒  ▐▌██▒  ▒██ █░░░██▄▄▄▄██ ▒██░    ░██░░▓█▄   ▌   ▒██░    ░██░▒▓▓▄ ▄██▒▒▓█  ▄ ▓██▒  ▐▌██▒  ▒   ██▒▒▓█  ▄ 
+//░██░▒██░   ▓██░   ▒▀█░   ▓█   ▓██▒░██████▒░██░░▒████▓    ░██████▒░██░▒ ▓███▀ ░░▒████▒▒██░   ▓██░▒██████▒▒░▒████▒
+//░▓  ░ ▒░   ▒ ▒    ░ ▐░   ▒▒   ▓▒█░░ ▒░▓  ░░▓   ▒▒▓  ▒    ░ ▒░▓  ░░▓  ░ ░▒ ▒  ░░░ ▒░ ░░ ▒░   ▒ ▒ ▒ ▒▓▒ ▒ ░░░ ▒░ ░
+//▒ ░░ ░░   ░ ▒░   ░ ░░    ▒   ▒▒ ░░ ░ ▒  ░ ▒ ░ ░ ▒  ▒    ░ ░ ▒  ░ ▒ ░  ░  ▒    ░ ░  ░░ ░░   ░ ▒░░ ░▒  ░ ░ ░ ░  ░
+//▒ ░   ░   ░ ░      ░░    ░   ▒     ░ ░    ▒ ░ ░ ░  ░      ░ ░    ▒ ░░           ░      ░   ░ ░ ░  ░  ░     ░   
+//░           ░       ░        ░  ░    ░  ░ ░     ░           ░  ░ ░  ░ ░         ░  ░         ░       ░     ░  ░
+//                   ░                          ░                     ░                                          
+//"""
+			);
+	
 	private String LICENSE;
 	public String getLicenseString() {
 		if(LICENSE == null || LICENSE.isBlank() || LICENSE.isEmpty()) try {
@@ -26,7 +55,6 @@ public abstract class OMCPlugin extends JavaPlugin{
 				licenseFile.getParentFile().mkdirs();
 				licenseFile.createNewFile();
 			}
-			System.out.println(licenseFile.toPath());
 			try(BufferedReader bi = new BufferedReader(new FileReader(licenseFile))){
 				LICENSE = bi.readLine();
 			}
@@ -47,6 +75,7 @@ public abstract class OMCPlugin extends JavaPlugin{
 
 	@OMCKeep public abstract void registerPluginTied();
 	@OMCKeep public abstract OMCLogger instantiateLogger();
+	@OMCKeep public abstract void registerAutoconfigClasses();
 
 	@OMCKeep public void loadLangFromConfig() {}
 	@OMCKeep public void onOMCEnable() {}
@@ -58,7 +87,10 @@ public abstract class OMCPlugin extends JavaPlugin{
 		if(OMCCore.getOMCCore() == null) {
 			OMCLogger.systemNormal("Core is hasn't been initialized yet! Requesting...");
 			Bukkit.getScheduler().runTaskAsynchronously(this, ()->{
-				if(provider.getData() == null) throw new RuntimeException("Provider failed to load core!");
+				if(provider.getData() == null) {
+					OMCLogger.systemError(OMCUtil.translateChatColor(NOLICENSE.get(new Random().nextInt(NOLICENSE.size()))));
+					throw new RuntimeException("Provider failed to load core!");
+				}
 				OMCLogger.systemNormal("Succesfully loaded core v" + OMCCore.getOMCCore().getClass().getSimpleName());
 				OMCLogger.systemNormal("Scheduling delayed start");
 				Bukkit.getScheduler().runTask(this, ()->onEnable());
@@ -79,4 +111,9 @@ public abstract class OMCPlugin extends JavaPlugin{
 	@OMCKeep public final void registerPluginTied(PluginTied pluginTied) {
 		OMCCore.getOMCCore().registerPluginTied(pluginTied);
 	}
+	
+	public void registerAutoConfigClass(Class<?> ... classes) {
+		for(Class<?> c : classes) OMCCore.getOMCCore().autoconfigParser.registerAutoConfigClass(c);
+	}
+	
 }

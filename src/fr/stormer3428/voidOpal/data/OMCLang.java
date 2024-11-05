@@ -3,12 +3,14 @@ package fr.stormer3428.voidOpal.data;
 import java.io.File;
 import java.io.IOException;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.OMCCore;
+import fr.stormer3428.voidOpal.plugin.annotations.OMCKeep;
+import fr.stormer3428.voidOpal.util.OMCUtil;
 
+@OMCKeep
 public enum OMCLang {
 
 	ERROR_GENERIC_NOPERMISSION("You do not have the permission to perform this command (<%PERMISSION>)"),
@@ -75,11 +77,7 @@ public enum OMCLang {
 
 	@Override
 	public String toString() {
-		try {
-			return ChatColor.translateAlternateColorCodes('&', ChatColor.translateAlternateColorCodes('§', LANG.getString(this.path, this.def)));
-		}catch (Exception e) {
-			return "INTERNAL ERROR, LANG NEVER INSTANCIATED, PLEASE CONTACT AN ADMIN ABOUT THIS ISSUE, (" + getClass().getSimpleName() + ")";
-		}
+		return OMCUtil.translateChatColor(LANG.getString(this.path, this.def));
 	}
 
 	public String getPath() {
@@ -90,7 +88,7 @@ public enum OMCLang {
 		return this.def;
 	}
 
-	public static void loadFromConfig() {
+	@OMCKeep public static void loadFromConfig() {
 		File lang = new File(OMCCore.getJavaPlugin().getDataFolder(), "lang.yml");
 		YamlConfiguration langConfig = YamlConfiguration.loadConfiguration(lang);
 		if(!lang.exists()) try {

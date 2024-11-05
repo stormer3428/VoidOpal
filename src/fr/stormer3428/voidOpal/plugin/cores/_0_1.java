@@ -34,11 +34,13 @@ public final class _0_1 extends OMCCore{
 	@Override
 	public final void onEnable() {
 		autoconfigParser.registerAutoConfigClass(getClass());
+		autoconfigParser.updateValues();
 		new OMCLogger("INTERNAL", "INTERNAL ERR");
 		loadLangAndLogger();
 
 		OMCLogger.debug("registering of internal plugin tied classes"); registerIntegratedPluginTied(); 
 		OMCLogger.debug("requesting registering of plugin tied classes"); OMCCore.getOMCChildPlugin().registerPluginTied();
+		OMCLogger.debug("requesting registering autoconfig classes"); OMCCore.getOMCChildPlugin().registerAutoconfigClasses();
 		OMCLogger.debug("injecting config values into classes"); autoconfigParser.updateValues();
 		OMCLogger.debug("requesting enabling of child plugin"); OMCCore.getOMCChildPlugin().onOMCEnable();
 		OMCLogger.debug("requesting enabling of plugin tied classes"); for(PluginTied pluginTied : new ArrayList<>(pluginTieds)) pluginTied.onPluginEnable();

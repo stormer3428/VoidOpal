@@ -209,7 +209,7 @@ public final class AutoconfigParserImpl implements AutoconfigParser{
 	}
 
 	@Override
-	public void write(Class<?> clazz, String fieldName, Object fieldValue) {
+	public void _write(Class<?> clazz, String fieldName, Object fieldValue) {
 		File file = getConfigFile(clazz);
 		if(file == null) {
 			OMCLogger.systemError("Error, tried to save a non annotated value un a class missing @AutoConfig annotation");

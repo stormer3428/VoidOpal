@@ -72,16 +72,16 @@ public class OMCSocketClient implements Closeable{
 		socket.close();
 	}
 
-	public void print(String s) {
-		System.out.println("[client]\t: ("+s.length()+") " + s);
-	}
+//	public void print(String s) {
+//		System.out.println("[client]\t: ("+s.length()+") " + s);
+//	}
 
 	private class Message implements Callable<String> {
 		private final String message;
 		private final String header;
 		public Message(String header, String message) {this.message = message; this.header = header;}
 		public String call() throws Exception {
-			print("Sending data to " + socket.getInetAddress().toString() + ":" + socket.getPort());
+//			print("Sending data to " + socket.getInetAddress().toString() + ":" + socket.getPort());
 
 			String data = "";
 

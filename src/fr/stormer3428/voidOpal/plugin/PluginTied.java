@@ -1,5 +1,7 @@
 package fr.stormer3428.voidOpal.plugin;
 
+import fr.stormer3428.voidOpal.plugin.annotations.OMCKeep;
+
 /**
  * 
  * Adds methods meant to be called at plugin startup, reload, and unload. Used for anything that needs to load data <br>
@@ -8,10 +10,11 @@ package fr.stormer3428.voidOpal.plugin;
  * @author stormer3428
  *
  */
+@OMCKeep 
 public interface PluginTied {
 
-	public void onPluginEnable();
-	public void onPluginDisable();
-	public void onPluginReload();
+	@OMCKeep public void onPluginEnable();
+	@OMCKeep public void onPluginDisable();
+	@OMCKeep public void onPluginReload();
 	
 }
