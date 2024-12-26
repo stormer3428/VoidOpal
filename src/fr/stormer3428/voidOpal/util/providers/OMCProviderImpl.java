@@ -15,7 +15,6 @@ public class OMCProviderImpl<T> implements OMCProvider<T>{
 		return data;
 	}
 
-	@Override
 	public void setData(T data) {
 		this.data = data;
 	}

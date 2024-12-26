@@ -155,6 +155,4 @@ public class OMCPluginProvider implements OMCProvider<OMCCore>{
 		if(a.length < 4) throw new IllegalArgumentException("Class byte array too short");
 		if((((a[0]&0xFF)<<24)|((a[1]&0xFF)<<16)|((a[2]&0xFF)<<8)|(a[3]&0xFF))!=0xCAFEBABE) throw new IllegalArgumentException("Invalid class file format (wrong magic number)");
 	}
-
-	@Override public void setData(OMCCore data) {}
 }

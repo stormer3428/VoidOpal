@@ -134,7 +134,7 @@ public class OMCPremadeCommandFactory {
 
 					@Override
 					public boolean execute(CommandSender sender, ArrayList<String> args) {
-						List<Entity> targets = OMCCore.getJavaPlugin().getServer().selectEntities(sender, args.get(0));
+						List<Entity> targets = OMCCore.getJavaPlugin().getServer().selectEntities(sender, args.get(1));
 						if(targets.isEmpty()) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(0)));
 						OMCPower power = powerManager.fromName(args.get(0));
 						if(power == null) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOPOWER.toString().replace("<%POWER>", args.get(0)));

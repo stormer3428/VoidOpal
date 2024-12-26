@@ -7,7 +7,7 @@ import org.bukkit.util.Vector;
 
 public class MovingPoint implements Drawable{
 
-	private Vector location;
+	private Vector location = new Vector();
 	private Particle particle = Particle.CRIT;
 	private Object particleData = null;
 	private Vector particleDirection = new Vector(0,0,0);

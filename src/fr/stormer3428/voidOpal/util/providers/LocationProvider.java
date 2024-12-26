@@ -26,7 +26,6 @@ public class LocationProvider implements OMCProvider<Location>{
 		this.location = null;
 	}
 
-	@Override
 	public void setData(Location location) {
 		this.entity = null;
 		this.location = location;

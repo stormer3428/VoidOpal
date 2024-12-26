@@ -22,7 +22,7 @@ public abstract class OMCEitherHandPassivePower extends OMCPassivePower{
 	public abstract void onStopHolding(Player p);
 	public abstract void onStartHolding(Player p);
 
-	private ArrayList<UUID> HOLDING = new ArrayList<>();
+	protected ArrayList<UUID> HOLDING = new ArrayList<>();
 	
 	@Override
 	public void onTick(int ticker) {

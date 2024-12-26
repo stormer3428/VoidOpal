@@ -1,5 +1,6 @@
 package fr.stormer3428.voidOpal.util;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -31,7 +32,13 @@ public class GeometryUtils {
 	}
 
 	public static Vector getRandomVector() {
-		return getRandomVector(new Random());
+		return getRandomVector(new SecureRandom());
+	}
+
+	public static Vector[] getRandomVectors(int amount) {
+		Vector[] vectors = new Vector[amount];
+		for(int i = amount;i>0;i--) vectors[i-1]=getRandomVector();
+		return vectors;
 	}
 
 	public static Vector getRandomVector(Random r) {
