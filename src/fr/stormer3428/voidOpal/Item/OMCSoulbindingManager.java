@@ -8,6 +8,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,6 +22,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
@@ -101,8 +104,14 @@ public abstract class OMCSoulbindingManager implements PluginTied, Listener{
 		boolean currentSoulbound = isSoulboundItem(e.getCurrentItem());
 		boolean shiftClick = e.isShiftClick();
 
+		boolean cursorBundle = e.getCursor() != null && e.getCursor().getType().equals(Material.BUNDLE);
+		boolean currentBundle = e.getCurrentItem() != null && e.getCurrentItem().getType().equals(Material.BUNDLE);
+
 		if 		((clickedTop && (!shiftClick && (offHandsoulbound || cursorSoulbound || hotbarSoulbound))) 
-				|| (!clickedTop && shiftClick && !inSurvivalInv && currentSoulbound)) e.setCancelled(true);
+				|| (!clickedTop && shiftClick && !inSurvivalInv && currentSoulbound)
+				|| (cursorSoulbound && currentBundle)
+				|| (currentSoulbound && cursorBundle)
+			) e.setCancelled(true);
 	}
 
 	protected final HashMap<UUID, ArrayList<ItemStack>> restituteMap = new HashMap<>();
@@ -137,6 +146,16 @@ public abstract class OMCSoulbindingManager implements PluginTied, Listener{
 	@EventHandler
 	public void onInteract(PlayerInteractEntityEvent e) {
 		Player p = e.getPlayer();
+		ItemStack it = p.getInventory().getItem(e.getHand());
+		if(it == null || !isSoulboundItem(it)) return;
+		e.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onBlockInteract(PlayerInteractEvent e) {
+		Player p = e.getPlayer();
+		Block clicked = e.getClickedBlock();
+		if(clicked == null || !clicked.getType().isInteractable()) return;
 		ItemStack it = p.getInventory().getItem(e.getHand());
 		if(it == null || !isSoulboundItem(it)) return;
 		e.setCancelled(true);
