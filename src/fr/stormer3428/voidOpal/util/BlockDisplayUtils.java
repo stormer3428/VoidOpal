@@ -31,17 +31,24 @@ public class BlockDisplayUtils {
 
 		double dist = a.distance(b);
 		Vector dir = b.clone().subtract(a).toVector().normalize();
-		Location temp = a.clone().setDirection(dir);
+		
+		Location source = a.clone();
+		if(containPoints) a.add(dir.clone().multiply(-width/2));
+		return createPointingMatrix4d(source, dir, dist + (containPoints ? width : 0), width, rotation);
+	}
+
+	public static Matrix4d createPointingMatrix4d(Location start, Vector dir, double length, double width, double rotation) {return createPointingMatrix4d(start.clone().setDirection(dir), length, width, rotation);}
+	public static Matrix4d createPointingMatrix4d(Location start, double length, double width, double rotation) {
 		Matrix4d m1 = new Matrix4d();
 		
-		m1.mul(getMatrix4dForRotationAlongAxis(new Vector(0,-1,0), (float) Math.toRadians(temp.getYaw())));
-		m1.mul(getMatrix4dForRotationAlongAxis(new Vector(1,0,0), (float) Math.toRadians(temp.getPitch())));
+		m1.mul(getMatrix4dForRotationAlongAxis(new Vector(0,-1,0), (float) Math.toRadians(start.getYaw())));
+		m1.mul(getMatrix4dForRotationAlongAxis(new Vector(1,0,0), (float) Math.toRadians(start.getPitch())));
 		m1.mul(getMatrix4dForRotationAlongAxis(new Vector(0,0,1), (float) rotation));
 		
-		m1.translate(-width/2, -width/2, containPoints ? -width/2 : 0);
-		m1.scale(width, width, containPoints ? dist + width : dist);
+		m1.translate(-width/2, -width/2, 0);
+		m1.scale(width, width, length);
 
-		return new Matrix4d(m1);
+		return new Matrix4d(m1);		
 	}
 
 	public static Matrix4d createOrientatedCubeMatrix4d(Location loc, Vector dir, double size) {return createOrientatedCubeMatrix4d(loc, dir, size, -size/2, -size/2, -size/2);}
