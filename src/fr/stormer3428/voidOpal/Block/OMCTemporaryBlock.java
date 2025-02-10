@@ -22,19 +22,19 @@ import fr.stormer3428.voidOpal.plugin.OMCCore;
 public class OMCTemporaryBlock {
 
 	private static BukkitRunnable blockChangeRunnable;
-//	private static final Map<UUID, List<BlockState>> changes = new HashMap<>();
+	//	private static final Map<UUID, List<BlockState>> changes = new HashMap<>();
 	private static final List<Change> changes = new ArrayList<OMCTemporaryBlock.Change>();
 
 	private static final class Change{
 		final UUID uuid;
 		final BlockState blockState;
-		
+
 		public Change(UUID uuid, BlockState blockState) {
 			this.uuid = uuid;
 			this.blockState = blockState;
 		}
 	}
-	
+
 	private static void sendBlockChange(Player p, Location location, BlockData blockData) {
 		if(blockChangeRunnable == null) {
 			blockChangeRunnable = new BukkitRunnable() {
@@ -44,7 +44,7 @@ public class OMCTemporaryBlock {
 					for(Change change : changes) map.put(change.uuid, new ArrayList<BlockState>());
 					for(Change change : changes) map.get(change.uuid).add(change.blockState);
 					for(Entry<UUID, ArrayList<BlockState>> entry : map.entrySet()) {
-//					for(Entry<UUID, List<BlockState>> entry : changes.entrySet()) {
+						//					for(Entry<UUID, List<BlockState>> entry : changes.entrySet()) {
 						Player p = Bukkit.getPlayer(entry.getKey());
 						if(p == null) continue;
 						p.sendBlockChanges(entry.getValue());
@@ -56,11 +56,11 @@ public class OMCTemporaryBlock {
 			blockChangeRunnable.runTaskTimer(OMCCore.getJavaPlugin(), 0, 1);
 		}
 		BlockState blockState = blockData.createBlockState().copy(location);
-//		List<BlockState> list = changes.get(p.getUniqueId());
-//		if(list == null) {
-//			list = new ArrayList<>();
-//			changes.put(p.getUniqueId(), list);
-//		}
+		//		List<BlockState> list = changes.get(p.getUniqueId());
+		//		if(list == null) {
+		//			list = new ArrayList<>();
+		//			changes.put(p.getUniqueId(), list);
+		//		}
 		changes.add(new Change(p.getUniqueId(), blockState));
 	}
 
@@ -137,7 +137,19 @@ public class OMCTemporaryBlock {
 	}
 
 	public static boolean contains(Block b) {
-		for(OMCTemporaryBlock a : all) if(a.location.equals(b.getLocation())) return true;
+		return contains(b.getLocation());
+	}
+
+	public static boolean contains(Location loc) {
+		for(OMCTemporaryBlock a : all) {
+			if(
+				a.location.getWorld().equals(loc.getWorld())
+				&& a.location.getBlockX() == loc.getBlockX()
+				&& a.location.getBlockY() == loc.getBlockY()
+				&& a.location.getBlockZ() == loc.getBlockZ()
+				) 
+				return true;
+		}
 		return false;
 	}
 
