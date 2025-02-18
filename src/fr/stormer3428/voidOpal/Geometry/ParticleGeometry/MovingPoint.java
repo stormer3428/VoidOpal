@@ -38,7 +38,7 @@ public class MovingPoint implements Drawable{
 		location.rotateAroundAxis(axis, radians);
 		if(!staticDirection) {
 			particleDirection.rotateAroundAxis(axis, radians);
-			particleOffsetDirection.rotateAroundAxis(axis, radians);
+//			particleOffsetDirection.rotateAroundAxis(axis, radians);
 		}
 		return this;
 	}
@@ -48,7 +48,7 @@ public class MovingPoint implements Drawable{
 		location.rotateAroundX(radians);
 		if(!staticDirection) {
 			particleDirection.rotateAroundX(radians);
-			particleOffsetDirection.rotateAroundX(radians);
+//			particleOffsetDirection.rotateAroundX(radians);
 		}
 		return this;
 	}
@@ -58,7 +58,7 @@ public class MovingPoint implements Drawable{
 		location.rotateAroundY(radians);
 		if(!staticDirection) {
 			particleDirection.rotateAroundY(radians);
-			particleOffsetDirection.rotateAroundY(radians);
+//			particleOffsetDirection.rotateAroundY(radians);
 		}
 		return this;
 	}
@@ -68,7 +68,7 @@ public class MovingPoint implements Drawable{
 		location.rotateAroundZ(radians);
 		if(!staticDirection) {
 			particleDirection.rotateAroundZ(radians);
-			particleOffsetDirection.rotateAroundZ(radians);
+//			particleOffsetDirection.rotateAroundZ(radians);
 		}
 		return this;
 	}
