@@ -50,7 +50,7 @@ public class OMCPremadeCommandFactory {
 					public boolean execute(CommandSender sender, ArrayList<String> args) {
 						List<Entity> targets = new ArrayList<Entity>();
 						try {
-							OMCCore.getJavaPlugin().getServer().selectEntities(sender, args.get(0));
+							targets.addAll(OMCCore.getJavaPlugin().getServer().selectEntities(sender, args.get(0)));
 						}catch (NoSuchMethodError e) {
 							targets.add(OMCCore.getJavaPlugin().getServer().getPlayer(args.get(0)));
 						}
@@ -73,7 +73,7 @@ public class OMCPremadeCommandFactory {
 					public boolean execute(CommandSender sender, ArrayList<String> args) {
 						List<Entity> targets = new ArrayList<Entity>();
 						try {
-							OMCCore.getJavaPlugin().getServer().selectEntities(sender, args.get(0));
+							targets.addAll(OMCCore.getJavaPlugin().getServer().selectEntities(sender, args.get(0)));
 						}catch (NoSuchMethodError e) {
 							targets.add(OMCCore.getJavaPlugin().getServer().getPlayer(args.get(0)));
 						}
