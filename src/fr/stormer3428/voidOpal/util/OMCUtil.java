@@ -242,6 +242,26 @@ public class OMCUtil {
 	    for (byte b : byteArray) sb.append(String.format("%02X ", b));  
 	    return sb.toString();
 	}
+	
+	private static final String STANDARD = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	private static final String SMALL_CAPS = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ";
+
+	/**
+	 * Converts a string of text's alphabet characters to their
+	 * Unicode small caps versions and keeps all other characters as is.
+	 *
+	 * @param text the text to convert
+	 * @return the text that was input, with the alphabet characters converted
+	 **/
+	public static String toSmallCaps(String text) {
+	    StringBuilder result = new StringBuilder();
+	    for (char character: translateChatColor(text.toUpperCase()).toCharArray()) {
+	        int i = STANDARD.indexOf(character);
+	        if (i == -1) {result.append(character);continue;}
+	        result.append(SMALL_CAPS.charAt(i));
+	    }
+	    return result.toString();
+	}
 }
 
 
