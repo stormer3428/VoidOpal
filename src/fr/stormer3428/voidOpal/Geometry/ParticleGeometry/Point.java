@@ -7,7 +7,7 @@ import org.bukkit.util.Vector;
 
 public class Point implements Drawable{
 
-	private Vector location = new Vector();
+	protected Vector location = new Vector();
 	protected Particle particle = Particle.CRIT;
 	protected Object particleData = null;
 	protected int particleAmount = 1;
