@@ -86,6 +86,17 @@ public class GeometryUtils {
 		return list;
 	}
 	
+	public static ArrayList<Vector> getVectorCube(int size){
+		ArrayList<Vector> list = new ArrayList<>();
+
+		int min = - size;
+		int max = size;
+		
+		for(int x = max; x > min; x--) for(int y = max; y > min; y--) for(int z = max; z > min; z--) list.add(new Vector(x,y,z));
+		
+		return list;
+	}
+	
 	public static ArrayList<Location> getSphericalLocations(Block center, double radius, boolean hollow){
 		ArrayList<Location> list = new ArrayList<Location>();
 		for(Vector v : getSphericalVectors(radius, hollow)) list.add(center.getLocation().add(v));

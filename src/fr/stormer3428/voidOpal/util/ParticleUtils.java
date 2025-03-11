@@ -25,4 +25,14 @@ public class ParticleUtils {
 
 	public static void spawnMovingParticle(Particle particle, Location loc, Vector dir, double speed) {spawnMovingParticle(particle, loc, dir, speed, true);}
 	public static void spawnMovingParticle(Particle particle, Location loc, Vector dir, double speed, boolean force) {loc.getWorld().spawnParticle(particle, loc, 0, dir.getX(), dir.getY(), dir.getZ(), speed, null, force);}
+
+	public static double getMovementSpeedForDisplacement(Particle particle, double displacement) {
+		switch (particle) {
+			case END_ROD: 
+				return displacement * (2.5/27.6);
+			default:
+				return 0;
+		}
+		
+	}
 }
