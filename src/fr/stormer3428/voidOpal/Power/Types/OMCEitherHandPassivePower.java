@@ -42,5 +42,6 @@ public abstract class OMCEitherHandPassivePower extends OMCPassivePower{
 				NEW_HOLDING.add(p.getUniqueId());
 			} else if(wasHolding) onStopHolding(p);
 		}
+		HOLDING = NEW_HOLDING;
 	}
 }
