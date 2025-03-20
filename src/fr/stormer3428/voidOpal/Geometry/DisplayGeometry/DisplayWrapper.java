@@ -19,17 +19,17 @@ public abstract class DisplayWrapper<T extends Display> {
 	protected Vector direction;
 	protected double scale = 1.0;
 
-	private int interpolationDelay = 0;
-	private int interpolationDuration = 0;
-	private int teleportDuration = 0;
-	private float shadowRadius = 0.0f;
-	private float viewRange = 32.0f;
-	private Color glowColorOverride = null;
-	private boolean glowing = false;
-	private Matrix4f transformationMatrix = null;
-	private Billboard billboard = null;
-	private Brightness brightness = null;
-	private Transformation transformation = null;
+	protected int interpolationDelay = 0;
+	protected int interpolationDuration = 0;
+	protected int teleportDuration = 0;
+	protected float shadowRadius = 0.0f;
+	protected float viewRange = 32.0f;
+	protected Color glowColorOverride = null;
+	protected boolean glowing = false;
+	protected Matrix4f transformationMatrix = null;
+	protected Billboard billboard = null;
+	protected Brightness brightness = null;
+	protected Transformation transformation = null;
 	
 	public DisplayWrapper<T> setScale(double scale) {this.scale = scale; this.display.setDisplayHeight((float) scale); this.display.setDisplayWidth((float) scale); return updatePosition();}
 	public DisplayWrapper<T> setWorld(World world) {this.origin.setWorld(world); return updatePosition();}
@@ -43,23 +43,31 @@ public abstract class DisplayWrapper<T extends Display> {
 	public DisplayWrapper<T> setBrightness(Brightness brightness) {this.brightness = brightness;return this;}
 	public DisplayWrapper<T> setShadowRadius(float shadowRadius) {this.shadowRadius = shadowRadius;return this;}
 	public DisplayWrapper<T> setTransformation(Transformation transformation) {this.transformation = transformation;return this;}
+	public DisplayWrapper<T> setTeleportDuration(int teleportDuration) { this.teleportDuration = teleportDuration;return this;}
 	public DisplayWrapper<T> setGlowColorOverride(Color glowColorOverride) {this.glowColorOverride = glowColorOverride;return this;}
 	public DisplayWrapper<T> setInterpolationDelay(int interpolationDelay) {this.interpolationDelay = interpolationDelay;return this;}
 	public DisplayWrapper<T> setInterpolationDuration(int interpolationDuration) {this.interpolationDuration = interpolationDuration;return this;}
 	public DisplayWrapper<T> setTransformationMatrix(Matrix4f transformationMatrix) {this.transformationMatrix = transformationMatrix;return this;}
 	
+	
 	public T getDisplay() {return display;}
+	public int getTeleportDuration() { return teleportDuration; }
 	public int getInterpolationDelay() {return interpolationDelay;}
 	public int getInterpolationDuration() {return interpolationDuration;}
 	public float getShadowRadius() {return shadowRadius;}
 	public float getViewRange() {return viewRange;}
 	public Color getGlowColorOverride() {return glowColorOverride;}
+	public double getScale() { return scale; }
+	public Vector getLocation() { return location; }
 	public Vector getDirection() {return direction;}
 	public boolean isGlowing() {return glowing;}
+	public Location getOrigin() { return origin; }
+	public Class<T> getDisplayClass() { return displayClass; }
 	public Matrix4f getTransformationMatrix() {return transformationMatrix;}
 	public Billboard getBillboard() {return billboard;}
 	public Brightness getBrightness() {return brightness;}
 	public Transformation getTransformation() {return transformation;}
+	
 	
 	public DisplayWrapper(Class<T> displayClass, Location origin) {this(displayClass, origin, new Vector());}
 	public DisplayWrapper(Class<T> displayClass, Location origin, Vector location) {this(displayClass, origin, location, origin.getDirection());}
@@ -110,6 +118,18 @@ public abstract class DisplayWrapper<T extends Display> {
 		if(display != null && display.isDead()) display = null; if(display != null) return false;
 		Location loc = getWorldLocation();
 		display = loc.getWorld().spawn(loc, displayClass);
+		update();
+		return true;
+	}
+
+	public boolean destroy() {
+		if(display != null && display.isDead()) display = null; if(display == null) return false;
+		display.remove();
+		display = null;
+		return true;
+	}
+	
+	public void update() {
 		if(billboard != null) display.setBillboard(billboard);
 		if(brightness != null) display.setBrightness(brightness);
 		if(glowColorOverride != null) display.setGlowColorOverride(glowColorOverride);
@@ -121,14 +141,6 @@ public abstract class DisplayWrapper<T extends Display> {
 		if(transformationMatrix != null) display.setTransformationMatrix(transformationMatrix);
 		display.setViewRange(viewRange);
 		display.setGlowing(glowing);
-		return true;
-	}
-
-	public boolean destroy() {
-		if(display != null && display.isDead()) display = null; if(display == null) return false;
-		display.remove();
-		display = null;
-		return true;
 	}
 	
 }

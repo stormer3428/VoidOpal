@@ -28,12 +28,18 @@ public class ItemDisplayWrapper extends DisplayWrapper<ItemDisplay>{
 	@Override
 	public boolean create() {
 		if(!super.create()) return false;
-		ItemDisplay display = getDisplay();
-		display.setItemDisplayTransform(itemDisplayTransform);
-		display.setItemStack(itemStack);
+		update();
 		return true;
 	}
 
+	public void update() {
+		super.update();
+		updatePosition();
+		ItemDisplay display = getDisplay();
+		if(itemDisplayTransform != null) display.setItemDisplayTransform(itemDisplayTransform);
+		display.setItemStack(itemStack);
+	}
+	
 	public ItemDisplayWrapper setItemDisplayTransform(ItemDisplayTransform itemDisplayTransform) {this.itemDisplayTransform = itemDisplayTransform; return this;}
 	public ItemDisplayWrapper setItemStack(ItemStack itemStack) {this.itemStack = itemStack; return this;}
 
@@ -49,11 +55,15 @@ public class ItemDisplayWrapper extends DisplayWrapper<ItemDisplay>{
 	@Override public ItemDisplayWrapper setBrightness(Brightness brightness) {super.setBrightness(brightness); return this;}
 	@Override public ItemDisplayWrapper setShadowRadius(float shadowRadius) {super.setShadowRadius(shadowRadius); return this;}
 	@Override public ItemDisplayWrapper setTransformation(Transformation transformation) {super.setTransformation(transformation); return this;}
+	@Override public ItemDisplayWrapper setTeleportDuration(int teleportDuration) {super.setTeleportDuration(teleportDuration);return this;}
 	@Override public ItemDisplayWrapper setGlowColorOverride(Color glowColorOverride) {super.setGlowColorOverride(glowColorOverride); return this;}
 	@Override public ItemDisplayWrapper setInterpolationDelay(int interpolationDelay) {super.setInterpolationDelay(interpolationDelay); return this;}
-	@Override public ItemDisplayWrapper setTransformationMatrix(Matrix4f transformationMatrix) {super.setTransformationMatrix(transformationMatrix); return this;}
+	@Override public ItemDisplayWrapper setTransformationMatrix(Matrix4f transformationMatrix) {super.setTransformationMatrix(transformationMatrix);return this;}
+	@Override public ItemDisplayWrapper setInterpolationDuration(int interpolationDuration) {super.setInterpolationDuration(interpolationDuration);return this;}
 
+	
 	public ItemDisplayTransform getItemDisplayTransform() {return itemDisplayTransform;}
 	public ItemStack getItemStack() {return itemStack;}
+	
 }
 
