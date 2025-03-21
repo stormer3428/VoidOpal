@@ -81,7 +81,7 @@ public class SMPItem implements OMCItem {
 		config.addDefault("cmd", CMD);
 		config.addDefault("lore", lore);
 		config.addDefault("itemflags", itemFlags.stream().map(f -> f.name()).collect(Collectors.toList()));
-		for(Enchantment e : enchants.keySet()) config.addDefault("enchants." + e.getKey(), enchants.get(e));
+		for(Enchantment e : enchants.keySet()) if(e.isRegistered()) config.addDefault("enchants." + e.getKeyOrNull(), enchants.get(e));
 		config.addDefault("unbreakable", unbreakeable);
 		for(String s : config.getDefaults().getKeys(true)) config.set(s, config.get(s));
 		return config;
