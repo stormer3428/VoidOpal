@@ -111,6 +111,13 @@ public abstract class OMCPowerManager extends BukkitRunnable implements Listener
 		registeredPowers.add(power);
 	}
 
+
+	public OMCPower getPower(String registryName) { 
+		for(OMCPower power : getPowers()) if(power.getRegistryName().equals(registryName)) return power;
+		return null;
+	}
+	
+	
 	/**
 	 * 
 	 * @return a copy of the registered power list
