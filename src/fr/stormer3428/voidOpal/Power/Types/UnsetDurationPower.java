@@ -1,6 +1,7 @@
 package fr.stormer3428.voidOpal.Power.Types;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -19,23 +20,25 @@ public abstract class UnsetDurationPower extends OMCPower{
 	}
 
 	@Override
-	public boolean tryCast(ItemStack it, Player p) {
+	public boolean tryCast(ItemStack it, Player p, Map<String, Object> metadata) {
 		if(!isEnabled()) return false;
 		if(empowered.contains(p.getUniqueId())) return onEmpoweredTryCast(it, p);
 		if(isOnCooldown(p)) return false;
-		empower(it, p);
+		empower(it, p, metadata);
 		return true;
 	}
 
 	/*
 	 * It is expected to call "putOnCooldown when ability ends"
 	 */
-	public boolean empower(ItemStack it, Player p) {
-		if(!cast(it, p)) return false;
+	@Override
+	public boolean empower(ItemStack it, Player p, Map<String, Object> metadata) {
+		if(!cast(it, p, metadata)) return false;
 		empowered.add(p.getUniqueId());
 		return true;
 	}
 
+	@Override
 	public void putOnCooldown(UUID uuid, int abilityCooldown) {
 		Player p = Bukkit.getPlayer(uuid);
 		if(p != null && empowered.contains(uuid)) onDepower(p);

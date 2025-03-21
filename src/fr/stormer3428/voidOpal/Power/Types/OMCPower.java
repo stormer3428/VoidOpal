@@ -2,6 +2,7 @@ package fr.stormer3428.voidOpal.Power.Types;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
@@ -23,7 +24,7 @@ public abstract class OMCPower extends BukkitRunnable implements PluginTied, Lis
 	public void onCooldownEnd(Player p) {}
 
 	public abstract int getCooldown();
-	public abstract boolean cast(ItemStack it, Player p);
+	public abstract boolean cast(ItemStack it, Player p, Map<String, Object> metadata);
 	public abstract String getDisplayName();
 
 	protected HashMap<UUID, Integer> onCooldown = new HashMap<>();
@@ -49,19 +50,21 @@ public abstract class OMCPower extends BukkitRunnable implements PluginTied, Lis
 		}
 	}
 
-
-	public boolean tryCast(ItemStack it, Player p) {
+	public boolean tryCast(ItemStack it, Player p) {return tryCast(it, p, new HashMap<String, Object>());}
+	public boolean tryCast(ItemStack it, Player p, Map<String, Object> metadata) {
 		if(!isEnabled())return false;
 		if(isOnCooldown(p)) return false;
-		empower(it, p);
+		empower(it, p, metadata);
 		return true;
 	}
 
-	public boolean empower(ItemStack it, Player p) {
-		if(!cast(it, p))return false;
+	public boolean empower(ItemStack it, Player p, Map<String, Object> metadata) {
+		if(!cast(it, p, metadata)) return false;
 		putOnCooldown(p);
 		return true;
 	}
+	
+	@Override public String toString() { return getRegistryName(); }
 
 	@Override public void onPluginEnable() {runTaskTimer(OMCCore.getJavaPlugin(), 0, 1);}
 	public String getRegistryName() {return registryName;}

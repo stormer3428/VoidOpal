@@ -1,5 +1,7 @@
 package fr.stormer3428.voidOpal.Power.Types;
 
+import java.util.Map;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,7 +22,7 @@ public abstract class OMCPassivePower extends OMCPower implements OMCTickable{
 	}
 
 	@Override
-	public boolean cast(ItemStack it, Player p) {
+	public boolean cast(ItemStack it, Player p, Map<String, Object> metadata) {
 		return false;
 	}
 

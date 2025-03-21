@@ -1,5 +1,7 @@
 package fr.stormer3428.voidOpal.Power.Types;
 
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -13,9 +15,10 @@ public abstract class SetDurationPower extends UnsetDurationPower{
 	public SetDurationPower(String registryName/*, OMCPowerManager powerManager*/) {
 		super(registryName/*, powerManager*/);
 	}
-	
-	public boolean empower(ItemStack it, Player p) {
-		if(!cast(it, p)) return false;
+
+	@Override
+	public boolean empower(ItemStack it, Player p, Map<String, Object> metadata) {
+		if(!cast(it, p, metadata)) return false;
 		empowered.add(p.getUniqueId());
 		Bukkit.getScheduler().scheduleSyncDelayedTask(OMCCore.getJavaPlugin(), () -> putOnCooldown(p), getDuration());
 		return true;

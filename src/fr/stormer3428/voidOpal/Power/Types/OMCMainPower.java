@@ -2,6 +2,7 @@ package fr.stormer3428.voidOpal.Power.Types;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
@@ -20,12 +21,12 @@ public abstract class OMCMainPower extends OMCMainHandPassivePower{
 	protected HashMap<UUID, Integer> selectedPower = new HashMap<>();
 	
 	@Override
-	public boolean cast(ItemStack it, Player p) {
+	public boolean cast(ItemStack it, Player p, Map<String, Object> metadata) {
 		if(p.isSneaking()) {
 			cycle(p);
 			return true;
 		}
-		return castCurrent(it, p);
+		return castCurrent(it, p, metadata);
 	}
 
 	public int getSelected(Player p) {
@@ -33,11 +34,11 @@ public abstract class OMCMainPower extends OMCMainHandPassivePower{
 		return selectedPower.get(p.getUniqueId());
 	}
 
-	public boolean castCurrent(ItemStack it, Player p) {
+	public boolean castCurrent(ItemStack it, Player p, Map<String, Object> metadata) {
 		ArrayList<OMCPower> powers = getAvailablePowers(p);
 		if(powers.isEmpty()) return false;
 		int selected = getSelected(p);
-		return powers.get(selected).tryCast(it, p);
+		return powers.get(selected).tryCast(it, p, metadata);
 	}
 
 	public OMCPower getSelectedPower(Player p) {
