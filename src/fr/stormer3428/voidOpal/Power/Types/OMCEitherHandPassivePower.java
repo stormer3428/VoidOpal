@@ -34,11 +34,12 @@ public abstract class OMCEitherHandPassivePower extends OMCPassivePower{
 		
 		ArrayList<UUID> NEW_HOLDING = new ArrayList<>();
 		for(Player p : Bukkit.getOnlinePlayers()) {
-			boolean holding = PlayerConditions.holdsItemInHand(p, omcItem);
+			boolean main = PlayerConditions.holdsItemInMainHand(p, omcItem);
+			boolean holding = main || PlayerConditions.holdsItemInOffHand(p, omcItem);
 			boolean wasHolding = HOLDING.contains(p.getUniqueId());
 			if(holding) {
 				if(!wasHolding) onStartHolding(p);
-				onHoldingTick(p, ticker, p.getInventory().getItemInOffHand());
+				onHoldingTick(p, ticker, main ? p.getInventory().getItemInMainHand() : p.getInventory().getItemInOffHand());
 				NEW_HOLDING.add(p.getUniqueId());
 			} else if(wasHolding) onStopHolding(p);
 		}
