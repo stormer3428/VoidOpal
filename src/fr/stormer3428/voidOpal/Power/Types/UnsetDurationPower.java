@@ -13,7 +13,7 @@ public abstract class UnsetDurationPower extends OMCPower{
 	protected ArrayList<UUID> empowered = new ArrayList<>();
 	
 	public void onDepower(Player p) {}
-	public boolean onEmpoweredTryCast(ItemStack it, Player p) {return false;}
+	public boolean onEmpoweredTryCast(ItemStack it, Player p, Map<String, Object> metadata) {return false;}
 
 	public UnsetDurationPower(String registryName/*, OMCPowerManager powerManager*/) {
 		super(registryName/*, powerManager*/);
@@ -22,7 +22,7 @@ public abstract class UnsetDurationPower extends OMCPower{
 	@Override
 	public boolean tryCast(ItemStack it, Player p, Map<String, Object> metadata) {
 		if(!isEnabled()) return false;
-		if(empowered.contains(p.getUniqueId())) return onEmpoweredTryCast(it, p);
+		if(empowered.contains(p.getUniqueId())) return onEmpoweredTryCast(it, p, metadata);
 		if(isOnCooldown(p)) return false;
 		empower(it, p, metadata);
 		return true;
