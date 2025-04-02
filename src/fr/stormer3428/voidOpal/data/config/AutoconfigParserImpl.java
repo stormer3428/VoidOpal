@@ -15,6 +15,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import fr.stormer3428.voidOpal.data.config.annotations.AutoConfig;
 import fr.stormer3428.voidOpal.data.config.annotations.BooleanConfigValue;
 import fr.stormer3428.voidOpal.data.config.annotations.DoubleConfigValue;
+import fr.stormer3428.voidOpal.data.config.annotations.FloatConfigValue;
 import fr.stormer3428.voidOpal.data.config.annotations.IntConfigValue;
 import fr.stormer3428.voidOpal.data.config.annotations.StringConfigValue;
 import fr.stormer3428.voidOpal.data.config.annotations.StringListConfigValue;
@@ -45,6 +46,7 @@ public final class AutoconfigParserImpl implements AutoconfigParser{
 				StringConfigValue stringConfigValue = field.getAnnotation(StringConfigValue.class);
 				IntConfigValue intConfigValue = field.getAnnotation(IntConfigValue.class);
 				DoubleConfigValue doubleConfigValue = field.getAnnotation(DoubleConfigValue.class);
+				FloatConfigValue floatConfigValue = field.getAnnotation(FloatConfigValue.class);
 				BooleanConfigValue booleanConfigValue = field.getAnnotation(BooleanConfigValue.class);
 				StringListConfigValue stringListConfigValue= field.getAnnotation(StringListConfigValue.class);
 				if(stringConfigValue != null) {
@@ -83,6 +85,21 @@ public final class AutoconfigParserImpl implements AutoconfigParser{
 					String path = doubleConfigValue.path();
 					if(!config.contains(path)) config.set(path, defaultValue);
 					double value = config.getDouble(path);
+					config.set(path, value);
+					try {
+						field.set(null, value);
+						OMCLogger.debug("Successfully updated double value!");
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						OMCLogger.systemError("Error, annotated field " + field.getName() + " in class " + clazz.getName() + " is either not static or of wrong type (expected Double)");
+						e.printStackTrace();
+						continue;
+					}
+				}else if(floatConfigValue != null) {
+					OMCLogger.debug("Updating field " + field.getName());
+					float defaultValue = floatConfigValue.defaultValue();
+					String path = floatConfigValue.path();
+					if(!config.contains(path)) config.set(path, defaultValue);
+					float value = (float) config.getDouble(path);
 					config.set(path, value);
 					try {
 						field.set(null, value);

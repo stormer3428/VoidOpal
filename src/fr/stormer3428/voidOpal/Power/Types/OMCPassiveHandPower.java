@@ -14,6 +14,11 @@ import fr.stormer3428.voidOpal.Item.Types.OMCItem;
 import fr.stormer3428.voidOpal.Power.OMCTickable;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 
+
+/**
+ * use {@link OMCEitherHandPassivePower} instead
+ */
+@Deprecated
 public abstract class OMCPassiveHandPower implements OMCTickable{
 	
 	public final String registryName;
