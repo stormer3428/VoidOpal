@@ -34,7 +34,7 @@ public class SMPItem implements OMCItem {
 
 	private Material material = Material.ENCHANTED_BOOK;
 	private String displayName = null;
-	private int CMD = -1;
+	private int CMD = 0;
 	private String registryName = getClass().getSimpleName();
 	private final ArrayList<String> lore = new ArrayList<>();
 	private final ArrayList<ItemFlag> itemFlags = new ArrayList<>();
@@ -169,7 +169,7 @@ public class SMPItem implements OMCItem {
 	public boolean equals(ItemStack other) {
 		if(other == null) return false;
 		if(other.getType() != getMaterial()) return false;
-		ItemMeta meta= other.getItemMeta();
+		ItemMeta meta = other.getItemMeta();
 		if(meta == null) return false;
 		if(!meta.hasCustomModelData()) return CMD==-1;
 		if(meta.getCustomModelData() != getCMD()) return false;
