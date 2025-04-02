@@ -171,7 +171,7 @@ public class SMPItem implements OMCItem {
 		if(other.getType() != getMaterial()) return false;
 		ItemMeta meta = other.getItemMeta();
 		if(meta == null) return false;
-		if(!meta.hasCustomModelData()) return CMD==-1;
+		if(!meta.hasCustomModelData()) return CMD==0;
 		if(meta.getCustomModelData() != getCMD()) return false;
 		return true;
 	}
