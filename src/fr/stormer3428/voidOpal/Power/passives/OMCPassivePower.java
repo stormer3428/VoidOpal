@@ -1,0 +1,40 @@
+package fr.stormer3428.voidOpal.Power.passives;
+
+import java.util.ArrayList;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import fr.stormer3428.voidOpal.Power.OMCTickable;
+
+public abstract class OMCPassivePower implements OMCTickable {
+
+	protected final String registryName;
+
+	public OMCPassivePower(String registryName) { this.registryName = registryName; }
+
+	public abstract void onPassiveTick(Player p, int ticker);
+	public abstract void onPassiveStop(Player p);
+	public abstract void onPassiveStart(Player p);
+	public abstract boolean matches(Player p);
+
+	private ArrayList<UUID> HOLDING = new ArrayList<>();
+
+	@Override public void onTick(int ticker) {
+		ArrayList<UUID> NEW_HOLDING = new ArrayList<>();
+		for (Player p : Bukkit.getOnlinePlayers()) {
+			boolean holding = matches(p);
+			boolean wasHolding = HOLDING.contains(p.getUniqueId());
+			if (holding) {
+				if (!wasHolding) onPassiveStart(p);
+				onPassiveTick(p, ticker);
+				NEW_HOLDING.add(p.getUniqueId());
+			} else if (wasHolding) onPassiveStop(p);
+		}
+		HOLDING = NEW_HOLDING;
+	}
+
+	public String getRegistryName() { return registryName; }
+
+}

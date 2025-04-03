@@ -64,11 +64,12 @@ public abstract class OMCPower extends BukkitRunnable implements PluginTied, Lis
 		return true;
 	}
 	
-	@Override public String toString() { return getRegistryName(); }
-
 	@Override public void onPluginEnable() {runTaskTimer(OMCCore.getJavaPlugin(), 0, 1);}
+	@Override public String toString() { return getRegistryName(); }
+	
+	public OMCPower(String registryName) {this.registryName = registryName;}
+
 	public String getRegistryName() {return registryName;}
-	public String path(String innerPath) {return getRegistryName() + "." + innerPath;}
 	public boolean isOnCooldown(Player p) {return isOnCooldown(p.getUniqueId());}
 	public boolean isOnCooldown(UUID uuid) {return onCooldown.containsKey(uuid);}
 	public void putOnCooldown(Player p) {putOnCooldown(p, getCooldown());}
@@ -78,6 +79,5 @@ public abstract class OMCPower extends BukkitRunnable implements PluginTied, Lis
 	public void clearCooldown(Player p) {onCooldown.remove(p.getUniqueId());}
 	public int getCooldown(Player p) {return getCooldown(p.getUniqueId());}
 	public int getCooldown(UUID uuid) {if(!isOnCooldown(uuid)) return 0;return onCooldown.get(uuid);}
-	public OMCPower(String registryName) {this.registryName = registryName;}
 	public void clearCooldowns() {onCooldown.clear();}
 }
