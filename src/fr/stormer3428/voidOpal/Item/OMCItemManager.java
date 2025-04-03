@@ -17,25 +17,35 @@ import fr.stormer3428.voidOpal.Command.OMCCommand;
 import fr.stormer3428.voidOpal.Command.OMCVariable;
 import fr.stormer3428.voidOpal.Item.Types.OMCItem;
 import fr.stormer3428.voidOpal.Item.Types.SMPItem;
+import fr.stormer3428.voidOpal.Power.OMCTickable;
 import fr.stormer3428.voidOpal.data.OMCLang;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 import fr.stormer3428.voidOpal.util.ItemStackUtils;
 
-public abstract class OMCItemManager implements Listener, PluginTied{
+public abstract class OMCItemManager implements Listener, PluginTied, OMCTickable{
 
 	private final ArrayList<OMCItem> registeredItems = new ArrayList<>();
 	private final HashMap<SMPItem, YamlConfiguration> smpitemConfigs = new HashMap<>();
+	private final ArrayList<OMCTickable> TICKERS = new ArrayList<>();
+	private int ticker = 0;
 
 	protected abstract void registerItems();
-
+	
+	@Override public void onTick(int ticker) {}
+	
 	@Override
 	public void onPluginEnable() {
 		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin());
 		registerItems();
 		registerRecipes();
 		registerConfigs();
+		
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(OMCCore.getJavaPlugin(), () -> {
+			onTick(++ticker);
+			for(OMCTickable tickable : TICKERS) tickable.onTick(ticker);
+		}, 0, 1);
 	}
 
 	private void registerConfigs() {
@@ -150,7 +160,10 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 			OMCLogger.systemError(OMCLang.ERROR_ITEM_MANAGER_REGISTER_NULL_NAME.toString());
 			return;
 		}
-		if(item instanceof SMPItem smpItem) for(Listener listener : smpItem.getListener()) OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(listener, OMCCore.getJavaPlugin());
+		if(item instanceof SMPItem smpItem) {
+			for(Listener listener : smpItem.getListener()) OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(listener, OMCCore.getJavaPlugin());
+			TICKERS.addAll(smpItem.getOmcTickeables());
+		}
 		registeredItems.add(item);
 	}
 
