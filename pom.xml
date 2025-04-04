@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.stormer3428</groupId>
 	<artifactId>VoidOpal</artifactId>
-	<version>0.2.1-Auth</version>
+	<version>0.2.2</version>
 	<name>VoidOpal</name>
 
 	<description>A library for plugins made by stormer3428</description>

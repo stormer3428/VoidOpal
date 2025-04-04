@@ -13,7 +13,9 @@ import fr.stormer3428.voidOpal.data.config.annotations.BooleanConfigValue;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
+import fr.stormer3428.voidOpal.plugin.annotations.OMCKeep;
 
+@OMCKeep
 @AutoConfig
 public final class _0_1 extends OMCCore{
 
