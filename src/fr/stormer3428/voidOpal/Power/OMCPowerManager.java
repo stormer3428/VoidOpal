@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.stormer3428.voidOpal.Command.OMCCommand;
 import fr.stormer3428.voidOpal.Command.OMCVariable;
@@ -14,25 +13,14 @@ import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
-public abstract class OMCPowerManager extends BukkitRunnable implements Listener, PluginTied{
+public class OMCPowerManager implements Listener, PluginTied{
 
 	private final ArrayList<OMCPower> registeredPowers = new ArrayList<>();
-	private int ticker = 0;
 
-	@Override
-	public void run() {
-		ticker++;
-		for(OMCPower power : registeredPowers) if(power instanceof OMCTickable tickable){
-			tickable.onTick(ticker);
-		}
-	}
-	
 	@Override
 	public void onPluginEnable() {
 		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin());
-		registerPowers();
 		for(OMCPower power : registeredPowers) power.onPluginEnable();
-		runTaskTimer(OMCCore.getJavaPlugin(), 0, 1);	
 	}
 	
 	@Override
@@ -47,10 +35,7 @@ public abstract class OMCPowerManager extends BukkitRunnable implements Listener
 			power.clearCooldowns();
 		}
 	}
-
-	public abstract void registerPowers();
 	
-
 	/**
 	 * Creates a {@link OMCVariable} with the given signature that completes for registered {@link OMCPower}
 	 * 
@@ -111,12 +96,10 @@ public abstract class OMCPowerManager extends BukkitRunnable implements Listener
 		registeredPowers.add(power);
 	}
 
-
 	public OMCPower getPower(String registryName) { 
 		for(OMCPower power : getPowers()) if(power.getRegistryName().equals(registryName)) return power;
 		return null;
 	}
-	
 	
 	/**
 	 * 
@@ -126,7 +109,6 @@ public abstract class OMCPowerManager extends BukkitRunnable implements Listener
 	public ArrayList<OMCPower> getPowers() {
 		return new ArrayList<>(registeredPowers);
 	}
-	
 
 	/**
 	 * Will return the corresponding {@link OMCPower} registered in this manager, or null if it is unrecognized

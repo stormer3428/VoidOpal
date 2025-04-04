@@ -1,4 +1,4 @@
-package fr.stormer3428.voidOpal.Power.passives;
+package fr.stormer3428.voidOpal.Tickeable.types;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -6,9 +6,9 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import fr.stormer3428.voidOpal.Power.OMCTickable;
+import fr.stormer3428.voidOpal.Tickeable.OMCTickeable;
 
-public abstract class OMCPassivePower implements OMCTickable {
+public abstract class OMCPassivePower implements OMCTickeable {
 
 	protected final String registryName;
 

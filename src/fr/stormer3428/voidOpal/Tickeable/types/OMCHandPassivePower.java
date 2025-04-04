@@ -1,4 +1,4 @@
-package fr.stormer3428.voidOpal.Power.passives;
+package fr.stormer3428.voidOpal.Tickeable.types;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

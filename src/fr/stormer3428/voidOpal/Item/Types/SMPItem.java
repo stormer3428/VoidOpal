@@ -20,8 +20,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import fr.stormer3428.voidOpal.Power.OMCTickable;
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
+import fr.stormer3428.voidOpal.Tickeable.OMCTickeable;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.util.OMCUtil;
@@ -39,7 +39,7 @@ public class SMPItem implements OMCItem {
 	private final ArrayList<String> lore = new ArrayList<>();
 	private final ArrayList<ItemFlag> itemFlags = new ArrayList<>();
 	private final ArrayList<OMCPower> omcPowers = new ArrayList<>();
-	private final ArrayList<OMCTickable> omcTickeables = new ArrayList<>();
+	private final ArrayList<OMCTickeable> omcTickeables = new ArrayList<>();
 	private final ArrayList<Listener> listeners = new ArrayList<>();
 	private HashMap<Enchantment, Integer> enchants = new HashMap<>();
 	private HashMap<PersistentDataType<Object, ? extends Object>, HashMap<String, Object>> data = new HashMap<>();
@@ -53,7 +53,7 @@ public class SMPItem implements OMCItem {
 	public List<ItemFlag> getItemFlags(){return itemFlags;}
 	public Map<Enchantment,Integer> getEnchants(){return enchants;}
 	public List<OMCPower> getOmcPowers() {return omcPowers;}
-	public List<OMCTickable> getOmcTickeables() {return omcTickeables;}
+	public List<OMCTickeable> getOmcTickeables() {return omcTickeables;}
 	public List<Listener> getListener() {return listeners;}
 
 	public SMPItem setMaterial(Material material){ this.material = material; return this;}
@@ -66,9 +66,9 @@ public class SMPItem implements OMCItem {
 	public SMPItem addItemflag(ItemFlag itemflag){ this.itemFlags.add(itemflag); return this;}
 	public SMPItem addEnchant(Enchantment enchant, int level){ this.enchants.put(enchant, level); return this;}
 	public SMPItem addPower(OMCPower omcPower) { omcPowers.add(omcPower); return this;}
-	public SMPItem addTickeable(OMCTickable omcTickeable) { omcTickeables.add(omcTickeable); return this;}
+	public SMPItem addTickeable(OMCTickeable omcTickeable) { omcTickeables.add(omcTickeable); return this;}
 	public SMPItem addListener(Listener listener) { listeners.add(listener); return this;}
-	public <T extends Listener & OMCTickable> SMPItem addTickeableListener(T tickeableListener) { return this;}
+	public <T extends Listener & OMCTickeable> SMPItem addTickeableListener(T tickeableListener) { return this;}
 	@SuppressWarnings("unchecked")
 	public <P, C extends Object> SMPItem addData(String name, PersistentDataType<P, C> dataType, C value) {data.computeIfAbsent((PersistentDataType<Object, ? extends Object>) dataType, (t) -> new HashMap<String, Object>()).put(name, value);return this;}
 

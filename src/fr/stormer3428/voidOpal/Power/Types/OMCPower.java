@@ -12,10 +12,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import fr.stormer3428.voidOpal.data.OMCNameable;
 import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
-public abstract class OMCPower extends BukkitRunnable implements PluginTied, Listener{
+public abstract class OMCPower extends BukkitRunnable implements PluginTied, Listener, OMCNameable{
 
 	@Override public void onPluginDisable(){}
 	@Override public void onPluginReload(){}
@@ -69,7 +70,7 @@ public abstract class OMCPower extends BukkitRunnable implements PluginTied, Lis
 	
 	public OMCPower(String registryName) {this.registryName = registryName;}
 
-	public String getRegistryName() {return registryName;}
+	@Override public String getRegistryName() {return registryName;}
 	public boolean isOnCooldown(Player p) {return isOnCooldown(p.getUniqueId());}
 	public boolean isOnCooldown(UUID uuid) {return onCooldown.containsKey(uuid);}
 	public void putOnCooldown(Player p) {putOnCooldown(p, getCooldown());}
