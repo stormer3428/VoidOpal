@@ -19,7 +19,7 @@ public abstract class OMCPassivePower implements OMCTickeable {
 	public abstract void onPassiveStart(Player p);
 	public abstract boolean matches(Player p);
 
-	private ArrayList<UUID> HOLDING = new ArrayList<>();
+	protected ArrayList<UUID> HOLDING = new ArrayList<>();
 
 	@Override public void onTick(int ticker) {
 		ArrayList<UUID> NEW_HOLDING = new ArrayList<>();
