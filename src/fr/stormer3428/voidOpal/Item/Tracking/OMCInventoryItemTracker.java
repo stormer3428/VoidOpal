@@ -8,6 +8,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -91,4 +92,10 @@ public class OMCInventoryItemTracker implements PluginTied, Listener{
 		if(!(e.getEntity() instanceof Player p)) return;
 		clearCache(p);
 	}
+	
+	@EventHandler
+	public void onPlace(BlockPlaceEvent e) {
+		clearCache(e.getPlayer());
+	}
+
 }
