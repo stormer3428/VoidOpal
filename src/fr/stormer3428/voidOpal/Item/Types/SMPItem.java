@@ -68,7 +68,6 @@ public class SMPItem implements OMCItem {
 	public SMPItem addPower(OMCPower omcPower) { omcPowers.add(omcPower); return this;}
 	public SMPItem addTickeable(OMCTickeable omcTickeable) { omcTickeables.add(omcTickeable); return this;}
 	public SMPItem addListener(Listener listener) { listeners.add(listener); return this;}
-	public <T extends Listener & OMCTickeable> SMPItem addTickeableListener(T tickeableListener) { return this;}
 	@SuppressWarnings("unchecked")
 	public <P, C extends Object> SMPItem addData(String name, PersistentDataType<P, C> dataType, C value) {data.computeIfAbsent((PersistentDataType<Object, ? extends Object>) dataType, (t) -> new HashMap<String, Object>()).put(name, value);return this;}
 
