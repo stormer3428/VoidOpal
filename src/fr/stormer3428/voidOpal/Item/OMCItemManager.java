@@ -29,10 +29,10 @@ import fr.stormer3428.voidOpal.util.ItemStackUtils;
 
 public abstract class OMCItemManager implements Listener, PluginTied{
 
-	private final OMCPowerManager powerManager;
-	private final OMCTickeableManager tickeableManager;
-	private final ArrayList<OMCItem> registeredItems = new ArrayList<>();
-	private final HashMap<SMPItem, YamlConfiguration> smpitemConfigs = new HashMap<>();
+	protected final OMCPowerManager powerManager;
+	protected final OMCTickeableManager tickeableManager;
+	protected final ArrayList<OMCItem> registeredItems = new ArrayList<>();
+	protected final HashMap<SMPItem, YamlConfiguration> smpitemConfigs = new HashMap<>();
 
 	public OMCItemManager(OMCPowerManager powerManager, OMCTickeableManager tickeableManager) { 
 		this.powerManager = powerManager;

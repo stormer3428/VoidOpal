@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import fr.stormer3428.voidOpal.Command.OMCCommand;
 import fr.stormer3428.voidOpal.Command.OMCVariable;
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
+import fr.stormer3428.voidOpal.Tickeable.OMCTickeableManager;
 import fr.stormer3428.voidOpal.data.OMCLang;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.OMCCore;
@@ -15,8 +16,13 @@ import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public class OMCPowerManager implements Listener, PluginTied{
 
+	private final OMCTickeableManager omcTickeableManager;
 	private final ArrayList<OMCPower> registeredPowers = new ArrayList<>();
 
+	public OMCPowerManager(OMCTickeableManager omcTickeableManager) {
+		this.omcTickeableManager = omcTickeableManager;
+	}
+	
 	@Override
 	public void onPluginEnable() {
 		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin());
@@ -93,6 +99,7 @@ public class OMCPowerManager implements Listener, PluginTied{
 			return;
 		}
 		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(power, OMCCore.getJavaPlugin());
+		omcTickeableManager.registerTickeable(power);
 		registeredPowers.add(power);
 	}
 

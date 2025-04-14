@@ -10,16 +10,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.stormer3428.voidOpal.data.OMCNameable;
-import fr.stormer3428.voidOpal.plugin.OMCCore;
+import fr.stormer3428.voidOpal.Tickeable.OMCTickeable;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
-public abstract class OMCPower extends BukkitRunnable implements PluginTied, Listener, OMCNameable{
+public abstract class OMCPower implements PluginTied, Listener, OMCTickeable{
 
-	@Override public void onPluginDisable(){}
-	@Override public void onPluginReload(){}
+	@Override public void onPluginDisable() {}
+	@Override public void onPluginReload() {}
+	@Override public void onPluginEnable() {}
 
 	public boolean isEnabled() {return true;}
 	public void onCooldownEnd(Player p) {}
@@ -33,7 +32,7 @@ public abstract class OMCPower extends BukkitRunnable implements PluginTied, Lis
 	protected final String registryName;
 
 	@Override
-	public void run() {
+	public void onTick(int ticker) {
 		Iterator<Entry<UUID, Integer>> iterator = onCooldown.entrySet().iterator();
 		while(iterator.hasNext()) {
 			Entry<UUID, Integer> entry = iterator.next();
@@ -65,7 +64,6 @@ public abstract class OMCPower extends BukkitRunnable implements PluginTied, Lis
 		return true;
 	}
 	
-	@Override public void onPluginEnable() {runTaskTimer(OMCCore.getJavaPlugin(), 0, 1);}
 	@Override public String toString() { return getRegistryName(); }
 	
 	public OMCPower(String registryName) {this.registryName = registryName;}
