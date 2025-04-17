@@ -8,14 +8,15 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
+import fr.stormer3428.voidOpal.Listener.OMCNamedListener;
 import fr.stormer3428.voidOpal.Tickeable.OMCTickeable;
-import fr.stormer3428.voidOpal.plugin.PluginTied;
 
-public abstract class OMCPower implements PluginTied, Listener, OMCTickeable{
+public abstract class OMCPower extends OMCNamedListener implements OMCTickeable{
 
+	public OMCPower(String registryName) { super(registryName); }
+	
 	@Override public void onPluginDisable() {}
 	@Override public void onPluginReload() {}
 	@Override public void onPluginEnable() {}
@@ -28,8 +29,6 @@ public abstract class OMCPower implements PluginTied, Listener, OMCTickeable{
 	public abstract String getDisplayName();
 
 	protected HashMap<UUID, Integer> onCooldown = new HashMap<>();
-
-	protected final String registryName;
 
 	@Override
 	public void onTick(int ticker) {
@@ -66,9 +65,6 @@ public abstract class OMCPower implements PluginTied, Listener, OMCTickeable{
 	
 	@Override public String toString() { return getRegistryName(); }
 	
-	public OMCPower(String registryName) {this.registryName = registryName;}
-
-	@Override public String getRegistryName() {return registryName;}
 	public boolean isOnCooldown(Player p) {return isOnCooldown(p.getUniqueId());}
 	public boolean isOnCooldown(UUID uuid) {return onCooldown.containsKey(uuid);}
 	public void putOnCooldown(Player p) {putOnCooldown(p, getCooldown());}

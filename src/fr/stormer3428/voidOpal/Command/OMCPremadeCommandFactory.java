@@ -133,7 +133,7 @@ public class OMCPremadeCommandFactory {
 				@Override
 				public boolean execute(CommandSender sender, ArrayList<String> args) {
 					if(!(sender instanceof Player p)) return OMCLogger.error(sender, OMCLang.ERROR_PLAYERONLY.toString());
-					OMCPower power = powerManager.fromName(args.get(0));
+					OMCPower power = powerManager.getPowerIgnoreCase(args.get(0));
 					if(power == null) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOPOWER.toString().replace("<%POWER>", args.get(0)));
 					power.tryCast(null, p);
 					return OMCLogger.normal(sender, OMCLang.POWER_MANUALCAST.toString().replace("<%POWER>", power.getRegistryName()));
@@ -151,7 +151,7 @@ public class OMCPremadeCommandFactory {
 						targets.add(OMCCore.getJavaPlugin().getServer().getPlayer(args.get(0)));
 					}
 					if(targets.isEmpty()) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(0)));
-					OMCPower power = powerManager.fromName(args.get(0));
+					OMCPower power = powerManager.getPowerIgnoreCase(args.get(0));
 					if(power == null) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOPOWER.toString().replace("<%POWER>", args.get(0)));
 					for(Entity e : targets) if(e instanceof Player p) {
 						power.tryCast(null, p);

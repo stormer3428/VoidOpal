@@ -31,19 +31,6 @@ public abstract class OMCPlugin extends JavaPlugin{
 ██║██║ ╚████║ ╚████╔╝ ██║  ██║███████╗██║██████╔╝    ███████╗██║╚██████╗███████╗██║ ╚████║███████║███████╗
 ╚═╝╚═╝  ╚═══╝  ╚═══╝  ╚═╝  ╚═╝╚══════╝╚═╝╚═════╝     ╚══════╝╚═╝ ╚═════╝╚══════╝╚═╝  ╚═══╝╚══════╝╚══════╝
 """
-//,"""
-//
-//██▓ ███▄    █  ██▒   █▓ ▄▄▄       ██▓     ██▓▓█████▄     ██▓     ██▓ ▄████▄  ▓█████  ███▄    █   ██████ ▓█████ 
-//▓██▒ ██ ▀█   █ ▓██░   █▒▒████▄    ▓██▒    ▓██▒▒██▀ ██▌   ▓██▒    ▓██▒▒██▀ ▀█  ▓█   ▀  ██ ▀█   █ ▒██    ▒ ▓█   ▀ 
-//▒██▒▓██  ▀█ ██▒ ▓██  █▒░▒██  ▀█▄  ▒██░    ▒██▒░██   █▌   ▒██░    ▒██▒▒▓█    ▄ ▒███   ▓██  ▀█ ██▒░ ▓██▄   ▒███   
-//░██░▓██▒  ▐▌██▒  ▒██ █░░░██▄▄▄▄██ ▒██░    ░██░░▓█▄   ▌   ▒██░    ░██░▒▓▓▄ ▄██▒▒▓█  ▄ ▓██▒  ▐▌██▒  ▒   ██▒▒▓█  ▄ 
-//░██░▒██░   ▓██░   ▒▀█░   ▓█   ▓██▒░██████▒░██░░▒████▓    ░██████▒░██░▒ ▓███▀ ░░▒████▒▒██░   ▓██░▒██████▒▒░▒████▒
-//░▓  ░ ▒░   ▒ ▒    ░ ▐░   ▒▒   ▓▒█░░ ▒░▓  ░░▓   ▒▒▓  ▒    ░ ▒░▓  ░░▓  ░ ░▒ ▒  ░░░ ▒░ ░░ ▒░   ▒ ▒ ▒ ▒▓▒ ▒ ░░░ ▒░ ░
-//▒ ░░ ░░   ░ ▒░   ░ ░░    ▒   ▒▒ ░░ ░ ▒  ░ ▒ ░ ░ ▒  ▒    ░ ░ ▒  ░ ▒ ░  ░  ▒    ░ ░  ░░ ░░   ░ ▒░░ ░▒  ░ ░ ░ ░  ░
-//▒ ░   ░   ░ ░      ░░    ░   ▒     ░ ░    ▒ ░ ░ ░  ░      ░ ░    ▒ ░░           ░      ░   ░ ░ ░  ░  ░     ░   
-//░           ░       ░        ░  ░    ░  ░ ░     ░           ░  ░ ░  ░ ░         ░  ░         ░       ░     ░  ░
-//                   ░                          ░                     ░                                          
-//"""
 			);
 	
 	private String LICENSE;
@@ -104,16 +91,8 @@ public abstract class OMCPlugin extends JavaPlugin{
 		if(OMCCore.getOMCCore() != null) OMCCore.getOMCCore().onDisable();
 	}
 
-	public File getPluginJar() {
-		return getFile();
-	}
-
-	@OMCKeep public final void registerPluginTied(PluginTied pluginTied) {
-		OMCCore.getOMCCore().registerPluginTied(pluginTied);
-	}
-	
-	public void registerAutoConfigClass(Class<?> ... classes) {
-		for(Class<?> c : classes) OMCCore.getOMCCore().autoconfigParser.registerAutoConfigClass(c);
-	}
+	public File getPluginJar() { return getFile(); }
+	@OMCKeep public final void registerPluginTied(PluginTied pluginTied) { OMCCore.getOMCCore().registerPluginTied(pluginTied); }
+	public void registerAutoConfigClass(Class<?>... classes) { for (Class<?> c : classes) OMCCore.getOMCCore().autoconfigParser.registerAutoConfigClass(c); }
 	
 }

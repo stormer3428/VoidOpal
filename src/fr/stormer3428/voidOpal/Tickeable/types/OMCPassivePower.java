@@ -6,14 +6,13 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import fr.stormer3428.voidOpal.Listener.OMCNamedListener;
 import fr.stormer3428.voidOpal.Tickeable.OMCTickeable;
 
-public abstract class OMCPassivePower implements OMCTickeable {
+public abstract class OMCPassivePower extends OMCNamedListener implements OMCTickeable {
 
-	protected final String registryName;
-
-	public OMCPassivePower(String registryName) { this.registryName = registryName; }
-
+	public OMCPassivePower(String registryName) { super(registryName); }
+	
 	public abstract void onPassiveTick(Player p, int ticker);
 	public abstract void onPassiveStop(Player p);
 	public abstract void onPassiveStart(Player p);
@@ -34,7 +33,5 @@ public abstract class OMCPassivePower implements OMCTickeable {
 		}
 		HOLDING = NEW_HOLDING;
 	}
-
-	public String getRegistryName() { return registryName; }
 
 }

@@ -77,6 +77,12 @@ public final class _0_1 extends OMCCore{
 		OMCLogger.debug("child plugin registered plugin tied class : " + pluginTied.getClass().getSimpleName());
 		this.pluginTieds.add(pluginTied);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override public <T extends PluginTied> T _getPluginTied(Class<T> clazz) { 
+		for(PluginTied pluginTied : pluginTieds) if(clazz.isInstance(pluginTied)) return (T) pluginTied;
+		return null; 
+	}
 
 	public final boolean _isSuperAdmin(CommandSender sender) {
 		if(!(sender instanceof Player p)) return false;

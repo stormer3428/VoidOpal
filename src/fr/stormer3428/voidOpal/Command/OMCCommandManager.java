@@ -18,6 +18,8 @@ public abstract class OMCCommandManager implements CommandExecutor, TabCompleter
 
 	public final ArrayList<OMCCommand> COMMANDS = new ArrayList<>();
 
+	public OMCCommandManager() {OMCCore.getOMCCore().registerPluginTied(this);}
+	
 	@Override
 	public void onPluginEnable() {
 		if(!COMMANDS.isEmpty()) return; //Already registered commands

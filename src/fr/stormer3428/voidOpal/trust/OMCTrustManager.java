@@ -21,6 +21,7 @@ public class OMCTrustManager implements PluginTied{
 	
 	public OMCTrustManager(String configFileName) {
 		this.configFileName = configFileName;
+		OMCCore.getOMCCore().registerPluginTied(this);
 	}
 
 	@Override public void onPluginEnable() {onPluginReload();}
@@ -37,30 +38,26 @@ public class OMCTrustManager implements PluginTied{
 		}
 	}
 
-	public boolean trusts(Player truster, Player trustee) {
-		return trusts(truster.getUniqueId(), trustee.getUniqueId());
-	}
+	public boolean trusts(Player truster, Player trustee) { return trusts(truster.getUniqueId(), trustee.getUniqueId()); }
 
 	public boolean trusts(UUID truster, UUID trustee) {
-		if(truster.equals(trustee)) return true;
+		if (truster.equals(trustee)) return true;
 		OMCTrustGroup group = getTrustgroup(truster);
 		return group.trusts(trustee);
 	}
 
-	public OMCTrustGroup getTrustgroup(Player truster){
-		return getTrustgroup(truster.getUniqueId());
-	}
-	
-	public OMCTrustGroup getTrustgroup(UUID truster){
-		return trustGroups.stream().filter(g->g.owner.equals(truster)).findFirst().orElseGet(()->{
+	public OMCTrustGroup getTrustgroup(Player truster) { return getTrustgroup(truster.getUniqueId()); }
+
+	public OMCTrustGroup getTrustgroup(UUID truster) {
+		return trustGroups.stream().filter(g -> g.owner.equals(truster)).findFirst().orElseGet(() -> {
 			OMCTrustGroup group = new OMCTrustGroup(truster, this);
 			trustGroups.add(group);
 			return group;
 		});
 	}
-	
+
 	public void saveGroup(OMCTrustGroup trustGroup) {
-		config.set(trustGroup.owner.toString(), trustGroup.stream().map(u->u.toString()).toList());
+		config.set(trustGroup.owner.toString(), trustGroup.stream().map(u -> u.toString()).toList());
 		try {
 			config.save(configurationFile);
 		} catch (IOException e) {

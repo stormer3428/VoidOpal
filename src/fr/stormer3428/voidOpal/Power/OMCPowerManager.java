@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 
 import fr.stormer3428.voidOpal.Command.OMCCommand;
 import fr.stormer3428.voidOpal.Command.OMCVariable;
+import fr.stormer3428.voidOpal.Listener.OMCNamedListenerManager;
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
 import fr.stormer3428.voidOpal.Tickeable.OMCTickeableManager;
 import fr.stormer3428.voidOpal.data.OMCLang;
@@ -17,10 +18,13 @@ import fr.stormer3428.voidOpal.plugin.PluginTied;
 public class OMCPowerManager implements Listener, PluginTied{
 
 	private final OMCTickeableManager omcTickeableManager;
+	private final OMCNamedListenerManager omcNamedListenerManager;
 	private final ArrayList<OMCPower> registeredPowers = new ArrayList<>();
 
-	public OMCPowerManager(OMCTickeableManager omcTickeableManager) {
+	public OMCPowerManager(OMCTickeableManager omcTickeableManager, OMCNamedListenerManager omcNamedListenerManager) {
 		this.omcTickeableManager = omcTickeableManager;
+		this.omcNamedListenerManager = omcNamedListenerManager;
+		OMCCore.getOMCCore().registerPluginTied(this);
 	}
 	
 	@Override
@@ -28,12 +32,9 @@ public class OMCPowerManager implements Listener, PluginTied{
 		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin());
 		for(OMCPower power : registeredPowers) power.onPluginEnable();
 	}
-	
-	@Override
-	public void onPluginDisable() {
-		for(OMCPower power : registeredPowers) power.onPluginDisable();
-	}
-	
+
+	@Override public void onPluginDisable() { for (OMCPower power : registeredPowers) power.onPluginDisable(); }
+
 	@Override
 	public void onPluginReload() {
 		for(OMCPower power : registeredPowers) {
@@ -77,9 +78,7 @@ public class OMCPowerManager implements Listener, PluginTied{
 	 * @see OMCCommand
 	 * @see #registerPower(OMCPower)
 	 */
-	public OMCVariable getPowerVariable() {
-		return getPowerVariable("%POWER%");
-	}
+	public OMCVariable getPowerVariable() { return getPowerVariable("%POWER%"); }
 
 	/**
 	 * 
@@ -98,25 +97,25 @@ public class OMCPowerManager implements Listener, PluginTied{
 			OMCLogger.systemError(OMCLang.ERROR_POWER_MANAGER_REGISTER_NULL_NAME.toString());
 			return;
 		}
-		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(power, OMCCore.getJavaPlugin());
+		omcNamedListenerManager.registerListener(power);
 		omcTickeableManager.registerTickeable(power);
 		registeredPowers.add(power);
 	}
 
+	/**
+	 * Will return the corresponding {@link OMCPower} registered in this manager, or null if it is unrecognized
+	 * @implNote
+	 * This method uses {@link String#equals(String)} to find the correlating {@link OMCPower}
+	 * 
+	 * @param name
+	 * The power name to search for
+	 * @return The corresponding {@link OMCPower}
+	 */
 	public OMCPower getPower(String registryName) { 
-		for(OMCPower power : getPowers()) if(power.getRegistryName().equals(registryName)) return power;
+		for(OMCPower power : registeredPowers) if(power.getRegistryName().equals(registryName)) return power;
 		return null;
 	}
 	
-	/**
-	 * 
-	 * @return a copy of the registered power list
-	 * @see #registerPower(OMCPower)
-	 */
-	public ArrayList<OMCPower> getPowers() {
-		return new ArrayList<>(registeredPowers);
-	}
-
 	/**
 	 * Will return the corresponding {@link OMCPower} registered in this manager, or null if it is unrecognized
 	 * @implNote
@@ -126,9 +125,18 @@ public class OMCPowerManager implements Listener, PluginTied{
 	 * The power name to search for
 	 * @return The corresponding {@link OMCPower}
 	 */
-	public OMCPower fromName(String name) {
-		for(OMCPower omcPower : registeredPowers) if(omcPower.getRegistryName().equalsIgnoreCase(name)) return omcPower;
+	public OMCPower getPowerIgnoreCase(String registryName) { 
+		for(OMCPower power : registeredPowers) if(power.getRegistryName().equals(registryName)) return power;
 		return null;
 	}
+	
+	
+	
+	/**
+	 * 
+	 * @return a copy of the registered power list
+	 * @see #registerPower(OMCPower)
+	 */
+	public ArrayList<OMCPower> getPowers() { return new ArrayList<>(registeredPowers); }
 	
 }

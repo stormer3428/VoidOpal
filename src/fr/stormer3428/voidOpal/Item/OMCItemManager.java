@@ -17,6 +17,7 @@ import fr.stormer3428.voidOpal.Command.OMCCommand;
 import fr.stormer3428.voidOpal.Command.OMCVariable;
 import fr.stormer3428.voidOpal.Item.Types.OMCItem;
 import fr.stormer3428.voidOpal.Item.Types.SMPItem;
+import fr.stormer3428.voidOpal.Listener.OMCNamedListenerManager;
 import fr.stormer3428.voidOpal.Power.OMCPowerManager;
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
 import fr.stormer3428.voidOpal.Tickeable.OMCTickeable;
@@ -31,12 +32,15 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 
 	protected final OMCPowerManager powerManager;
 	protected final OMCTickeableManager tickeableManager;
+	protected final OMCNamedListenerManager listenerManager;
 	protected final ArrayList<OMCItem> registeredItems = new ArrayList<>();
 	protected final HashMap<SMPItem, YamlConfiguration> smpitemConfigs = new HashMap<>();
 
-	public OMCItemManager(OMCPowerManager powerManager, OMCTickeableManager tickeableManager) { 
+	public OMCItemManager(OMCPowerManager powerManager, OMCTickeableManager tickeableManager, OMCNamedListenerManager namedListenerManager) { 
 		this.powerManager = powerManager;
 		this.tickeableManager = tickeableManager; 
+		this.listenerManager = namedListenerManager;
+		OMCCore.getOMCCore().registerPluginTied(this);
 	}
 	
 	protected abstract void registerItems();
@@ -140,9 +144,7 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 	 * @see OMCCommand
 	 * @see #registerItem(OMCItem)
 	 */
-	public OMCVariable getItemVariable() {
-		return getItemVariable("%ITEM%");
-	}
+	public OMCVariable getItemVariable() { return getItemVariable("%ITEM%"); }
 
 	/**
 	 * 
@@ -164,9 +166,9 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 			return;
 		}
 		if(item instanceof SMPItem smpItem) {
-			for(Listener listener : smpItem.getListener()) OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(listener, OMCCore.getJavaPlugin());
 			smpItem.getOmcTickeables().forEach(t->tickeableManager.registerTickeable(t));
 			smpItem.getOmcPowers().forEach(p->powerManager.registerPower(p));
+			smpItem.getListener().forEach(l->listenerManager.registerListener(l));
 		}
 		registeredItems.add(item);
 	}
@@ -176,9 +178,7 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 	 * @return a copy of the registered item list
 	 * @see #registerItem(OMCItem)
 	 */
-	public ArrayList<OMCItem> getItems() {
-		return new ArrayList<>(registeredItems);
-	}
+	public ArrayList<OMCItem> getItems() { return new ArrayList<>(registeredItems); }
 
 	/**
 	 * Returns whether or not the manager recognizes this {@link ItemStack} as a registered {@link OMCItem}
@@ -188,9 +188,7 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 	 * The item to test for
 	 * @return whether it is recognized
 	 */
-	public boolean contains(ItemStack item) {
-		return fromItemStack(item) != null;
-	}
+	public boolean contains(ItemStack item) { return fromItemStack(item) != null; }
 
 	/**
 	 * Will return the corresponding {@link OMCItem} registered in this manager, or null if it is unrecognized.
@@ -202,9 +200,7 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 	 * @return The corresponding {@link OMCItem}
 	 * @see #fromName(String)
 	 */
-	public OMCItem fromItemStack(ItemStack item) {
-		return fromItemStack(item, registeredItems);
-	}
+	public OMCItem fromItemStack(ItemStack item) { return fromItemStack(item, registeredItems); }
 
 	public OMCItem fromItemStack(ItemStack item, Collection<OMCItem> registeredItems) {
 		if(item == null) return null;

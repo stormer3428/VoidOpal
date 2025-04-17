@@ -24,6 +24,8 @@ import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public class OMCInventoryItemTracker implements PluginTied, Listener{
 
+	public OMCInventoryItemTracker() {OMCCore.getOMCCore().registerPluginTied(this);}
+	
 	@Override public void onPluginEnable() {OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin());}
 	@Override public void onPluginDisable() {}
 	@Override public void onPluginReload() {}
@@ -56,46 +58,25 @@ public class OMCInventoryItemTracker implements PluginTied, Listener{
 		OMCLogger.debug("Item cache cleared for " + p.getName());
 		clearCache(p.getUniqueId());
 	}
-	
-	public void clearCache(UUID uuid) {
-		inventoryTrackerMap.remove(uuid);
-	}
-	
-	@EventHandler
-	public void onInventoryClick(InventoryClickEvent e) {
-		for(HumanEntity he : e.getViewers()) if(he instanceof Player p) clearCache(p);
-		if(e.getInventory().getHolder() instanceof Player p) clearCache(p);
-	}
-	
-	@EventHandler
-	public void onDeath(PlayerDeathEvent e) {
-		clearCache(e.getEntity());
-	}
-	
-	@EventHandler
-	public void onQuit(PlayerQuitEvent e) {
-		clearCache(e.getPlayer());
-	}
-	
-	@EventHandler
-	public void onJoin(PlayerJoinEvent e) {
-		clearCache(e.getPlayer());
+
+	public void clearCache(UUID uuid) { inventoryTrackerMap.remove(uuid); }
+
+	@EventHandler public void onInventoryClick(InventoryClickEvent e) {
+		for (HumanEntity he : e.getViewers()) if (he instanceof Player p) clearCache(p);
+		if (e.getInventory().getHolder() instanceof Player p) clearCache(p);
 	}
 
-	@EventHandler
-	public void onDrop(PlayerDropItemEvent e) {
-		clearCache(e.getPlayer());
-	}
-
-	@EventHandler
-	public void onPickup(EntityPickupItemEvent e) {
-		if(!(e.getEntity() instanceof Player p)) return;
+	@EventHandler public void onPickup(EntityPickupItemEvent e) {
+		if (!(e.getEntity() instanceof Player p)) return;
 		clearCache(p);
 	}
-	
-	@EventHandler
-	public void onPlace(BlockPlaceEvent e) {
-		clearCache(e.getPlayer());
-	}
+
+	@EventHandler public void onDeath(PlayerDeathEvent e) { clearCache(e.getEntity()); }
+	@EventHandler public void onQuit(PlayerQuitEvent e) { clearCache(e.getPlayer()); }
+	@EventHandler public void onJoin(PlayerJoinEvent e) { clearCache(e.getPlayer()); }
+	@EventHandler public void onDrop(PlayerDropItemEvent e) { clearCache(e.getPlayer()); }
+	@EventHandler public void onPlace(BlockPlaceEvent e) { clearCache(e.getPlayer()); }
+
+
 
 }

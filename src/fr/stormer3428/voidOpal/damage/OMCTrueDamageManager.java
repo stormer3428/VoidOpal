@@ -17,6 +17,8 @@ import fr.stormer3428.voidOpal.plugin.PluginTied;
 @SuppressWarnings("deprecation")
 public class OMCTrueDamageManager implements Listener,PluginTied{
 
+	public OMCTrueDamageManager() {OMCCore.getOMCCore().registerPluginTied(this);}
+	
 	public class DamageRequest {
 
 		public final double damage;
@@ -70,15 +72,8 @@ public class OMCTrueDamageManager implements Listener,PluginTied{
 		return null;
 	}
 	
-	@Override
-	public void onPluginDisable() {}
-
-	@Override
-	public void onPluginEnable() {
-		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin());
-	}
-
-	@Override
-	public void onPluginReload() {}
+	@Override public void onPluginDisable() {}
+	@Override public void onPluginEnable() { OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin()); }
+	@Override public void onPluginReload() {}
 
 }

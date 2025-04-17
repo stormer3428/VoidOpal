@@ -33,20 +33,15 @@ import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public abstract class OMCSoulbindingManager implements PluginTied, Listener{
 
+	public OMCSoulbindingManager() {OMCCore.getOMCCore().registerPluginTied(this);}
+	
 	protected abstract boolean isSoulboundItem(ItemStack it);
 	protected abstract boolean isSuitable(ArrayList<ItemStack> soulboundItems);
 	protected abstract void fixInventory(ArrayList<ItemStack> soulboundItems, Player p);
 
-	@Override
-	public void onPluginEnable() {
-		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin());
-	}
-
-	@Override
-	public void onPluginDisable() {}
-
-	@Override
-	public void onPluginReload() {}
+	@Override public void onPluginEnable() { OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin()); }
+	@Override public void onPluginDisable() {}
+	@Override public void onPluginReload() {}
 
 	@EventHandler
 	public void onDrop(PlayerDropItemEvent e) {
@@ -60,15 +55,8 @@ public abstract class OMCSoulbindingManager implements PluginTied, Listener{
 		validate(p);
 	}
 
-	@EventHandler
-	public void onInventoryClose(InventoryCloseEvent e) {
-		validate((Player) e.getPlayer());
-	}
-
-	@EventHandler
-	public void onInventoryOpen(InventoryOpenEvent e) {
-		validate((Player) e.getPlayer());
-	}
+	@EventHandler public void onInventoryClose(InventoryCloseEvent e) { validate((Player) e.getPlayer()); }
+	@EventHandler public void onInventoryOpen(InventoryOpenEvent e) { validate((Player) e.getPlayer()); }
 
 	@EventHandler
 	public void onDrag(InventoryDragEvent e) {
