@@ -18,7 +18,7 @@ public class OMCLogger {
 	private static String PREFIX_COMMAND;
 	private static String PREFIX_ERROR;
 
-	public static OMCLogger instance = new OMCLogger(OMCCore.getJavaPlugin().getDescription().getName(), OMCCore.getJavaPlugin().getDescription().getName() + " ERR");
+	public static OMCLogger instance = new OMCLogger("VoidOPAL INTERNAL", "VoidOPAL INTERNAL ERR");
 	
 	public OMCLogger(String prefix, String error) {
 		setPrefixCommand(prefix);

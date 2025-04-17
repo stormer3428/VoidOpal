@@ -74,7 +74,7 @@ public final class _0_1 extends OMCCore{
 	}
 
 	public final void registerPluginTied(PluginTied pluginTied) {
-		OMCLogger.debug("child plugin registered plugin tied class : " + pluginTied.getClass().getSimpleName());
+//		OMCLogger.debug("child plugin registered plugin tied class : " + pluginTied.getClass().getSimpleName());
 		this.pluginTieds.add(pluginTied);
 	}
 	

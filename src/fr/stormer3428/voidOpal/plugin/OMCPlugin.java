@@ -51,25 +51,10 @@ public abstract class OMCPlugin extends JavaPlugin{
 		return LICENSE;
 	}
 
-	private final OMCProvider<OMCCore> provider;
-
 	@OMCKeep public OMCPlugin() {this(new OMCPluginProvider());}
 	@OMCKeep public OMCPlugin(OMCProvider<OMCCore> provider) {
 		OMCCore.setJavaPlugin(this);
 		OMCCore.setOMCChildPlugin(this);
-		this.provider = provider;
-	}
-
-	@OMCKeep public abstract void registerPluginTied();
-	@OMCKeep public abstract OMCLogger instantiateLogger();
-	@OMCKeep public abstract void registerAutoconfigClasses();
-
-	@OMCKeep public void loadLangFromConfig() {}
-	@OMCKeep public void onOMCEnable() {}
-	@OMCKeep public void onOMCReload() {}
-	@OMCKeep public void onOMCDisable() {}
-
-	@OMCKeep @Override public final void onEnable() {
 		OMCLogger.systemNormal("Enabling core");
 		if(OMCCore.getOMCCore() == null) {
 			OMCLogger.systemNormal("Core is hasn't been initialized yet! Requesting...");
@@ -84,12 +69,21 @@ public abstract class OMCPlugin extends JavaPlugin{
 			});
 			return;
 		}
-		OMCCore.getOMCCore().onEnable();
 		OMCLogger.systemNormal("Core v"+OMCCore.getOMCCore().getClass().getSimpleName()+" succesfully enabled! Welcome to Stormer's plugin");
+
 	}
-	@OMCKeep @Override public final void onDisable() {
-		if(OMCCore.getOMCCore() != null) OMCCore.getOMCCore().onDisable();
-	}
+
+	@OMCKeep public abstract void registerPluginTied();
+	@OMCKeep public abstract OMCLogger instantiateLogger();
+	@OMCKeep public abstract void registerAutoconfigClasses();
+
+	@OMCKeep public void loadLangFromConfig() {}
+	@OMCKeep public void onOMCEnable() {}
+	@OMCKeep public void onOMCReload() {}
+	@OMCKeep public void onOMCDisable() {}
+
+	@OMCKeep @Override public final void onEnable() { OMCCore.getOMCCore().onEnable(); }
+	@OMCKeep @Override public final void onDisable() { if (OMCCore.getOMCCore() != null) OMCCore.getOMCCore().onDisable(); }
 
 	public File getPluginJar() { return getFile(); }
 	@OMCKeep public final void registerPluginTied(PluginTied pluginTied) { OMCCore.getOMCCore().registerPluginTied(pluginTied); }
