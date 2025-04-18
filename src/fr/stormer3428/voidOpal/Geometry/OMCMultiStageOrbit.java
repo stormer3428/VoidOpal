@@ -41,7 +41,7 @@ public class OMCMultiStageOrbit {
 	
 	public Vector getSum() {
 		Vector v = new Vector();
-		vectors.stream().forEach(v2->v.add(v2));
+		vectors.parallelStream().forEach(v2->v.add(v2));
 		return v;
 	}
 

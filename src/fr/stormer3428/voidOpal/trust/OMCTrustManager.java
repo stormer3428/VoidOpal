@@ -33,7 +33,7 @@ public class OMCTrustManager implements PluginTied{
 		for(String uuidString : config.getKeys(false)) {
 			UUID uuid = UUID.fromString(uuidString);
 			OMCTrustGroup trustGroup = new OMCTrustGroup(uuid, this);
-			trustGroup.addAll(config.getStringList(uuidString).stream().map(u->UUID.fromString(u)).toList());
+			trustGroup.addAll(config.getStringList(uuidString).parallelStream().map(u->UUID.fromString(u)).toList());
 			trustGroups.add(trustGroup);
 		}
 	}
@@ -49,7 +49,7 @@ public class OMCTrustManager implements PluginTied{
 	public OMCTrustGroup getTrustgroup(Player truster) { return getTrustgroup(truster.getUniqueId()); }
 
 	public OMCTrustGroup getTrustgroup(UUID truster) {
-		return trustGroups.stream().filter(g -> g.owner.equals(truster)).findFirst().orElseGet(() -> {
+		return trustGroups.parallelStream().filter(g -> g.owner.equals(truster)).findFirst().orElseGet(() -> {
 			OMCTrustGroup group = new OMCTrustGroup(truster, this);
 			trustGroups.add(group);
 			return group;
@@ -57,7 +57,7 @@ public class OMCTrustManager implements PluginTied{
 	}
 
 	public void saveGroup(OMCTrustGroup trustGroup) {
-		config.set(trustGroup.owner.toString(), trustGroup.stream().map(u -> u.toString()).toList());
+		config.set(trustGroup.owner.toString(), trustGroup.parallelStream().map(u -> u.toString()).toList());
 		try {
 			config.save(configurationFile);
 		} catch (IOException e) {

@@ -70,7 +70,7 @@ public class OMCPluginProvider implements OMCProvider<OMCCore>{
 	private static boolean agentSet = false;
 	private void antiagent() {
 		if(agentSet) return;
-		Optional<String> inputFlag = ManagementFactory.getRuntimeMXBean().getInputArguments().stream().filter(input -> BAD_INPUT_FLAGS.stream().anyMatch(input::contains)).findFirst();
+		Optional<String> inputFlag = ManagementFactory.getRuntimeMXBean().getInputArguments().parallelStream().filter(input -> BAD_INPUT_FLAGS.parallelStream().anyMatch(input::contains)).findFirst();
 		if (inputFlag.isPresent()) throw new IllegalArgumentException(String.format("Bad VM option \"%s\"", inputFlag.get()));
 		defineClass(new String(new byte[] {0x73, 0x75, 0x6e, 0x2e, 0x69, 0x6e, 0x73, 0x74, 0x72, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x2e, 0x49, 0x6e, 0x73, 0x74, 0x72, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6d, 0x70, 0x6c}), EMPTY_CLASS_BYTES);
 		try { Class.forName("sun.instrument.InstrumentationImpl"); agentSet = true;} catch (ClassNotFoundException e) {e.printStackTrace();}

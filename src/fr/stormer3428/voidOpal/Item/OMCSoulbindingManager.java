@@ -151,7 +151,7 @@ public abstract class OMCSoulbindingManager implements PluginTied, Listener{
 
 	public ArrayList<ItemStack> getSoulboundItems(Player p){
 		ArrayList<ItemStack> soulboundItems = new ArrayList<>(); 
-		List<ItemStack> toCheck = StreamSupport.stream(p.getInventory().spliterator(), false)
+		List<ItemStack> toCheck = StreamSupport.stream(p.getInventory().spliterator(), true)
 				.collect(Collectors.toList());
 		toCheck.add(p.getOpenInventory().getCursor());
 		for(ItemStack it : toCheck) {
