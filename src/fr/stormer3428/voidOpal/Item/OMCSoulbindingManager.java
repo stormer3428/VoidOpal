@@ -13,6 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -152,6 +153,12 @@ public abstract class OMCSoulbindingManager implements Listener, PluginTied{
 
 	@EventHandler public void onHopperPickup(InventoryPickupItemEvent e) { if (isSoulboundItem(e.getItem().getItemStack())) e.setCancelled(true); }
 
+	@EventHandler 
+	public void onEntityPickup(EntityPickupItemEvent e) {
+		if(e.getEntity() instanceof Player) return;
+		if(isSoulboundItem(e.getItem().getItemStack())) e.setCancelled(true);
+	}
+	
 	public ArrayList<ItemStack> getSoulboundItems(Player p){
 		ArrayList<ItemStack> soulboundItems = new ArrayList<>(); 
 		List<ItemStack> toCheck = StreamSupport.stream(p.getInventory().spliterator(), true)
