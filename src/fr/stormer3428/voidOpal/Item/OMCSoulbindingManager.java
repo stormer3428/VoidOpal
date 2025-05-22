@@ -19,6 +19,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -31,7 +32,7 @@ import org.bukkit.inventory.ItemStack;
 import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
-public abstract class OMCSoulbindingManager implements PluginTied, Listener{
+public abstract class OMCSoulbindingManager implements Listener, PluginTied{
 
 	public OMCSoulbindingManager() {OMCCore.getOMCCore().registerPluginTied(this);}
 	
@@ -148,6 +149,8 @@ public abstract class OMCSoulbindingManager implements PluginTied, Listener{
 		if(it == null || !isSoulboundItem(it)) return;
 		e.setCancelled(true);
 	}
+
+	@EventHandler public void onHopperPickup(InventoryPickupItemEvent e) { if (isSoulboundItem(e.getItem().getItemStack())) e.setCancelled(true); }
 
 	public ArrayList<ItemStack> getSoulboundItems(Player p){
 		ArrayList<ItemStack> soulboundItems = new ArrayList<>(); 
