@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -158,6 +159,8 @@ public abstract class OMCSoulbindingManager implements Listener, PluginTied{
 		if(e.getEntity() instanceof Player) return;
 		if(isSoulboundItem(e.getItem().getItemStack())) e.setCancelled(true);
 	}
+	
+	@EventHandler public void onDespawn(ItemDespawnEvent e) { if (isSoulboundItem(e.getEntity().getItemStack())) e.setCancelled(true); }
 	
 	public ArrayList<ItemStack> getSoulboundItems(Player p){
 		ArrayList<ItemStack> soulboundItems = new ArrayList<>(); 
