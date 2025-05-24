@@ -22,6 +22,7 @@ public class Line implements Drawable{
 	private float particleSpreadZ = 0;
 	private float particleSpeed = 0;
 	private double resolution = 0.1d;
+	private double drawChance = 1;
 	private boolean forceRender = true;
 
 	public Line(Vector a, Vector b) {this(new OMCProviderImpl<>(a), new OMCProviderImpl<>(b));}
@@ -31,6 +32,7 @@ public class Line implements Drawable{
 	}
 	
 	public void drawPoint(World world, Vector location) {
+		if(Math.random() > drawChance) return;
 		world.spawnParticle(particle, location.getX(), location.getY(), location.getZ(), particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData, forceRender);
 	}
 
@@ -93,6 +95,7 @@ public class Line implements Drawable{
 	public void setB(Vector b) {setB(new OMCProviderImpl<>(b));}
 	public void setA(OMCProvider<Vector> a) {this.a = a;}
 	public void setB(OMCProvider<Vector> b) {this.b = b;}
+	public Line setDrawChance(double drawChance) {this.drawChance = drawChance;return this;}
 	public Line setResolution(double resolution) {this.resolution = resolution;return this;}
 	public Line setParticleSpeed(float particleSpeed) {this.particleSpeed = particleSpeed;return this;}
 	public Line setParticleAmount(int particleAmount) {this.particleAmount = particleAmount; return this;}
@@ -103,6 +106,7 @@ public class Line implements Drawable{
 	public float getParticleSpreadX() {return particleSpreadX;}
 	public float getParticleSpreadY() {return particleSpreadY;}
 	public float getParticleSpreadZ() {return particleSpreadZ;}
+	public double getDrawChance() { return drawChance; }
 	public double getResolution() {return resolution;}
 	public OMCProvider<Vector> getA() {return a;}
 	public OMCProvider<Vector> getB() {return b;}

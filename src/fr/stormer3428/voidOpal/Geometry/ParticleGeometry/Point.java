@@ -15,10 +15,12 @@ public class Point implements Drawable{
 	protected float particleSpreadY = 0;
 	protected float particleSpreadZ = 0;
 	protected float particleSpeed = 0;
+	protected double drawChance = 1;
 	protected boolean forceRender = true;
 
 	@Override
 	public Point draw(Location location, double scale) {
+		if(Math.random() > drawChance) return this;
 		World world = location.getWorld();
 		Location particleLoc = location.clone().add(this.location.clone().multiply(scale));
 		world.spawnParticle(particle, particleLoc, particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData, forceRender);
@@ -31,12 +33,14 @@ public class Point implements Drawable{
 	public float getParticleSpreadZ() {return particleSpreadZ;}
 	public float getParticleSpeed() {return particleSpeed;}
 	public Point setLocation(Vector location) {this.location = location;return this;}
+	public Point setDrawChance(double drawChance) {this.drawChance = drawChance;return this;}
 	public Point setParticleAmount(int particleAmount) {this.particleAmount = particleAmount;return this;}
 	public Point setParticleSpread(float particleSpread) {setParticleSpreadX(particleSpread); setParticleSpreadY(particleSpread); setParticleSpreadZ(particleSpread); return this;}
 	public Point setParticleSpreadX(float particleSpreadX) {this.particleSpreadX = particleSpreadX;return this;}
 	public Point setParticleSpreadY(float particleSpreadY) {this.particleSpreadY = particleSpreadY;return this;}
 	public Point setParticleSpreadZ(float particleSpreadZ) {this.particleSpreadZ = particleSpreadZ;return this;}
 	public Point setParticleSpeed(float particleSpeed) {this.particleSpeed = particleSpeed;return this;}
+	public double getDrawChance() { return drawChance; }
 	public Vector getLocation() {return location;}
 	@Override public Point rotateAroundAxis(Vector axis, double radians) {location.rotateAroundAxis(axis, radians);return this;}
 	@Override public Point rotateAroundX(double radians) {location.rotateAroundX(radians);return this;}
