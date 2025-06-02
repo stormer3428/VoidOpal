@@ -2,6 +2,8 @@ package fr.stormer3428.voidOpal.Command;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Registry;
@@ -20,7 +22,9 @@ import fr.stormer3428.voidOpal.Item.OMCItemManager;
 import fr.stormer3428.voidOpal.Item.Types.OMCItem;
 import fr.stormer3428.voidOpal.Power.OMCPowerManager;
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
+import fr.stormer3428.voidOpal.Tickeable.OMCTickeableManager;
 import fr.stormer3428.voidOpal.data.OMCLang;
+import fr.stormer3428.voidOpal.data.OMCNameable;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.OMCCore;
 
@@ -140,23 +144,63 @@ public class OMCPremadeCommandFactory {
 				}
 			}
 			,
-			new OMCCommand(root + " power %POWER% %P%", true) {
+			new OMCCommand(root + " power %POWER% cast %P%", true) {
 
 				@Override
 				public boolean execute(CommandSender sender, ArrayList<String> args) {
-					List<Entity> targets = new ArrayList<Entity>();
-					try {
-						OMCCore.getJavaPlugin().getServer().selectEntities(sender, args.get(0));
-					}catch (NoSuchMethodError e) {
-						targets.add(OMCCore.getJavaPlugin().getServer().getPlayer(args.get(0)));
-					}
-					if(targets.isEmpty()) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(0)));
 					OMCPower power = powerManager.getPowerIgnoreCase(args.get(0));
 					if(power == null) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOPOWER.toString().replace("<%POWER>", args.get(0)));
+
+					List<Entity> targets = new ArrayList<Entity>();
+					try {
+						OMCCore.getJavaPlugin().getServer().selectEntities(sender, args.get(1));
+					}catch (NoSuchMethodError e) {
+						targets.add(OMCCore.getJavaPlugin().getServer().getPlayer(args.get(1)));
+					}
+					if(targets.isEmpty()) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(1)));
+					
 					for(Entity e : targets) if(e instanceof Player p) {
 						power.tryCast(null, p);
 						OMCLogger.normal(sender, OMCLang.POWER_MANUALCAST.toString().replace("<%POWER>", power.getRegistryName()));
 					}
+					
+					return true;
+				}
+			}
+			,
+			new OMCCommand(root + " power %POWER% putOnCooldown %P% %V%", true) {
+
+				@Override
+				public boolean execute(CommandSender sender, ArrayList<String> args) {
+					OMCPower power = powerManager.getPowerIgnoreCase(args.get(0));
+					if(power == null) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOPOWER.toString().replace("<%POWER>", args.get(0)));
+					
+					Player p = Bukkit.getPlayer(args.get(1));
+					if(p == null) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(1)));
+
+					int cooldown;
+					try {
+						cooldown = Integer.parseInt(args.get(2));
+					}catch (NumberFormatException e) {
+						return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_INTEGER.toString().replace("<%VALUE>", args.get(2)));
+					}
+					
+					power.putOnCooldown(p, cooldown);
+					return true;
+				}
+			}
+			,
+			new OMCCommand(root + " power %POWER% clearCooldown %P%", true) {
+
+				@Override
+				public boolean execute(CommandSender sender, ArrayList<String> args) {
+					OMCPower power = powerManager.getPowerIgnoreCase(args.get(0));
+					if(power == null) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOPOWER.toString().replace("<%POWER>", args.get(0)));
+					
+					Player p = Bukkit.getPlayer(args.get(1));
+					if(p == null) return OMCLogger.error(sender, OMCLang.ERROR_INVALIDARG_NOPLAYER.toString().replace("<%PLAYER>", args.get(1)));
+
+					power.clearCooldowns();
 					return true;
 				}
 			}
@@ -223,6 +267,46 @@ public class OMCPremadeCommandFactory {
 		};
 	}
 
+	public static OMCCommand[] printItemRegistry(OMCItemManager itemManager, String root) {
+		return new OMCCommand[] { 
+			new OMCCommand(root + " debug%%%d printItemRegistry", true) { @Override public boolean execute(CommandSender sender, ArrayList<String> vars) {
+				OMCLogger.normal(sender, "<Printing Item Registry>\n");
+				for (OMCNameable nameable : itemManager.getItems()) OMCLogger.normal(sender, nameable.getRegistryName());
+				return OMCLogger.normal(sender, "\n");
+			}} 
+		};
+	}
+
+	public static OMCCommand[] printPowerRegistry(OMCPowerManager powerManager, String root) {
+		return new OMCCommand[] { 
+			new OMCCommand(root + " debug%%%d printPowerRegistry", true) { @Override public boolean execute(CommandSender sender, ArrayList<String> vars) {
+				OMCLogger.normal(sender, "<Printing Power Registry>\n");
+				for (OMCNameable nameable : powerManager.getPowers()) OMCLogger.normal(sender, nameable.getRegistryName());
+				return OMCLogger.normal(sender, "\n");
+			}} ,
+			new OMCCommand(root + " debug%%%d printCooldowns", true) { @Override public boolean execute(CommandSender sender, ArrayList<String> vars) {
+				OMCLogger.normal(sender, "<Printing cooldowns Registry>\n");
+				for (OMCPower power : powerManager.getPowers()) {
+					for(Entry<UUID, Integer> entry : power.getCooldownMap().entrySet()) {
+						OMCLogger.normal(sender, power.getRegistryName() + " " + entry.getKey() + " " + entry.getValue());
+					}
+				}
+				return OMCLogger.normal(sender, "\n");
+			}}
+		};
+	}
+
+	public static OMCCommand[] printTickeableRegistry(OMCTickeableManager tickeableManager, String root) {
+		return new OMCCommand[] { 
+			new OMCCommand(root + " debug%%%d printTickeableRegistry", true) { @Override public boolean execute(CommandSender sender, ArrayList<String> vars) {
+				OMCLogger.normal(sender, "<Printing Tickeable Registry>\n");
+				for (OMCNameable nameable : tickeableManager.getRegisteredTickables()) OMCLogger.normal(sender, nameable.getRegistryName());
+				return OMCLogger.normal(sender, "\n");
+			}}
+		};
+	}
+
+	
 
 	public static final String serializeItemstack(ItemStack it) {
 		YamlConfiguration config = new YamlConfiguration();

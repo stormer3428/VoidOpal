@@ -23,6 +23,9 @@ import fr.stormer3428.voidOpal.Power.Types.OMCPower;
 import fr.stormer3428.voidOpal.Tickeable.OMCTickeable;
 import fr.stormer3428.voidOpal.Tickeable.OMCTickeableManager;
 import fr.stormer3428.voidOpal.data.OMCLang;
+import fr.stormer3428.voidOpal.data.OMCNamedListenerHolder;
+import fr.stormer3428.voidOpal.data.OMCPowerHolder;
+import fr.stormer3428.voidOpal.data.OMCTickeableHolder;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
@@ -165,11 +168,9 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 			OMCLogger.systemError(OMCLang.ERROR_ITEM_MANAGER_REGISTER_NULL_NAME.toString());
 			return;
 		}
-		if(item instanceof SMPItem smpItem) {
-			smpItem.getOmcTickeables().forEach(t->tickeableManager.registerTickeable(t));
-			smpItem.getOmcPowers().forEach(p->powerManager.registerPower(p));
-			smpItem.getListener().forEach(l->listenerManager.registerListener(l));
-		}
+		if(item instanceof OMCNamedListenerHolder h) h.getListeners().forEach(l->listenerManager.registerListener(l));
+		if(item instanceof OMCTickeableHolder h) h.getOmcTickeables().forEach(l->tickeableManager.registerTickeable(l));
+		if(item instanceof OMCPowerHolder h) h.getOmcPowers().forEach(l->powerManager.registerPower(l));
 		registeredItems.add(item);
 	}
 

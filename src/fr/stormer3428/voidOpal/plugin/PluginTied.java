@@ -16,6 +16,6 @@ public interface PluginTied {
 	@OMCKeep public void onPluginEnable();
 	@OMCKeep public void onPluginDisable();
 	@OMCKeep public void onPluginReload();
-	@OMCKeep public default void registerSelf() { OMCCore.getOMCCore().registerPluginTied(this); }
+	@OMCKeep default void registerSelf() { OMCCore.getOMCCore().registerPluginTied(this); }
 	
 }

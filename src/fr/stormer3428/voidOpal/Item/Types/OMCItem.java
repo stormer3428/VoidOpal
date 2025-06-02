@@ -3,6 +3,7 @@ package fr.stormer3428.voidOpal.Item.Types;
 import org.bukkit.inventory.ItemStack;
 
 import fr.stormer3428.voidOpal.Item.OMCItemManager;
+import fr.stormer3428.voidOpal.data.OMCNameable;
 
 /**
  * Represents a custom {@link ItemStack}
@@ -11,7 +12,7 @@ import fr.stormer3428.voidOpal.Item.OMCItemManager;
  * @see OMCItemManager
  *
  */
-public interface OMCItem {
+public interface OMCItem extends OMCNameable{
 
 	//	public List<OMCPower> getPowers();
 	public ItemStack createItemsStack(int amount);

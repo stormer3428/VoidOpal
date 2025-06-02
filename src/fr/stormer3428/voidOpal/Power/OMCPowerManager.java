@@ -11,6 +11,9 @@ import fr.stormer3428.voidOpal.Listener.OMCNamedListenerManager;
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
 import fr.stormer3428.voidOpal.Tickeable.OMCTickeableManager;
 import fr.stormer3428.voidOpal.data.OMCLang;
+import fr.stormer3428.voidOpal.data.OMCNamedListenerHolder;
+import fr.stormer3428.voidOpal.data.OMCPowerHolder;
+import fr.stormer3428.voidOpal.data.OMCTickeableHolder;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
@@ -97,9 +100,14 @@ public class OMCPowerManager implements Listener, PluginTied{
 			OMCLogger.systemError(OMCLang.ERROR_POWER_MANAGER_REGISTER_NULL_NAME.toString());
 			return;
 		}
+			
 		omcNamedListenerManager.registerListener(power);
 		omcTickeableManager.registerTickeable(power);
 		registeredPowers.add(power);
+		
+		if(power instanceof OMCNamedListenerHolder h) h.getListeners().forEach(l->omcNamedListenerManager.registerListener(l));
+		if(power instanceof OMCTickeableHolder h) h.getOmcTickeables().forEach(l->omcTickeableManager.registerTickeable(l));
+		if(power instanceof OMCPowerHolder h) h.getOmcPowers().forEach(l->registerPower(l));
 	}
 
 	/**

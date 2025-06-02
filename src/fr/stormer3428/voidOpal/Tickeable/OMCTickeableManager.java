@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
+import fr.stormer3428.voidOpal.data.OMCTickeableHolder;
 import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
@@ -19,7 +20,14 @@ public class OMCTickeableManager extends BukkitRunnable implements PluginTied{
 		registeredTickables.forEach(t->t.onTick(i));
 	}
 
-	public void registerTickeable(OMCTickeable tickeable) {registeredTickables.add(tickeable);}
+	public void registerTickeable(OMCTickeable tickeable) {
+		registeredTickables.add(tickeable);
+		
+
+//		if(tickeable instanceof OMCNamedListenerHolder h) h.getListeners().forEach(l->listenerManager.registerListener(l));
+		if(tickeable instanceof OMCTickeableHolder h) h.getOmcTickeables().forEach(l->registerTickeable(l));
+//		if(tickeable instanceof OMCPowerHolder h) h.getOmcPowers().forEach(l->powerManager.registerPower(l));
+	}
 	
 	public ArrayList<OMCTickeable> getRegisteredTickables() { return new ArrayList<>(registeredTickables); }
 

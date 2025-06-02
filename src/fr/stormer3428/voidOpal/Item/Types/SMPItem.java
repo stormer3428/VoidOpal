@@ -22,15 +22,16 @@ import org.bukkit.persistence.PersistentDataType;
 import fr.stormer3428.voidOpal.Listener.OMCNamedListener;
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
 import fr.stormer3428.voidOpal.Tickeable.OMCTickeable;
+import fr.stormer3428.voidOpal.data.OMCNamedListenerHolder;
+import fr.stormer3428.voidOpal.data.OMCPowerHolder;
+import fr.stormer3428.voidOpal.data.OMCTickeableHolder;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.util.OMCUtil;
 
-public class SMPItem implements OMCItem {
+public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder, OMCTickeableHolder {
 
-	public SMPItem(String registryName) {
-		this.registryName = registryName;
-	}
+	public SMPItem(String registryName) { this.registryName = registryName; }
 
 	private Material material = Material.ENCHANTED_BOOK;
 	private String displayName = null;
@@ -46,15 +47,15 @@ public class SMPItem implements OMCItem {
 	private boolean unbreakeable = false;
 
 	@Override public String getRegistryName() { return registryName;}
+	@Override public List<OMCPower> getOmcPowers() {return omcPowers;}
+	@Override public List<OMCTickeable> getOmcTickeables() {return omcTickeables;}
+	@Override public List<OMCNamedListener> getListeners() {return listeners;}
 	public Material getMaterial(){return material;}
 	public String getDisplayName(){return displayName;}
 	public int getCMD(){return CMD;}
 	public List<String> getLore(){return lore;}
 	public List<ItemFlag> getItemFlags(){return itemFlags;}
 	public Map<Enchantment,Integer> getEnchants(){return enchants;}
-	public List<OMCPower> getOmcPowers() {return omcPowers;}
-	public List<OMCTickeable> getOmcTickeables() {return omcTickeables;}
-	public List<OMCNamedListener> getListener() {return listeners;}
 
 	public SMPItem setMaterial(Material material){ this.material = material; return this;}
 	public SMPItem setDisplayname(String displayname){ this.displayName = displayname; return this;}
