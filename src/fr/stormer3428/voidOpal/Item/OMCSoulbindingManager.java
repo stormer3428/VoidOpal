@@ -36,7 +36,7 @@ import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public abstract class OMCSoulbindingManager implements Listener, PluginTied{
 
-	public OMCSoulbindingManager() {OMCCore.getOMCCore().registerPluginTied(this);}
+	public OMCSoulbindingManager() {registerSelf();}
 	
 	protected abstract boolean isSoulboundItem(ItemStack it);
 	protected abstract boolean isSuitable(ArrayList<ItemStack> soulboundItems);

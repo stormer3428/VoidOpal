@@ -3,7 +3,6 @@ package fr.stormer3428.voidOpal.Listener;
 import org.bukkit.event.Listener;
 
 import fr.stormer3428.voidOpal.data.OMCNameable;
-import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public abstract class OMCNamedListener implements Listener, OMCNameable, PluginTied{
@@ -14,7 +13,7 @@ public abstract class OMCNamedListener implements Listener, OMCNameable, PluginT
 	
 	public OMCNamedListener(String registryName) {
 		this.registryName = registryName;
-		OMCCore.getOMCCore().registerPluginTied(this); 
+		registerSelf(); 
 	}
 
 	@Override public void onPluginEnable() {}

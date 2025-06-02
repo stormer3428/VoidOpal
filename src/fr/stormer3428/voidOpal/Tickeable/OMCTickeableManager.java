@@ -9,7 +9,7 @@ import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public class OMCTickeableManager extends BukkitRunnable implements PluginTied{
 
-	public OMCTickeableManager() {OMCCore.getOMCCore().registerPluginTied(this);}
+	public OMCTickeableManager() {registerSelf();}
 	
 	private final ArrayList<OMCTickeable> registeredTickables = new ArrayList<>();
 	private int i;

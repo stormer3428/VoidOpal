@@ -17,7 +17,7 @@ import fr.stormer3428.voidOpal.plugin.PluginTied;
 @SuppressWarnings("deprecation")
 public class OMCTrueDamageManager implements Listener,PluginTied{
 
-	public OMCTrueDamageManager() {OMCCore.getOMCCore().registerPluginTied(this);}
+	public OMCTrueDamageManager() {registerSelf();}
 	
 	public class DamageRequest {
 

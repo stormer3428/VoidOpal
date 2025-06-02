@@ -20,7 +20,6 @@ import javax.crypto.spec.IvParameterSpec;
 import fr.stormer3428.voidOpal.communication.OMCEncryptionUtils;
 import fr.stormer3428.voidOpal.communication.OMCPluginIdentifier;
 import fr.stormer3428.voidOpal.communication.OMCProtocol;
-import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.plugin.PluginTied;
 
 public abstract class SocketServer implements Closeable, PluginTied{
@@ -41,7 +40,7 @@ public abstract class SocketServer implements Closeable, PluginTied{
 	protected SocketServer(int port) throws IOException {
 		this.port = port;
 		this.serverSocket = new ServerSocket(port);
-		OMCCore.getOMCCore().registerPluginTied(this);
+		registerSelf();
 	}
 
 	@Override public void onPluginEnable(){thread.start();}

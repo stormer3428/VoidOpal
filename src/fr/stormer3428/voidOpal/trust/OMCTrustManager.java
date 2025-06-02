@@ -21,7 +21,7 @@ public class OMCTrustManager implements PluginTied{
 	
 	public OMCTrustManager(String configFileName) {
 		this.configFileName = configFileName;
-		OMCCore.getOMCCore().registerPluginTied(this);
+		registerSelf();
 	}
 
 	@Override public void onPluginEnable() {onPluginReload();}

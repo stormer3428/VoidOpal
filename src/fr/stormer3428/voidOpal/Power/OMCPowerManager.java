@@ -24,7 +24,7 @@ public class OMCPowerManager implements Listener, PluginTied{
 	public OMCPowerManager(OMCTickeableManager omcTickeableManager, OMCNamedListenerManager omcNamedListenerManager) {
 		this.omcTickeableManager = omcTickeableManager;
 		this.omcNamedListenerManager = omcNamedListenerManager;
-		OMCCore.getOMCCore().registerPluginTied(this);
+		registerSelf();
 	}
 	
 	@Override

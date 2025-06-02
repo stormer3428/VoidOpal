@@ -13,7 +13,7 @@ public class OMCNamedListenerManager implements Listener, PluginTied{
 
 	private final ArrayList<OMCNamedListener> registeredListeners = new ArrayList<>();
 	
-	public OMCNamedListenerManager() { OMCCore.getOMCCore().registerPluginTied(this); }
+	public OMCNamedListenerManager() { registerSelf(); }
 	
 	@Override public void onPluginEnable() {
 		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin());

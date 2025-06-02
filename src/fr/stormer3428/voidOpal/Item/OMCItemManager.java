@@ -40,7 +40,7 @@ public abstract class OMCItemManager implements Listener, PluginTied{
 		this.powerManager = powerManager;
 		this.tickeableManager = tickeableManager; 
 		this.listenerManager = namedListenerManager;
-		OMCCore.getOMCCore().registerPluginTied(this);
+		registerSelf();
 	}
 	
 	protected abstract void registerItems();
