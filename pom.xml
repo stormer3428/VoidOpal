@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.stormer3428</groupId>
 	<artifactId>VoidOpal</artifactId>
-	<version>0.2.2</version>
+	<version>0.2.3</version>
 	<name>VoidOpal</name>
 
 	<description>A library for plugins made by stormer3428</description>
@@ -28,6 +28,11 @@
 			<groupId>org.ow2.asm</groupId>
 			<artifactId>asm-commons</artifactId>
 			<version>9.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.10.2</version>
 		</dependency>
 	</dependencies>
 	<build>

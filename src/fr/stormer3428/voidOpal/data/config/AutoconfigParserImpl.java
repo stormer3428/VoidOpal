@@ -5,12 +5,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.reflections.Reflections;
 
 import fr.stormer3428.voidOpal.data.config.annotations.AutoConfig;
 import fr.stormer3428.voidOpal.data.config.annotations.BooleanConfigValue;
@@ -24,17 +27,12 @@ import fr.stormer3428.voidOpal.plugin.OMCCore;
 
 public final class AutoconfigParserImpl implements AutoconfigParser{
 
-	final ArrayList<Class<?>> annotatedClasses = new ArrayList<>();
-
 	@Override
 	public void updateValues() {
-//		OMCLogger.systemNormal("Updating values in classes");
-		for(Class<?> clazz : annotatedClasses) {
-//			OMCLogger.systemNormal("Updating values of class " + clazz.getName());
+		for(Class<?> clazz : getClassesAnnotatedWith(AutoConfig.class)) {
 
 			File file = getConfigFile(clazz);
 			if(file == null) {
-//				OMCLogger.systemError("Error, missing @AutoConfig annotation");
 				continue;
 			}
 
@@ -153,11 +151,6 @@ public final class AutoconfigParserImpl implements AutoconfigParser{
 	}
 	
 	@Override
-	public void registerAutoConfigClass(Class<?> clazz) {
-		annotatedClasses.add(clazz);
-	}
-
-	@Override
 	public void createConfigFile(String resourcePath) {
 		File dataFolder = OMCCore.getJavaPlugin().getDataFolder();
 
@@ -239,5 +232,22 @@ public final class AutoconfigParserImpl implements AutoconfigParser{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static Set<Class<?>> getClassesAnnotatedWith(Class<? extends Annotation> annotationType) {
+		Reflections reflections = new Reflections("org.package.foo");
+
+		Set<Class<?>> allClasses = reflections.getSubTypesOf(Object.class);
+		Set<Class<?>> annotatedClases = new HashSet<>();
+
+		for (Class<?> clazz : allClasses) {
+			Annotation[] annotations = clazz.getAnnotations();
+
+			for (Annotation annotation : annotations) if (annotationType.isInstance(annotation)){
+				annotatedClases.add(clazz);
+				break;
+			}
+		}
+		return annotatedClases;
 	}
 }
