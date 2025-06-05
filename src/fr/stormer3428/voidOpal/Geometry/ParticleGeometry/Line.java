@@ -91,17 +91,17 @@ public class Line implements Drawable{
 	}
 	
 	public int getParticleAmount() {return particleAmount;}
-	public void a(Vector a) {a(new OMCProviderImpl<>(a));}
-	public void b(Vector b) {b(new OMCProviderImpl<>(b));}
-	public void a(OMCProvider<Vector> a) {this.a = a;}
-	public void b(OMCProvider<Vector> b) {this.b = b;}
-	public Line drawChance(double drawChance) {this.drawChance = drawChance;return this;}
-	public Line resolution(double resolution) {this.resolution = resolution;return this;}
-	public Line particleSpeed(float particleSpeed) {this.particleSpeed = particleSpeed;return this;}
+	public Line a(Vector a) {a(new OMCProviderImpl<>(a)); return this;}
+	public Line b(Vector b) {b(new OMCProviderImpl<>(b)); return this;}
+	public Line a(OMCProvider<Vector> a) {this.a = a; return this;}
+	public Line b(OMCProvider<Vector> b) {this.b = b; return this;}
+	public Line drawChance(double drawChance) {this.drawChance = drawChance; return this;}
+	public Line resolution(double resolution) {this.resolution = resolution; return this;}
+	public Line particleSpeed(float particleSpeed) {this.particleSpeed = particleSpeed; return this;}
 	public Line particleAmount(int particleAmount) {this.particleAmount = particleAmount; return this;}
-	public Line particleSpreadX(float particleSpreadX) {this.particleSpreadX = particleSpreadX;return this;}
-	public Line particleSpreadY(float particleSpreadY) {this.particleSpreadY = particleSpreadY;return this;}
-	public Line particleSpreadZ(float particleSpreadZ) {this.particleSpreadZ = particleSpreadZ;return this;}
+	public Line particleSpreadX(float particleSpreadX) {this.particleSpreadX = particleSpreadX; return this;}
+	public Line particleSpreadY(float particleSpreadY) {this.particleSpreadY = particleSpreadY; return this;}
+	public Line particleSpreadZ(float particleSpreadZ) {this.particleSpreadZ = particleSpreadZ; return this;}
 	public float getParticleSpeed() {return particleSpeed;}
 	public float getParticleSpreadX() {return particleSpreadX;}
 	public float getParticleSpreadY() {return particleSpreadY;}
@@ -111,8 +111,8 @@ public class Line implements Drawable{
 	public OMCProvider<Vector> getA() {return a;}
 	public OMCProvider<Vector> getB() {return b;}
 	@Override public Line particle(Particle particle) {this.particle = particle; return this;}
-	@Override public Line particleData(Object particleData) {this.particleData = particleData;return this;}
-	@Override public Line forceRendering(boolean forceRender) {this.forceRender = forceRender;return this;}
+	@Override public Line particleData(Object particleData) {this.particleData = particleData; return this;}
+	@Override public Line forceRendering(boolean forceRender) {this.forceRender = forceRender; return this;}
 	@Override public boolean isForceRendering() {return forceRender;}
 	@Override public Particle getParticle() {return particle;}
 
