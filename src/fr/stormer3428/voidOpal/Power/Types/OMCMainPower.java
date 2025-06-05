@@ -12,11 +12,10 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.stormer3428.voidOpal.Item.Tracking.PlayerConditions;
 import fr.stormer3428.voidOpal.Item.Types.OMCItem;
-import fr.stormer3428.voidOpal.Tickeable.OMCTickeable;
 import fr.stormer3428.voidOpal.data.OMCPowerHolder;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 
-public abstract class OMCMainPower extends OMCPower implements OMCTickeable, OMCPowerHolder {
+public abstract class OMCMainPower extends OMCPower implements OMCPowerHolder {
 
 	public OMCMainPower(String registryName) { super(registryName); }
 
