@@ -127,7 +127,7 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 			loc.clone().add(b).distanceSquared(origin)
 			));
 		sorted.addAll(options);
-		return sorted.isEmpty() ? null : sorted.getFirst();
+		return sorted.isEmpty() ? null : sorted.first();
 	}
 	
 	public static boolean isSupported(Block present, BlockData toPlace) {
