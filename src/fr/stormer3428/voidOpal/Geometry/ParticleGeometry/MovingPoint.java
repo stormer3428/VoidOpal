@@ -66,21 +66,21 @@ public class MovingPoint implements Drawable{
 		return this;
 	}
 
+	public boolean isScaleSpeed() { return scaleSpeed; }
+	public boolean isStaticDirection() { return staticDirection; }
 	public Vector getLocation() { return location; }
+	public Vector getParticleDirection() { return particleDirection; }
+	public Vector getParticleOffdirection() { return particleOffdirection; }
 	public MovingPoint location(Vector location) { this.location = location; return this; }
+	public MovingPoint scaleSpeed(boolean scaleSpeed) { this.scaleSpeed = scaleSpeed; return this;}
+	public MovingPoint scaleSpeed() { scaleSpeed(true); return this;}
+	public MovingPoint particleDirection(Vector particleDirection) { this.particleDirection = particleDirection; return this; }
+	public MovingPoint staticDirection(boolean staticDirection) {this.staticDirection = staticDirection; return this;}
+	public MovingPoint particleOffdirection(Vector particleOffdirection) { this.particleOffdirection = particleOffdirection; return this; }
+	@Override public boolean isForceRendering() { return forceRender; }
 	@Override public Particle getParticle() { return particle; }
 	@Override public MovingPoint particle(Particle particle) { this.particle = particle; return this; }
-	public Vector getParticleDirection() { return particleDirection; }
-	public MovingPoint particleDirection(Vector particleDirection) { this.particleDirection = particleDirection; return this; }
-	public Vector getParticleOffdirection() { return particleOffdirection; }
-	public MovingPoint particleOffdirection(Vector particleOffdirection) { this.particleOffdirection = particleOffdirection; return this; }
 	@Override public MovingPoint particleData(Object particleData) { this.particleData = particleData; return this; }
 	@Override public MovingPoint particleSpeed(float particleSpeed) { this.particleDirection.normalize().multiply(particleSpeed); return this; }
 	@Override public MovingPoint forceRendering(boolean forceRender) {this.forceRender = forceRender;return this;}
-	@Override public boolean isForceRendering() { return forceRender; }
-	public MovingPoint staticDirection(boolean staticDirection) {this.staticDirection = staticDirection; return this;}
-	public boolean isStaticDirection() { return staticDirection; }
-	public boolean isScaleSpeed() { return scaleSpeed; }
-	public void scaleSpeed(boolean scaleSpeed) { this.scaleSpeed = scaleSpeed; }
-	public MovingPoint scaleSpeed() { scaleSpeed(true); return this;}
 }
