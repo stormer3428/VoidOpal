@@ -120,26 +120,26 @@ public class Geometry implements Drawable{
 	}
 
 	@Override
-	public Geometry setParticleSpeed(float speed) {
-		for(Drawable drawable : drawables) drawable.setParticleSpeed(speed);
+	public Geometry particleSpeed(float speed) {
+		for(Drawable drawable : drawables) drawable.particleSpeed(speed);
 		return this;
 	}
 
 	@Override
-	public Geometry setParticle(Particle particle) {
-		for(Drawable drawable : drawables) drawable.setParticle(particle);
+	public Geometry particle(Particle particle) {
+		for(Drawable drawable : drawables) drawable.particle(particle);
 		return this;
 	}
 
 	@Override
-	public <T> Geometry setParticleData(T particleData) {
-		for(Drawable drawable : drawables) drawable.setParticleData(particleData);
+	public <T> Geometry particleData(T particleData) {
+		for(Drawable drawable : drawables) drawable.particleData(particleData);
 		return this;
 	}
 
 	@Override
-	public Geometry setForceRendering(boolean forceRender) {
-		for(Drawable drawable : drawables) drawable.setForceRendering(forceRender);
+	public Geometry forceRendering(boolean forceRender) {
+		for(Drawable drawable : drawables) drawable.forceRendering(forceRender);
 		return this;
 	}
 	

@@ -14,10 +14,10 @@ public interface Drawable {
 	public Drawable rotateAroundZ(double radians);
 	
 	public Particle getParticle();
-	public Drawable setParticle(Particle particle);
-	public Drawable setParticleSpeed(float particleSpeed);
-	public <T> Drawable setParticleData(T particleData);
-	public Drawable setForceRendering(boolean forceRender);
+	public Drawable particle(Particle particle);
+	public Drawable particleSpeed(float particleSpeed);
+	public <T> Drawable particleData(T particleData);
+	public Drawable forceRendering(boolean forceRender);
 	public boolean isForceRendering();
 	
 }

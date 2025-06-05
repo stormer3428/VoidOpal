@@ -11,34 +11,30 @@ public class MovingPoint implements Drawable{
 	private Particle particle = Particle.CRIT;
 	private Object particleData = null;
 	private Vector particleDirection = new Vector(0,0,0);
-	private Vector particleOffsetDirection = new Vector(0,0,0);
+	private Vector particleOffdirection = new Vector(0,0,0);
 	private boolean forceRender = true;
 	private boolean staticDirection = false;
 	private boolean scaleSpeed = false;
-	
-	@Override
-	public MovingPoint draw(Location location, double scale) {
+
+	public void draw(Location location) { draw(location, 1.0); }
+	@Override public MovingPoint draw(Location location, double scale) {
 		World world = location.getWorld();
 		Location particleLoc = location.clone().add(this.location.clone().multiply(scale));
 		world.spawnParticle(particle, particleLoc, 
 				0, 
-				particleDirection.getX() + particleOffsetDirection.getX(),
-				particleDirection.getY() + particleOffsetDirection.getY(),
-				particleDirection.getZ() + particleOffsetDirection.getZ(),
-				particleDirection.clone().add(particleOffsetDirection).length()*(scaleSpeed ? scale : 1), particleData, forceRender);
+				particleDirection.getX() + particleOffdirection.getX(),
+				particleDirection.getY() + particleOffdirection.getY(),
+				particleDirection.getZ() + particleOffdirection.getZ(),
+				particleDirection.clone().add(particleOffdirection).length()*(scaleSpeed ? scale : 1), particleData, forceRender);
 		return this;
 	}
 
-	public void draw(Location location) {
-		draw(location, 1.0);
-	}
 
 	@Override
 	public MovingPoint rotateAroundAxis(Vector axis, double radians) {
 		location.rotateAroundAxis(axis, radians);
 		if(!staticDirection) {
 			particleDirection.rotateAroundAxis(axis, radians);
-//			particleOffsetDirection.rotateAroundAxis(axis, radians);
 		}
 		return this;
 	}
@@ -48,7 +44,6 @@ public class MovingPoint implements Drawable{
 		location.rotateAroundX(radians);
 		if(!staticDirection) {
 			particleDirection.rotateAroundX(radians);
-//			particleOffsetDirection.rotateAroundX(radians);
 		}
 		return this;
 	}
@@ -58,7 +53,6 @@ public class MovingPoint implements Drawable{
 		location.rotateAroundY(radians);
 		if(!staticDirection) {
 			particleDirection.rotateAroundY(radians);
-//			particleOffsetDirection.rotateAroundY(radians);
 		}
 		return this;
 	}
@@ -68,92 +62,25 @@ public class MovingPoint implements Drawable{
 		location.rotateAroundZ(radians);
 		if(!staticDirection) {
 			particleDirection.rotateAroundZ(radians);
-//			particleOffsetDirection.rotateAroundZ(radians);
 		}
 		return this;
 	}
 
-	public Vector getLocation() {
-		return location;
-	}
-
-	public MovingPoint setLocation(Vector location) {
-		this.location = location;
-		return this;
-	}
-
-	@Override
-	public Particle getParticle() {
-		return particle;
-	}
-
-	@Override
-	public MovingPoint setParticle(Particle particle) {
-		this.particle = particle;
-		return this;
-	}
-
-	public Vector getParticleDirection() {
-		return particleDirection;
-	}
-
-	public MovingPoint setParticleDirection(Vector particleDirection) {
-		this.particleDirection = particleDirection;
-		return this;
-	}
-
-	public Vector getParticleOffsetDirection() {
-		return particleOffsetDirection;
-	}
-
-	public MovingPoint setParticleOffsetDirection(Vector particleOffsetDirection) {
-		this.particleOffsetDirection = particleOffsetDirection;
-		return this;
-	}
-
-	@Override
-	public MovingPoint setParticleData(Object particleData) {
-		this.particleData = particleData;
-		return this;
-	}
-
-	@Override
-	public MovingPoint setParticleSpeed(float particleSpeed) {
-		this.particleDirection.normalize().multiply(particleSpeed);
-		return this;
-	}
-
-	@Override
-	public MovingPoint setForceRendering(boolean forceRender) {
-		this.forceRender = forceRender;
-		return this;
-	}
-
-	@Override
-	public boolean isForceRendering() {
-		return forceRender;
-	}
-
-	public MovingPoint setStaticDirection(boolean staticDirection) {
-		this.staticDirection = staticDirection;
-		return this;
-	}
-
-	public boolean isStaticDirection() {
-		return staticDirection;
-	}
-
-	public boolean isScaleSpeed() {
-		return scaleSpeed;
-	}
-
-	public void setScaleSpeed(boolean scaleSpeed) {
-		this.scaleSpeed = scaleSpeed;
-	}
-
-	public MovingPoint scaleSpeed() {
-		setScaleSpeed(true);
-		return this;
-	}
-
+	public Vector getLocation() { return location; }
+	public MovingPoint location(Vector location) { this.location = location; return this; }
+	@Override public Particle getParticle() { return particle; }
+	@Override public MovingPoint particle(Particle particle) { this.particle = particle; return this; }
+	public Vector getParticleDirection() { return particleDirection; }
+	public MovingPoint particleDirection(Vector particleDirection) { this.particleDirection = particleDirection; return this; }
+	public Vector getParticleOffdirection() { return particleOffdirection; }
+	public MovingPoint particleOffdirection(Vector particleOffdirection) { this.particleOffdirection = particleOffdirection; return this; }
+	@Override public MovingPoint particleData(Object particleData) { this.particleData = particleData; return this; }
+	@Override public MovingPoint particleSpeed(float particleSpeed) { this.particleDirection.normalize().multiply(particleSpeed); return this; }
+	@Override public MovingPoint forceRendering(boolean forceRender) {this.forceRender = forceRender;return this;}
+	@Override public boolean isForceRendering() { return forceRender; }
+	public MovingPoint staticDirection(boolean staticDirection) {this.staticDirection = staticDirection; return this;}
+	public boolean isStaticDirection() { return staticDirection; }
+	public boolean isScaleSpeed() { return scaleSpeed; }
+	public void scaleSpeed(boolean scaleSpeed) { this.scaleSpeed = scaleSpeed; }
+	public MovingPoint scaleSpeed() { scaleSpeed(true); return this;}
 }
