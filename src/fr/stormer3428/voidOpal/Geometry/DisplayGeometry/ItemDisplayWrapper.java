@@ -43,7 +43,7 @@ public class ItemDisplayWrapper extends DisplayWrapper<ItemDisplay>{
 	public ItemDisplayWrapper setItemDisplayTransform(ItemDisplayTransform itemDisplayTransform) {this.itemDisplayTransform = itemDisplayTransform; return this;}
 	public ItemDisplayWrapper setItemStack(ItemStack itemStack) {this.itemStack = itemStack; return this;}
 
-	@Override public ItemDisplayWrapper setScale(double scale) {this.scale = scale; updatePosition(); return this;}
+	@Override public ItemDisplayWrapper setScale(double scale) {super.setScale(scale); return this;}
 	@Override public ItemDisplayWrapper setWorld(World world) {super.setWorld(world); return this;}
 	@Override public ItemDisplayWrapper setOrigin(Vector origin) {super.setOrigin(origin); return this;}
 	@Override public ItemDisplayWrapper setOrigin(Location origin) {super.setOrigin(origin); return this;}

@@ -86,6 +86,7 @@ public class OMCTemporaryBlock {
 	}
 
 	public static OMCTemporaryBlock createNew(BlockData blockData, int visibleTime, Location loc, UUID ... playerWhitelist) {
+		loc = loc.getBlock().getLocation();
 		for(OMCTemporaryBlock block : all) if(block.location.equals(loc)) {
 			block.setRemainingTicks(visibleTime);
 			block.setBlockData(blockData);
