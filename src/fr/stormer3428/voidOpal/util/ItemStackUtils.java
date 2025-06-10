@@ -36,6 +36,7 @@ public class ItemStackUtils {
 		return createNamedItemstack(it, name, true);
 	}
 
+	@SuppressWarnings("deprecation")
 	public static ItemStack createNamedItemstack(ItemStack it, String name, boolean hideData) {
 
 		ItemMeta itm = it.getItemMeta();
@@ -45,6 +46,7 @@ public class ItemStackUtils {
 		return it;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static ItemStack createCMDItemstack(Material material, String name, int CMD) {
 		ItemStack it = new ItemStack(material);
 		ItemMeta itm = it.getItemMeta();

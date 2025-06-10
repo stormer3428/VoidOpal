@@ -30,6 +30,7 @@ public class TextDisplayWrapper extends DisplayWrapper<TextDisplay>{
 	private boolean shadowed = true;
 	private TextAlignment textAlignment = TextAlignment.CENTER;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean create() {
 		if(!super.create()) return false;

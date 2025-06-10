@@ -81,7 +81,7 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 		config.addDefault("cmd", CMD);
 		config.addDefault("lore", lore);
 		config.addDefault("itemflags", itemFlags.parallelStream().map(f -> f.name()).collect(Collectors.toList()));
-		for(Enchantment e : enchants.keySet()) if(e.isRegistered()) config.addDefault("enchants." + e.getKeyOrNull(), enchants.get(e));
+		for(Enchantment e : enchants.keySet()) config.addDefault("enchants." + e.getKey(), enchants.get(e));
 		config.addDefault("unbreakable", unbreakeable);
 		for(String s : config.getDefaults().getKeys(true)) config.set(s, config.get(s));
 		return config;
@@ -118,6 +118,7 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 		unbreakeable = config.getBoolean("unbreakable");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public ItemStack createItemsStack(int amount) {
 		Material material = getMaterial();
@@ -165,6 +166,7 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 		return NSKs.computeIfAbsent(name, (s) -> new NamespacedKey(OMCCore.getJavaPlugin(), s));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean equals(ItemStack other) {
 		if(other == null) return false;
