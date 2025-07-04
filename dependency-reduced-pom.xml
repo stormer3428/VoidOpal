@@ -4,7 +4,7 @@
   <groupId>fr.stormer3428</groupId>
   <artifactId>VoidOpal</artifactId>
   <name>VoidOpal</name>
-  <version>0.2.2-Paper</version>
+  <version>0.3.0</version>
   <description>A library for plugins made by stormer3428</description>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -146,7 +146,7 @@
     <dependency>
       <groupId>io.papermc.paper</groupId>
       <artifactId>paper-api</artifactId>
-      <version>1.21.5-R0.1-SNAPSHOT</version>
+      <version>1.21.4-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -164,6 +164,10 @@
         <exclusion>
           <artifactId>joml</artifactId>
           <groupId>org.joml</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>json-simple</artifactId>
+          <groupId>com.googlecode.json-simple</groupId>
         </exclusion>
         <exclusion>
           <artifactId>fastutil</artifactId>

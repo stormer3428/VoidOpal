@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.stormer3428</groupId>
 	<artifactId>VoidOpal</artifactId>
-	<version>0.2.2-Paper</version>
+	<version>0.3.0</version>
 	<name>VoidOpal</name>
 
 	<description>A library for plugins made by stormer3428</description>
@@ -32,7 +32,7 @@
 		<dependency>
 			<groupId>io.papermc.paper</groupId>
 			<artifactId>paper-api</artifactId>
-			<version>1.21.5-R0.1-SNAPSHOT</version>
+			<version>1.21.4-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

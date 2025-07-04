@@ -12,12 +12,14 @@ public class MovingPoint implements Drawable{
 	private Object particleData = null;
 	private Vector particleDirection = new Vector(0,0,0);
 	private Vector particleOffdirection = new Vector(0,0,0);
+	protected double drawChance = 1;
 	private boolean forceRender = true;
 	private boolean staticDirection = false;
 	private boolean scaleSpeed = false;
 
 	public void draw(Location location) { draw(location, 1.0); }
 	@Override public MovingPoint draw(Location location, double scale) {
+		if(Math.random() > drawChance) return this;
 		World world = location.getWorld();
 		Location particleLoc = location.clone().add(this.location.clone().multiply(scale));
 		world.spawnParticle(particle, particleLoc, 
@@ -68,10 +70,12 @@ public class MovingPoint implements Drawable{
 
 	public boolean isScaleSpeed() { return scaleSpeed; }
 	public boolean isStaticDirection() { return staticDirection; }
+	public double getDrawChance() { return drawChance; }
 	public Vector getLocation() { return location; }
 	public Vector getParticleDirection() { return particleDirection; }
 	public Vector getParticleOffdirection() { return particleOffdirection; }
 	public MovingPoint location(Vector location) { this.location = location; return this; }
+	public MovingPoint drawChance(double drawChance) {this.drawChance = drawChance; return this;}
 	public MovingPoint scaleSpeed(boolean scaleSpeed) { this.scaleSpeed = scaleSpeed; return this;}
 	public MovingPoint scaleSpeed() { scaleSpeed(true); return this;}
 	public MovingPoint particleDirection(Vector particleDirection) { this.particleDirection = particleDirection; return this; }

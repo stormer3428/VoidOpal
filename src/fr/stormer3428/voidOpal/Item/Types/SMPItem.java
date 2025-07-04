@@ -1,6 +1,7 @@
 package fr.stormer3428.voidOpal.Item.Types;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -33,9 +35,9 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 
 	public SMPItem(String registryName) { this.registryName = registryName; }
 
-	private Material material = Material.ENCHANTED_BOOK;
+	private Material material = Material.BOOK;
 	private String displayName = null;
-	private int CMD = 0;
+//	private CustomModelDataComponent customModelDataComponent = CustomModelDataComponent.;
 	private String registryName = getClass().getSimpleName();
 	private final ArrayList<String> lore = new ArrayList<>();
 	private final ArrayList<ItemFlag> itemFlags = new ArrayList<>();
@@ -52,14 +54,14 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 	@Override public List<OMCNamedListener> getListeners() {return listeners;}
 	public Material getMaterial(){return material;}
 	public String getDisplayName(){return displayName;}
-	public int getCMD(){return CMD;}
 	public List<String> getLore(){return lore;}
 	public List<ItemFlag> getItemFlags(){return itemFlags;}
+//	public CustomModelData getCustomModelData() { return customModelData; }
 	public Map<Enchantment,Integer> getEnchants(){return enchants;}
 
 	public SMPItem setMaterial(Material material){ this.material = material; return this;}
 	public SMPItem setDisplayname(String displayname){ this.displayName = displayname; return this;}
-	public SMPItem setCmd(int cmd){ this.CMD = cmd; return this;}
+//	public SMPItem setCustomModelData(CustomModelData customModelData) { this.customModelData = customModelData; return this; }
 	public SMPItem setLore(List<String> lore){ this.lore.clear(); this.lore.addAll(lore); return this;}
 	public SMPItem setItemflags(List<ItemFlag> itemflags){ this.itemFlags.clear(); this.itemFlags.addAll(itemflags); return this;}
 	public SMPItem setEnchants(HashMap<Enchantment,Integer> enchants){ this.enchants = enchants; return this;}
@@ -78,7 +80,7 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 		YamlConfiguration config = new YamlConfiguration();
 		config.addDefault("material", material.name());
 		config.addDefault("displayname", displayName);
-		config.addDefault("cmd", CMD);
+//		config.addDefault("customModelData", customModelData);
 		config.addDefault("lore", lore);
 		config.addDefault("itemflags", itemFlags.parallelStream().map(f -> f.name()).collect(Collectors.toList()));
 		for(Enchantment e : enchants.keySet()) config.addDefault("enchants." + e.getKey(), enchants.get(e));
@@ -92,7 +94,11 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 		if(mat == null) OMCLogger.systemError("Tried to set material of " + registryName + " to invalid material, " + materialString);
 		else setMaterial(mat);
 		setDisplayname(config.getString("displayname"));
-		setCmd(config.getInt("cmd"));
+//		try {
+//			setCustomModelData((CustomModelData) config.get("customModelData"));
+//		}catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		setLore(config.getStringList("lore"));
 		setItemflags(config.getStringList("itemflags").parallelStream().map(s -> {
 			try {
@@ -123,7 +129,7 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 	public ItemStack createItemsStack(int amount) {
 		Material material = getMaterial();
 		String displayName = getDisplayName();
-		int CMD = getCMD();
+		
 		List<String> lore = getLore();
 		List<ItemFlag> itemFlags = getItemFlags();
 		Map<Enchantment,Integer> enchants = getEnchants();
@@ -132,7 +138,11 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 		ItemMeta itm = it.getItemMeta();
 		if(itm != null) {
 			if(displayName != null) itm.setDisplayName(ChatColor.RESET + OMCUtil.translateChatColor(displayName));
-			if(CMD != 0) itm.setCustomModelData(CMD);
+			
+			CustomModelDataComponent component = itm.getCustomModelDataComponent();
+			component.setStrings(Arrays.asList(registryName));
+			itm.setCustomModelDataComponent(component);
+			
 			if(!lore.isEmpty()) {
 				ArrayList<String> translated = new ArrayList<>();
 				for(String s : lore) translated.add(OMCUtil.translateChatColor(s));
@@ -166,16 +176,17 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 		return NSKs.computeIfAbsent(name, (s) -> new NamespacedKey(OMCCore.getJavaPlugin(), s));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean equals(ItemStack other) {
 		if(other == null) return false;
 		if(other.getType() != getMaterial()) return false;
 		ItemMeta meta = other.getItemMeta();
 		if(meta == null) return false;
-		if(!meta.hasCustomModelData()) return CMD==0;
-		if(meta.getCustomModelData() != getCMD()) return false;
-		return true;
+		if(!meta.hasCustomModelData()) return false;
+//		if(meta.getCustomModelData() != getCMD()) return false;
+		CustomModelDataComponent component = meta.getCustomModelDataComponent();
+		if(component.getStrings().isEmpty()) return false;
+		return component.getStrings().get(0).equals(registryName);
 	}
 
 }
