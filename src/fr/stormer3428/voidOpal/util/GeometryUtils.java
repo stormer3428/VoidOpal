@@ -14,6 +14,7 @@ import org.joml.Vector3f;
 public class GeometryUtils {
 
 	public static final Vector VERTICAL = new Vector(0,1,0);
+	public static final Random RANDOM = new Random();
 	
 	public static Vector lerp(Vector a, Vector b, double i) {
 		return a.clone().multiply(1 - i).add(b.clone().multiply(i));
@@ -32,7 +33,7 @@ public class GeometryUtils {
 	}
 
 	public static Vector getRandomVector() {
-		return getRandomVector(new SecureRandom());
+		return getRandomVector(RANDOM);
 	}
 
 	public static Vector[] getRandomVectors(int amount) {
