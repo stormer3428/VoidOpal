@@ -45,6 +45,8 @@ public class MakisteinLightning extends BukkitRunnable{
 		loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, lifespan/3f, 1.7f + random.nextFloat()*.3f - lifespan/100f);
 	}
 	
+	public void start() {runTaskTimer(OMCCore.getJavaPlugin(), 0, 1);}
+	
 	@Override public void run() {
 		do {
 			if(--lifespan<=0) {
