@@ -142,6 +142,7 @@ public abstract class OMCSoulbindingManager implements Listener, PluginTied{
 		e.setCancelled(true);
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onBlockInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();

@@ -41,17 +41,17 @@ public abstract class OMCMainPower extends OMCPower implements OMCPowerHolder {
 	}
 
 	public boolean castCurrent(ItemStack it, Player p, Map<String, Object> metadata) {
-		List<OMCPower> powers = getOmcPowers();
-		if (powers.isEmpty()) return false;
-		int selected = getSelected(p);
-		return powers.get(selected).tryCast(it, p, metadata);
+		OMCPower power = getSelectedPower(p);
+		if(power == null) return false;
+		return power.tryCast(it, p, metadata);
 	}
 
 	public OMCPower getSelectedPower(Player p) {
 		List<OMCPower> powers = getOmcPowers();
 		final int size = powers.size();
-		if (size == 0) return null;
-		return powers.get(getSelected(p));
+		final int selected = getSelected(p);
+		if (size <= selected) return null;
+		return powers.get(selected);
 	}
 
 	public void cycle(Player p) {

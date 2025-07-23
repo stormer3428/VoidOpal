@@ -1,6 +1,5 @@
 package fr.stormer3428.voidOpal.util;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,6 +13,7 @@ import org.joml.Vector3f;
 public class GeometryUtils {
 
 	public static final Vector VERTICAL = new Vector(0,1,0);
+	public static final Random RANDOM = new Random();
 	
 	public static Vector lerp(Vector a, Vector b, double i) {
 		return a.clone().multiply(1 - i).add(b.clone().multiply(i));
@@ -32,7 +32,7 @@ public class GeometryUtils {
 	}
 
 	public static Vector getRandomVector() {
-		return getRandomVector(new SecureRandom());
+		return getRandomVector(RANDOM);
 	}
 
 	public static Vector[] getRandomVectors(int amount) {
@@ -59,6 +59,15 @@ public class GeometryUtils {
 		for(int i = amount; i > 0; i--) list.add(v.rotateAroundY(angle).clone());
 		return list;
 	}
+	
+//	public static ArrayList<Vector> getStarVectors(int amount, int points){
+//		ArrayList<Vector> list = new ArrayList<>();
+//		if(amount <= 0) return list;
+//		double angle = Math.PI * 2 / amount;
+//		Vector v = new Vector(1,0,0);
+//		for(int i = amount; i > 0; i--) list.add(v.rotateAroundY(angle).clone());
+//		return list;
+//	}
 	
 	public static ArrayList<Vector> getCircularVectors(int amount, Vector axis){
 		ArrayList<Vector> list = new ArrayList<>();

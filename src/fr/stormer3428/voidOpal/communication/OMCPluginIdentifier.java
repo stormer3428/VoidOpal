@@ -38,6 +38,7 @@ public final class OMCPluginIdentifier implements Serializable{
 	public int port;
 	public String eulaHash;
 	
+	@SuppressWarnings("deprecation")
 	public static OMCPluginIdentifier local() {
 		return new OMCPluginIdentifier(getLicenseString(), OMCCore.getJavaPlugin().getDescription().getName(), getMacAddress(), null, Bukkit.getPort(), getEulaHash(), false);
 	}

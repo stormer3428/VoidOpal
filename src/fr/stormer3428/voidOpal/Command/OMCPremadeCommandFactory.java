@@ -249,6 +249,7 @@ public class OMCPremadeCommandFactory {
 			,
 			new OMCCommand(root + " debug%%%d cmd %V%", true) {
 
+				@SuppressWarnings("deprecation")
 				@Override
 				public boolean execute(CommandSender sender, ArrayList<String> vars) {
 					if(!(sender instanceof Player p)) return OMCLogger.error(sender, OMCLang.ERROR_PLAYERONLY.toString());

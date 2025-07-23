@@ -18,7 +18,7 @@ public class OMCNamedListenerManager implements Listener, PluginTied{
 	
 	@Override public void onPluginEnable() {
 		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(this, OMCCore.getJavaPlugin());
-		for (OMCNamedListener power : registeredListeners) power.onPluginEnable();
+		for (OMCNamedListener power : new ArrayList<>(registeredListeners)) power.onPluginEnable();
 	}
 
 	@Override public void onPluginDisable() { for (OMCNamedListener power : registeredListeners) power.onPluginDisable(); }
