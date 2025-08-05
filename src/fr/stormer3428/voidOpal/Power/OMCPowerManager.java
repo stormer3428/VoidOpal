@@ -119,7 +119,7 @@ public class OMCPowerManager implements Listener, PluginTied{
 	 * The power name to search for
 	 * @return The corresponding {@link OMCPower}
 	 */
-	public OMCPower getPower(String registryName) { 
+	public OMCPower fromName(String registryName) { 
 		for(OMCPower power : registeredPowers) if(power.getRegistryName().equals(registryName)) return power;
 		return null;
 	}
@@ -146,5 +146,4 @@ public class OMCPowerManager implements Listener, PluginTied{
 	 * @see #registerPower(OMCPower)
 	 */
 	public ArrayList<OMCPower> getPowers() { return new ArrayList<>(registeredPowers); }
-	
 }

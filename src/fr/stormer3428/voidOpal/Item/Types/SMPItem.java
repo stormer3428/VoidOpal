@@ -141,6 +141,7 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 			
 			CustomModelDataComponent component = itm.getCustomModelDataComponent();
 			component.setStrings(Arrays.asList(registryName));
+			component.setFloats(Arrays.asList(0f)); //Backward compat for plugins that retrieve the number value after checking whether the item has any CMD
 			itm.setCustomModelDataComponent(component);
 			
 			if(!lore.isEmpty()) {

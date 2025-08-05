@@ -38,6 +38,9 @@ public enum OMCLang {
 	
 	ERROR_POWER_MANAGER_REGISTER_NULL("Tried to register a null power to the OMCPower manager"),
 	ERROR_POWER_MANAGER_REGISTER_NULL_NAME("Tried to register a power with no registry name to the OMCPower manager"),
+	
+	ERROR_NAMED_LISTENER_MANAGER_REGISTER_NULL("Tried to register a null namedListener to the NamedListener manager"),
+	ERROR_NAMED_LISTENER_MANAGER_REGISTER_NULL_NAME("Tried to register a namedListener with no registry name to the NamedListener manager"),
 
 	ERROR_POTION_MANAGER_NO_POTIONEFFECT("No potion effect with such name : <%INVALID> in file <%FILE>\n Valid options are <%VALID>"),
 	ERROR_POTION_MANAGER_MISSING_POTIONEFFECT("Missing potion effect <%POTIONEFFECT> in file <%FILE>"),

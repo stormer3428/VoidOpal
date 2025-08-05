@@ -26,11 +26,11 @@ public class OMCNamedListenerManager implements Listener, PluginTied{
 
 	public void registerListener(OMCNamedListener listener) {
 		if(listener == null) {
-			OMCLogger.systemError(OMCLang.ERROR_POWER_MANAGER_REGISTER_NULL.toString());
+			OMCLogger.systemError(OMCLang.ERROR_NAMED_LISTENER_MANAGER_REGISTER_NULL.toString());
 			return;
 		}
 		if(listener.getRegistryName() == null || listener.getRegistryName().isBlank()) {
-			OMCLogger.systemError(OMCLang.ERROR_POWER_MANAGER_REGISTER_NULL_NAME.toString());
+			OMCLogger.systemError(OMCLang.ERROR_NAMED_LISTENER_MANAGER_REGISTER_NULL_NAME.toString());
 			return;
 		}
 		OMCCore.getJavaPlugin().getServer().getPluginManager().registerEvents(listener, OMCCore.getJavaPlugin());
@@ -42,9 +42,8 @@ public class OMCNamedListenerManager implements Listener, PluginTied{
 		
 	}
 
-	public OMCNamedListener getPower(String registryName) { 
+	public OMCNamedListener fromName(String registryName) { 
 		for(OMCNamedListener power : registeredListeners) if(power.getRegistryName().equals(registryName)) return power;
 		return null;
 	}
-
 }
