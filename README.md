@@ -20,6 +20,7 @@ Define commands using from a simple string:
 
 <details>
   <summary>Code example</summary>
+  
 ```java
 registerCommand(new OMCCommand("myplugin item give %ITEM%", true) {
   @Override public boolean execute(CommandSender sender, ArrayList<String> args) {
