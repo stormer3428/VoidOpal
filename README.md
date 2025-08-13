@@ -7,6 +7,8 @@ Because VoidOpal is optimised for faster code development, as opposed to a fully
 
 *"All I want is a /myplugin give command!"*
 
+Successor of [ObsidianMC](https://github.com/stormer3428/ObsidianMC)
+
 ---
 
 ## Features
