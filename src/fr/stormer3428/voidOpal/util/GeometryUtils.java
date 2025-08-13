@@ -60,14 +60,21 @@ public class GeometryUtils {
 		return list;
 	}
 	
-//	public static ArrayList<Vector> getStarVectors(int amount, int points){
-//		ArrayList<Vector> list = new ArrayList<>();
-//		if(amount <= 0) return list;
-//		double angle = Math.PI * 2 / amount;
-//		Vector v = new Vector(1,0,0);
-//		for(int i = amount; i > 0; i--) list.add(v.rotateAroundY(angle).clone());
-//		return list;
-//	}
+	public static ArrayList<Vector> getStarVectors(int amount, int points){
+		ArrayList<Vector> startTips = getCircularVectors(points);
+		ArrayList<Vector> list = new ArrayList<>();
+		if(amount <= 0) return list;
+		double angle = Math.PI * 2 / amount;
+		double maxAngle = Math.PI / points;
+		Vector v = new Vector(1,0,0);
+		for(int i = amount; i > 0; i--) {
+			double minAngle = maxAngle;
+			for(Vector startTip : startTips) minAngle = Math.min(minAngle, startTip.angle(v));
+			double length = OMCUtil.map(0, maxAngle, 1, 0.01, minAngle);
+			list.add(v.rotateAroundY(angle).clone().multiply(length));
+		}
+		return list;
+	}
 	
 	public static ArrayList<Vector> getCircularVectors(int amount, Vector axis){
 		ArrayList<Vector> list = new ArrayList<>();
