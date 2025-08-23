@@ -35,18 +35,17 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 
 	public SMPItem(String registryName) { this.registryName = registryName; }
 
-	private Material material = Material.BOOK;
-	private String displayName = null;
-//	private CustomModelDataComponent customModelDataComponent = CustomModelDataComponent.;
-	private String registryName = getClass().getSimpleName();
-	private final ArrayList<String> lore = new ArrayList<>();
-	private final ArrayList<ItemFlag> itemFlags = new ArrayList<>();
-	private final ArrayList<OMCPower> omcPowers = new ArrayList<>();
-	private final ArrayList<OMCTickeable> omcTickeables = new ArrayList<>();
-	private final ArrayList<OMCNamedListener> listeners = new ArrayList<>();
-	private HashMap<Enchantment, Integer> enchants = new HashMap<>();
-	private HashMap<PersistentDataType<Object, ? extends Object>, HashMap<String, Object>> data = new HashMap<>();
-	private boolean unbreakeable = false;
+	protected Material material = Material.BOOK;
+	protected String displayName = null;
+	protected String registryName = getClass().getSimpleName();
+	protected final ArrayList<String> lore = new ArrayList<>();
+	protected final ArrayList<ItemFlag> itemFlags = new ArrayList<>();
+	protected final ArrayList<OMCPower> omcPowers = new ArrayList<>();
+	protected final ArrayList<OMCTickeable> omcTickeables = new ArrayList<>();
+	protected final ArrayList<OMCNamedListener> listeners = new ArrayList<>();
+	protected HashMap<Enchantment, Integer> enchants = new HashMap<>();
+	protected HashMap<PersistentDataType<Object, ? extends Object>, HashMap<String, Object>> data = new HashMap<>();
+	protected boolean unbreakeable = false;
 
 	@Override public String getRegistryName() { return registryName;}
 	@Override public List<OMCPower> getOmcPowers() {return omcPowers;}
@@ -173,7 +172,7 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 	}
 
 	private static final Map<String, NamespacedKey> NSKs = new HashMap<>();
-	private NamespacedKey getNSK(String name) {
+	protected NamespacedKey getNSK(String name) {
 		return NSKs.computeIfAbsent(name, (s) -> new NamespacedKey(OMCCore.getJavaPlugin(), s));
 	}
 
