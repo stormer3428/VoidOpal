@@ -23,7 +23,6 @@ public abstract class OMCCore{
 	
 	@OMCKeep protected abstract boolean _isDebugModeActive();
 	@OMCKeep protected abstract boolean _isSuperAdmin(CommandSender sender);
-	@OMCKeep protected abstract boolean _isPirated();
 
 	@OMCKeep public OMCCore() {omcCore = this;}
 	@OMCKeep private static OMCCore omcCore; 
@@ -39,5 +38,4 @@ public abstract class OMCCore{
 
 	@OMCKeep public static final boolean isDebugModeActive() {return omcCore._isDebugModeActive();}
 	@OMCKeep public static boolean isSuperAdmin(CommandSender sender) {return omcCore._isSuperAdmin(sender);}
-	@OMCKeep public static boolean isPirated() {return omcCore._isPirated();}
 }

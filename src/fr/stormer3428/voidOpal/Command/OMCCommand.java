@@ -75,7 +75,6 @@ public abstract class OMCCommand {
 	}
 
 	public boolean execute(CommandSender sender, String[] args) {
-		if(OMCCore.isPirated()) throw new RuntimeException("OMCPointerException");
 		if(!canRun(sender)) return OMCLogger.error(sender, OMCLang.ERROR_GENERIC_NOPERMISSION.toString().replace("<%PERMISSION>", getPermissionString()));
 		ArrayList<String> variables = new ArrayList<>();
 		int i = 0;

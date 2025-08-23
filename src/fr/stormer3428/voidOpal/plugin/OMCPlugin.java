@@ -1,12 +1,6 @@
 package fr.stormer3428.voidOpal.plugin;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,44 +8,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.annotations.OMCKeep;
 import fr.stormer3428.voidOpal.plugin.annotations.OMCKeepChildren;
-import fr.stormer3428.voidOpal.util.OMCUtil;
 import fr.stormer3428.voidOpal.util.providers.OMCProvider;
 
 @OMCKeep
 @OMCKeepChildren
 public abstract class OMCPlugin extends JavaPlugin{
-
-	private static final List<String> NOLICENSE = Arrays.asList(
-"""
-
-██╗███╗   ██╗██╗   ██╗ █████╗ ██╗     ██╗██████╗     ██╗     ██╗ ██████╗███████╗███╗   ██╗███████╗███████╗
-██║████╗  ██║██║   ██║██╔══██╗██║     ██║██╔══██╗    ██║     ██║██╔════╝██╔════╝████╗  ██║██╔════╝██╔════╝
-██║██╔██╗ ██║██║   ██║███████║██║     ██║██║  ██║    ██║     ██║██║     █████╗  ██╔██╗ ██║███████╗█████╗  
-██║██║╚██╗██║╚██╗ ██╔╝██╔══██║██║     ██║██║  ██║    ██║     ██║██║     ██╔══╝  ██║╚██╗██║╚════██║██╔══╝  
-██║██║ ╚████║ ╚████╔╝ ██║  ██║███████╗██║██████╔╝    ███████╗██║╚██████╗███████╗██║ ╚████║███████║███████╗
-╚═╝╚═╝  ╚═══╝  ╚═══╝  ╚═╝  ╚═╝╚══════╝╚═╝╚═════╝     ╚══════╝╚═╝ ╚═════╝╚══════╝╚═╝  ╚═══╝╚══════╝╚══════╝
-"""
-			);
 	
-	private String LICENSE;
-	public String getLicenseString() {
-		if(LICENSE == null || LICENSE.isBlank() || LICENSE.isEmpty()) try {
-			LICENSE = null;
-			File licenseFile = new File(getDataFolder(), "license.yml");
-			if(!licenseFile.exists()) {
-				licenseFile.getParentFile().mkdirs();
-				licenseFile.createNewFile();
-			}
-			try(BufferedReader bi = new BufferedReader(new FileReader(licenseFile))){
-				LICENSE = bi.readLine();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return LICENSE;
-	}
-
-	@OMCKeep public OMCPlugin() {this(new OMCPluginProvider());}
 	@OMCKeep public OMCPlugin(OMCProvider<OMCCore> provider) {
 		OMCCore.setJavaPlugin(this);
 		OMCCore.setOMCChildPlugin(this);
@@ -60,7 +22,7 @@ public abstract class OMCPlugin extends JavaPlugin{
 			OMCLogger.systemNormal("Core is hasn't been initialized yet! Requesting...");
 			Bukkit.getScheduler().runTaskAsynchronously(this, ()->{
 				if(provider.getData() == null) {
-					OMCLogger.systemError(OMCUtil.translateChatColor(NOLICENSE.get(new Random().nextInt(NOLICENSE.size()))));
+					OMCLogger.systemError("Provider failed to load core!");
 					throw new RuntimeException("Provider failed to load core!");
 				}
 				OMCLogger.systemNormal("Succesfully loaded core v" + OMCCore.getOMCCore().getClass().getSimpleName());
