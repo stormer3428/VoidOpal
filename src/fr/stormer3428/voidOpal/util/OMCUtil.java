@@ -262,6 +262,10 @@ public class OMCUtil {
 	    }
 	    return result.toString();
 	}
+
+	public static double randDouble(double a, double b) { return Math.random() * (b - a) + a; }
+	public static float randFloat(double a, double b) { return (float) randDouble(a, b); }
+	public static int randInt(int a, int b) { return new Random().nextInt(a, b); }
 }
 
 

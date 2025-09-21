@@ -46,9 +46,8 @@ public abstract class UnsetDurationPower extends OMCPower{
 		super.putOnCooldown(uuid, abilityCooldown);
 	}
 
+	public boolean isEmpowered(Player p) { return isEmpowered(p.getUniqueId()); }
 
-	public boolean isEmpowered(Player p) {
-		return empowered.contains(p.getUniqueId());
-	}
+	public boolean isEmpowered(UUID uuid) { return empowered.contains(uuid); }
 
 }
