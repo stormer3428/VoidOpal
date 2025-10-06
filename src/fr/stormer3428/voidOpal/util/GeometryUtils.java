@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
+
+import fr.stormer3428.voidOpal.Geometry.ParticleGeometry.Geometry;
+import fr.stormer3428.voidOpal.Geometry.ParticleGeometry.MovingPoint;
+import fr.stormer3428.voidOpal.Geometry.ParticleGeometry.Point;
 
 public class GeometryUtils {
 
@@ -116,6 +121,24 @@ public class GeometryUtils {
 	public static ArrayList<Location> getSphericalLocations(Block center, double radius, boolean hollow){
 		ArrayList<Location> list = new ArrayList<Location>();
 		for(Vector v : getSphericalVectors(radius, hollow)) list.add(center.getLocation().add(v));
+		return list;
+	}
+	
+	public static ArrayList<Vector> getFibonnacciLatticeSphere(int POINTS){
+		ArrayList<Vector> list = new ArrayList<>();
+		double PHI = Math.PI * (1 + Math.sqrt(5.0));
+
+		for(int i = POINTS; i > 0; i--) {
+
+			double phi = Math.acos(1 - (2.0*(double)i/(double)POINTS));
+			double theta = PHI * i;  // golden angle increment
+
+			double x = Math.cos(theta) * Math.sin(phi);
+			double y = Math.sin(theta) * Math.sin(phi);
+			double z = Math.cos(phi);
+
+			list.add(new Vector(x,z,y));
+		}
 		return list;
 	}
 	
