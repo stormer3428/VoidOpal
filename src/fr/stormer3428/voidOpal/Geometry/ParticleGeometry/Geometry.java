@@ -35,6 +35,7 @@ public class Geometry implements Drawable{
 
 	@Override
 	public Geometry rotateAroundAxis(Vector axis, double radians) {
+		if(axis.isZero()) return this;
 		try {
 			axis.checkFinite();
 		}catch (Exception e) {
@@ -73,6 +74,7 @@ public class Geometry implements Drawable{
 	
 	public Geometry setDirection(Vector newDirection) {
 		if(newDirection.equals(direction)) return this;
+		if(newDirection.isZero()) return this;
 		try {
 			newDirection.checkFinite();
 		}catch (Exception e) {

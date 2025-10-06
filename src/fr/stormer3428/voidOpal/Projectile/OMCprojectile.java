@@ -38,6 +38,7 @@ public abstract class OMCprojectile extends BukkitRunnable{
 
 	public void move() {
 		if(inGround) return;
+		if(velocity.isZero()) return;
 		if(blockColliding && entityColliding) {
 			RayTraceResult rtr = location.getWorld().rayTrace(location, velocity, velocity.length(), FluidCollisionMode.NEVER, true, projectileWidth, entityPredicate);
 			if(rtr != null && onHit(rtr)) {
