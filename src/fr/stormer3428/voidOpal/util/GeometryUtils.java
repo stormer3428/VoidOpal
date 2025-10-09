@@ -165,7 +165,7 @@ public class GeometryUtils {
             double x = Math.copySign(Math.pow(Math.abs(cos), 2.0 / s), cos) * xstretch;
             double y = Math.copySign(Math.pow(Math.abs(sin), 2.0 / s), sin) * ystretch;
 
-            list.add(new Vector(x,y,0));
+            list.add(new Vector(x,0,y));
         }
         return list;
     }
