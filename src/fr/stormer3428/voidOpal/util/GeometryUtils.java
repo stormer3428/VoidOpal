@@ -140,4 +140,33 @@ public class GeometryUtils {
 	public static Transformation getCenteredBlockTransformation() {
 		return new Transformation(new Vector3f(-.5f,-.5f,-.5f), new AxisAngle4f(), new Vector3f(1,1,1), new AxisAngle4f());
 	}
+	
+	/***
+	Credits to frogg3rs
+	<br>
+	s => superlipse value
+	<br>
+	2 yields a circle
+	<br>
+	[2;1] pillow
+	<br>
+	1 yields a diamond
+	<br>
+	[1;0] star
+	*/
+	public static ArrayList<Vector> superEllipse(double xstretch, double ystretch, int points, double s) {
+		ArrayList<Vector> list = new ArrayList<>();
+        for (int i = 0; i < points; i++) {
+            double theta = 2 * Math.PI * i / points;
+
+            double cos = Math.cos(theta);
+            double sin = Math.sin(theta);
+
+            double x = Math.copySign(Math.pow(Math.abs(cos), 2.0 / s), cos) * xstretch;
+            double y = Math.copySign(Math.pow(Math.abs(sin), 2.0 / s), sin) * ystretch;
+
+            list.add(new Vector(x,y,0));
+        }
+        return list;
+    }
 }
