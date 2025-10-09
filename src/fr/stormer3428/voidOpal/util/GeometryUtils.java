@@ -4,16 +4,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
-
-import fr.stormer3428.voidOpal.Geometry.ParticleGeometry.Geometry;
-import fr.stormer3428.voidOpal.Geometry.ParticleGeometry.MovingPoint;
-import fr.stormer3428.voidOpal.Geometry.ParticleGeometry.Point;
 
 public class GeometryUtils {
 
