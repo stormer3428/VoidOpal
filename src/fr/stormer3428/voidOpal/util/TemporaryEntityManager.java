@@ -2,7 +2,6 @@ package fr.stormer3428.voidOpal.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,7 +36,6 @@ public class TemporaryEntityManager implements PluginTied, Listener{
 	@EventHandler public void onDeload(EntitiesUnloadEvent event) {
 		event.getEntities().stream()
 		.filter(e->e.getScoreboardTags().contains(TAG))
-		.map(e->(BlockDisplay)e)
 		.forEach(e->e.remove());
 		;
 	}
