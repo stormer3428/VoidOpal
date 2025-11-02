@@ -24,6 +24,7 @@ import org.bukkit.persistence.PersistentDataType;
 import fr.stormer3428.voidOpal.Listener.OMCNamedListener;
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
 import fr.stormer3428.voidOpal.Tickeable.OMCTickeable;
+import fr.stormer3428.voidOpal.data.OMCNameable;
 import fr.stormer3428.voidOpal.data.OMCNamedListenerHolder;
 import fr.stormer3428.voidOpal.data.OMCPowerHolder;
 import fr.stormer3428.voidOpal.data.OMCTickeableHolder;
@@ -43,6 +44,7 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 	protected final ArrayList<OMCPower> omcPowers = new ArrayList<>();
 	protected final ArrayList<OMCTickeable> omcTickeables = new ArrayList<>();
 	protected final ArrayList<OMCNamedListener> listeners = new ArrayList<>();
+	protected final ArrayList<OMCNameable> passives = new ArrayList<>();
 	protected HashMap<Enchantment, Integer> enchants = new HashMap<>();
 	protected HashMap<PersistentDataType<Object, ? extends Object>, HashMap<String, Object>> data = new HashMap<>();
 	protected boolean unbreakeable = false;
@@ -68,8 +70,12 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 	public SMPItem addItemflag(ItemFlag itemflag){ this.itemFlags.add(itemflag); return this;}
 	public SMPItem addEnchant(Enchantment enchant, int level){ this.enchants.put(enchant, level); return this;}
 	public SMPItem addPower(OMCPower omcPower) { omcPowers.add(omcPower); return this;}
-	public SMPItem addTickeable(OMCTickeable omcTickeable) { omcTickeables.add(omcTickeable); return this;}
-	public SMPItem addListener(OMCNamedListener listener) { listeners.add(listener); return this;}
+	public SMPItem addPassive(OMCNameable passive) { 
+		passives.add(passive);
+		if(passive instanceof OMCNamedListener listener) listeners.add(listener);
+		if(passive instanceof OMCTickeable tickeable) omcTickeables.add(tickeable); 
+		return this;
+	}
 	@SuppressWarnings("unchecked")
 	public <P, C extends Object> SMPItem addData(String name, PersistentDataType<P, C> dataType, C value) {data.computeIfAbsent((PersistentDataType<Object, ? extends Object>) dataType, (t) -> new HashMap<String, Object>()).put(name, value);return this;}
 

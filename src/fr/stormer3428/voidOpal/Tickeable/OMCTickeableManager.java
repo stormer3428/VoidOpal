@@ -22,11 +22,7 @@ public class OMCTickeableManager extends BukkitRunnable implements PluginTied{
 
 	public void registerTickeable(OMCTickeable tickeable) {
 		registeredTickables.add(tickeable);
-		
-
-//		if(tickeable instanceof OMCNamedListenerHolder h) h.getListeners().forEach(l->listenerManager.registerListener(l));
 		if(tickeable instanceof OMCTickeableHolder h) h.getOmcTickeables().forEach(l->registerTickeable(l));
-//		if(tickeable instanceof OMCPowerHolder h) h.getOmcPowers().forEach(l->powerManager.registerPower(l));
 	}
 	
 	public ArrayList<OMCTickeable> getRegisteredTickables() { return new ArrayList<>(registeredTickables); }

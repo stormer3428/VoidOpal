@@ -37,9 +37,6 @@ public class OMCNamedListenerManager implements Listener, PluginTied{
 		registeredListeners.add(listener);
 
 		if(listener instanceof OMCNamedListenerHolder h) h.getListeners().forEach(l->registerListener(l));
-//		if(power instanceof OMCTickeableHolder h) h.getOmcTickeables().forEach(l->tickeableManager.registerTickeable(l));
-//		if(power instanceof OMCPowerHolder h) h.getOmcPowers().forEach(l->powerManager.registerPower(l));
-		
 	}
 
 	public OMCNamedListener fromName(String registryName) { 
