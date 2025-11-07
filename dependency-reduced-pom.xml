@@ -146,7 +146,7 @@
     <dependency>
       <groupId>io.papermc.paper</groupId>
       <artifactId>paper-api</artifactId>
-      <version>1.21.4-R0.1-SNAPSHOT</version>
+      <version>1.21.8-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -164,10 +164,6 @@
         <exclusion>
           <artifactId>joml</artifactId>
           <groupId>org.joml</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>json-simple</artifactId>
-          <groupId>com.googlecode.json-simple</groupId>
         </exclusion>
         <exclusion>
           <artifactId>fastutil</artifactId>
@@ -224,6 +220,14 @@
         <exclusion>
           <artifactId>checker-qual</artifactId>
           <groupId>org.checkerframework</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>maven-resolver-connector-basic</artifactId>
+          <groupId>org.apache.maven.resolver</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>maven-resolver-transport-http</artifactId>
+          <groupId>org.apache.maven.resolver</groupId>
         </exclusion>
       </exclusions>
     </dependency>
