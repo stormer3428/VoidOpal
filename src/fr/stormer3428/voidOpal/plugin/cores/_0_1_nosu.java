@@ -2,7 +2,6 @@ package fr.stormer3428.voidOpal.plugin.cores;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.UUID;
 
 import org.bukkit.command.CommandSender;
 
@@ -17,8 +16,6 @@ import fr.stormer3428.voidOpal.plugin.annotations.OMCKeep;
 @OMCKeep
 @AutoConfig
 public final class _0_1_nosu extends OMCCore{
-
-	public static final UUID MASTER_UUID = UUID.fromString("a39d1ae3-18c5-4c02-8f91-bcb5207d437f");
 
 	protected final HashSet<PluginTied> pluginTieds = new HashSet<>();
 
