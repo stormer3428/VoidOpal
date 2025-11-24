@@ -16,6 +16,7 @@ public interface AutoconfigParser {
 	@OMCKeep public File getConfigFile(Class<?> clazz);
 	@OMCKeep public void updateValues();
 	@OMCKeep public void _write(Class<?> clazz, String fieldName, Object fieldValue);
+	@OMCKeep void _writeAllClass(Class<?> clazz);
 
 }
 

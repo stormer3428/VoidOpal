@@ -41,7 +41,6 @@ public final class AutoconfigParserImpl implements AutoconfigParser{
 			YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
 			for(Field field : clazz.getDeclaredFields()) {
-
 				field.setAccessible(true);
 				StringConfigValue stringConfigValue = field.getAnnotation(StringConfigValue.class);
 				IntConfigValue intConfigValue = field.getAnnotation(IntConfigValue.class);
@@ -224,6 +223,44 @@ public final class AutoconfigParserImpl implements AutoconfigParser{
 		File file = getConfigFile(configName);
 		return file;
 	}
+
+	@Override
+	public void _writeAllClass(Class<?> clazz) {
+		for(Field field : clazz.getDeclaredFields()) {
+			field.setAccessible(true);
+			StringConfigValue stringConfigValue = field.getAnnotation(StringConfigValue.class);
+			IntConfigValue intConfigValue = field.getAnnotation(IntConfigValue.class);
+			DoubleConfigValue doubleConfigValue = field.getAnnotation(DoubleConfigValue.class);
+			FloatConfigValue floatConfigValue = field.getAnnotation(FloatConfigValue.class);
+			BooleanConfigValue booleanConfigValue = field.getAnnotation(BooleanConfigValue.class);
+			StringListConfigValue stringListConfigValue = field.getAnnotation(StringListConfigValue.class);
+			
+			String name = null;
+			
+			if(stringConfigValue != null) name = stringConfigValue.path();
+			if(intConfigValue != null) name = intConfigValue.path();
+			if(doubleConfigValue != null) name = doubleConfigValue.path();
+			if(floatConfigValue != null) name = floatConfigValue.path();
+			if(booleanConfigValue != null) name = booleanConfigValue.path();
+			if(stringListConfigValue != null) name = stringListConfigValue.path();
+			
+			if(name == null) continue;
+
+			Object value;
+			try {
+				value = field.get(null);
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
+			}
+			
+			
+			_write(clazz, name, value);
+		}
+		
+	}
+	
+
 
 	@Override
 	public void _write(Class<?> clazz, String fieldName, Object fieldValue) {
