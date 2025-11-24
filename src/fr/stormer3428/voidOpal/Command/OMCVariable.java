@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -31,6 +32,43 @@ public abstract class OMCVariable {
 			final ArrayList<String> list = new ArrayList<>();
 			final String lower = incomplete.toLowerCase();
 			for(Player p : Bukkit.getOnlinePlayers()) if(p.getName().toLowerCase().startsWith(lower)) list.add(p.getName());
+			return list;
+		}
+	};
+	
+	public static final OMCVariable WORLD_VARIABLE = new OMCVariable("%W%") {
+		@Override
+		protected ArrayList<String> complete(CommandSender sender, String incomplete) {
+			final ArrayList<String> list = new ArrayList<>();
+			final String lower = incomplete.toLowerCase();
+			for(World w : Bukkit.getWorlds()) if(w.getName().toLowerCase().startsWith(lower)) list.add(w.getName());
+			return list;
+		}
+	};
+	
+	public static final OMCVariable PLAYER_X = new OMCVariable("%PX%") {
+		@Override
+		protected ArrayList<String> complete(CommandSender sender, String incomplete) {
+			final ArrayList<String> list = new ArrayList<>();
+			if(sender instanceof Player p) list.add(p.getLocation().getBlockX() + "");
+			return list;
+		}
+	};
+	
+	public static final OMCVariable PLAYER_Y = new OMCVariable("%PY%") {
+		@Override
+		protected ArrayList<String> complete(CommandSender sender, String incomplete) {
+			final ArrayList<String> list = new ArrayList<>();
+			if(sender instanceof Player p) list.add(p.getLocation().getBlockY() + "");
+			return list;
+		}
+	};
+	
+	public static final OMCVariable PLAYER_Z = new OMCVariable("%PZ%") {
+		@Override
+		protected ArrayList<String> complete(CommandSender sender, String incomplete) {
+			final ArrayList<String> list = new ArrayList<>();
+			if(sender instanceof Player p) list.add(p.getLocation().getBlockZ() + "");
 			return list;
 		}
 	};
@@ -62,6 +100,10 @@ public abstract class OMCVariable {
 		VARIABLES.add(PLAYER_VARIABLE);
 		VARIABLES.add(BOOLEAN_VARIABLE);
 		VARIABLES.add(MATERIAL_VARIABLE);
+		VARIABLES.add(WORLD_VARIABLE);
+		VARIABLES.add(PLAYER_X);
+		VARIABLES.add(PLAYER_Y);
+		VARIABLES.add(PLAYER_Z);
 	}
 	
 	public static void registerVariable(OMCVariable v) {
