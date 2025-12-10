@@ -31,6 +31,7 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 	private final Location origin;
 	private final Consumer<Block> blockPlaceConsumer;
 	private final Runnable onFinish;
+	private int blocksPerCycle = 16;
 
 	@SuppressWarnings("unused")
 	private final AirMode airMode;
@@ -68,6 +69,7 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 		Map.entry(StructureRotation.CLOCKWISE_180, Math.PI),
 		Map.entry(StructureRotation.COUNTERCLOCKWISE_90, -Math.PI/2)
 		);
+
 	private static StructureRotation getRotationForVector(Vector vector) { 
 		StructureRotation rotation = null;
 		double minAngle = Math.PI;
@@ -81,17 +83,19 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 	}
 
 	@Override public void run() {
-		Vector blockVector = getNextBlock();
-		if(blockVector == null) {
-			onFinish.run();
-			cancel();
-			return;
-		}
-		BlockData data = leftToBuild.remove(blockVector);
+		for(int i = 0; i < blocksPerCycle; i++) {
+			Vector blockVector = getNextBlock();
+			if(blockVector == null) {
+				onFinish.run();
+				cancel();
+				return;
+			}
+			BlockData data = leftToBuild.remove(blockVector);
 
-		Location placeLoc = loc.clone().add(blockVector);
-		placeLoc.getBlock().setBlockData(data, true);
-		blockPlaceConsumer.accept(placeLoc.getBlock());
+			Location placeLoc = loc.clone().add(blockVector);
+			placeLoc.getBlock().setBlockData(data, true);
+			blockPlaceConsumer.accept(placeLoc.getBlock());
+		}
 	}
 
 	private Vector getNextBlock() {
@@ -129,11 +133,11 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 		sorted.addAll(options);
 		return sorted.isEmpty() ? null : sorted.first();
 	}
-	
+
 	public static boolean isSupported(Block present, BlockData toPlace) {
 		for(BlockFace face : ORTHOGONAL) 
 			if(present.getRelative(face).getBlockData().isFaceSturdy(face.getOppositeFace(), BlockSupport.CENTER))
-			return true;
+				return true;
 		return false; 
 
 	}
