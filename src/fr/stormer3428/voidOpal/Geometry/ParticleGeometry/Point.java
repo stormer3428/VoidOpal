@@ -1,9 +1,12 @@
 package fr.stormer3428.voidOpal.Geometry.ParticleGeometry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
+
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 
 public class Point implements Drawable{
 
@@ -11,6 +14,7 @@ public class Point implements Drawable{
 	protected Particle particle = Particle.CRIT;
 	protected Object particleData = null;
 	protected int particleAmount = 1;
+	protected int delay = 0;
 	protected float particleSpreadX = 0;
 	protected float particleSpreadY = 0;
 	protected float particleSpreadZ = 0;
@@ -23,15 +27,24 @@ public class Point implements Drawable{
 		if(Math.random() > drawChance) return this;
 		World world = location.getWorld();
 		Location particleLoc = location.clone().add(this.location.clone().multiply(scale));
-		world.spawnParticle(particle, particleLoc, particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData, forceRender);
+		if(delay <= 0) {
+			world.spawnParticle(particle, particleLoc, particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData, forceRender);
+			return this;
+		}
+		Bukkit.getScheduler().runTaskLater(OMCCore.getJavaPlugin(), ()->{
+			world.spawnParticle(particle, particleLoc, particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData, forceRender);
+		}, delay);
 		return this;
 	}
 
+
+	public int getDelay() { return delay; }
 	public int getParticleAmount() {return particleAmount;}
 	public float getParticleSpeed() {return particleSpeed;}
 	public float getParticleSpreadX() {return particleSpreadX;}
 	public float getParticleSpreadY() {return particleSpreadY;}
 	public float getParticleSpreadZ() {return particleSpreadZ;}
+	public Point delay(int delay) { this.delay = delay; return this;}
 	public Point location(Vector location) {this.location = location; return this;}
 	public Point drawChance(double drawChance) {this.drawChance = drawChance; return this;}
 	public Point particleSpeed(float particleSpeed) {this.particleSpeed = particleSpeed; return this;}
