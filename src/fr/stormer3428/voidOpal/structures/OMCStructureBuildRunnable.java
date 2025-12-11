@@ -27,11 +27,13 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 	private static final Collection<BlockFace> ORTHOGONAL = Arrays.asList(BlockFace.DOWN, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.UP, BlockFace.WEST);
 
 	private final HashMap<Vector, BlockData> leftToBuild = new HashMap<>();
+	private final TreeSet<Vector> sorted;
 	private final Location loc;
-	private final Location origin;
+	//	private final Location origin;
 	private final Consumer<Block> blockPlaceConsumer;
 	private final Runnable onFinish;
-	private int blocksPerCycle = 16;
+	private int blocksPerCycle = 1;
+	private boolean sortedRespectsConstraints = true;
 
 	@SuppressWarnings("unused")
 	private final AirMode airMode;
@@ -50,7 +52,13 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 
 		this.loc = loc.getBlock().getLocation().add(.5,.5,.5);
 		this.rotation = getRotationForVector(vector);
-		this.origin = loc.clone().add(origin.clone().rotateAroundY(rotationMap.get(rotation)));
+		//		this.origin = loc.clone().add(origin.clone().rotateAroundY(rotationMap.get(rotation)));
+		this.sorted = new TreeSet<>((a,b)-> {
+			if(a.equals(b)) return 0;
+			double delta = a.length() - b.length();
+			double sign = Math.signum(delta);
+			return sign > 0 ? 1 : -1;
+		});
 
 		map.forEach((bv,bd)->{
 			bd = bd.clone();
@@ -84,6 +92,7 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 
 	@Override public void run() {
 		for(int i = 0; i < blocksPerCycle; i++) {
+			if(!sortedRespectsConstraints) sorted.clear();
 			Vector blockVector = getNextBlock();
 			if(blockVector == null) {
 				onFinish.run();
@@ -97,48 +106,40 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 			blockPlaceConsumer.accept(placeLoc.getBlock());
 		}
 	}
-
+	
 	private Vector getNextBlock() {
-		ArrayList<Vector> options = new ArrayList<>(leftToBuild.keySet());
+		if(!sorted.isEmpty()) {
+			return sorted.pollFirst();
+		}
+		sortedRespectsConstraints = true;
 
+		ArrayList<Vector> options = new ArrayList<>(leftToBuild.keySet());
 		for(Vector v : new ArrayList<>(options)) {
 			Block present = loc.clone().add(v).getBlock();
-			//			BlockData toPlace = leftToBuild.get(v);
 			if(terrainMode == TerrainMode.KEEP && !present.getType().isAir()) options.remove(v);
 			if(terrainMode == TerrainMode.KEEP_IF_NOT_PASSABLE && !present.isPassable()) options.remove(v);
 		}
 
-		if(buildMode == BuildMode.NEAREST_SUPPORTED) {
-			ArrayList<Vector> supportedOptions = new ArrayList<>();
-			for(Vector v : options) {
+		if (buildMode == BuildMode.NEAREST_SUPPORTED) {
+			for (Vector v : options) {
 				Block present = loc.clone().add(v).getBlock();
 				BlockData toPlace = leftToBuild.get(v);
-				if(!toPlace.isSupported(present)) continue;
-				if(isSupported(present, toPlace)) supportedOptions.add(v);
-				for(BlockFace face : ORTHOGONAL) if(present.getRelative(face).getBlockData().isFaceSturdy(face.getOppositeFace(), BlockSupport.CENTER)){
-					supportedOptions.add(v);
-					break;
-				}
+				if (!toPlace.isSupported(present)) continue;
+				if (!hasAdjacentSupportingBlock(present)) continue;
+				sorted.add(v);
 			}
-			if(!supportedOptions.isEmpty()) {
-				options.clear();
-				options.addAll(supportedOptions);
-			}
+			if (sorted.isEmpty()) sortedRespectsConstraints = false;
 		}
-
-		TreeSet<Vector> sorted = new TreeSet<>((a,b)->(int) Math.ceil(
-			loc.clone().add(a).distanceSquared(origin) - 
-			loc.clone().add(b).distanceSquared(origin)
-			));
-		sorted.addAll(options);
-		return sorted.isEmpty() ? null : sorted.first();
+		if (sorted.isEmpty()) sorted.addAll(options);
+		return sorted.pollFirst();
 	}
 
-	public static boolean isSupported(Block present, BlockData toPlace) {
-		for(BlockFace face : ORTHOGONAL) 
-			if(present.getRelative(face).getBlockData().isFaceSturdy(face.getOppositeFace(), BlockSupport.CENTER))
+	public static boolean hasAdjacentSupportingBlock(Block present) {
+		for(BlockFace face : ORTHOGONAL) {
+			if(present.getRelative(face).getBlockData().isFaceSturdy(face.getOppositeFace(), BlockSupport.CENTER)) {
 				return true;
+			}
+		}
 		return false; 
-
 	}
 }
