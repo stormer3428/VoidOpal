@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.TreeSet;
 import java.util.function.Consumer;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -17,6 +18,9 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.structure.StructureRotation;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import fr.stormer3428.voidOpal.logging.OMCLogger;
+import fr.stormer3428.voidOpal.plugin.OMCCore;
 
 public class OMCStructureBuildRunnable extends BukkitRunnable{
 
@@ -32,7 +36,7 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 	//	private final Location origin;
 	private final Consumer<Block> blockPlaceConsumer;
 	private final Runnable onFinish;
-	private int blocksPerCycle = 1;
+	private int blocksPerCycle = 16;
 	private boolean sortedRespectsConstraints = true;
 
 	@SuppressWarnings("unused")
@@ -55,16 +59,18 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 		//		this.origin = loc.clone().add(origin.clone().rotateAroundY(rotationMap.get(rotation)));
 		this.sorted = new TreeSet<>((a,b)-> {
 			if(a.equals(b)) return 0;
-			double delta = a.length() - b.length();
+			double delta = a.lengthSquared() - b.lengthSquared();
 			double sign = Math.signum(delta);
 			return sign > 0 ? 1 : -1;
 		});
 
 		map.forEach((bv,bd)->{
 			bd = bd.clone();
-			bd.rotate(rotation);
 			bv = bv.clone();
-			bv.rotateAroundY(rotationMap.get(rotation));
+			if(rotation != null) {
+				bd.rotate(rotation);
+				bv.rotateAroundY(rotationMap.get(rotation));
+			}
 			leftToBuild.put(bv, bd);
 		});
 
@@ -91,6 +97,7 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 	}
 
 	@Override public void run() {
+		OMCLogger.systemNormal(leftToBuild.size() + "");
 		for(int i = 0; i < blocksPerCycle; i++) {
 			if(!sortedRespectsConstraints) sorted.clear();
 			Vector blockVector = getNextBlock();
@@ -102,15 +109,17 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 			BlockData data = leftToBuild.remove(blockVector);
 
 			Location placeLoc = loc.clone().add(blockVector);
-			placeLoc.getBlock().setBlockData(data, true);
-			blockPlaceConsumer.accept(placeLoc.getBlock());
+			Bukkit.getScheduler().runTask(OMCCore.getJavaPlugin(), ()->{
+				placeLoc.getBlock().setBlockData(data, true);
+				blockPlaceConsumer.accept(placeLoc.getBlock());
+			});
 		}
+		sorted.clear();
 	}
-	
+
 	private Vector getNextBlock() {
-		if(!sorted.isEmpty()) {
-			return sorted.pollFirst();
-		}
+		if(!sorted.isEmpty()) return sorted.pollFirst();
+
 		sortedRespectsConstraints = true;
 
 		ArrayList<Vector> options = new ArrayList<>(leftToBuild.keySet());
