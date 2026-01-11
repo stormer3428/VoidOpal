@@ -2,6 +2,7 @@ package fr.stormer3428.voidOpal.Item.Tracking;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 
 import org.bukkit.entity.HumanEntity;
@@ -40,7 +41,7 @@ public class OMCInventoryItemTracker implements PluginTied, Listener{
 	inventory
 	//*/
 
-	private final ArrayList<OMCItem> inventoryTrackedItems = new ArrayList<>();
+	private final HashSet<OMCItem> inventoryTrackedItems = new HashSet<>();
 	private final HashMap<UUID, ArrayList<OMCItem>> inventoryTrackerMap = new HashMap<>();
 	public void registerInventoryTrackedItem(OMCItem omcItem) {inventoryTrackedItems.add(omcItem);}
 	public boolean isInventoryHoldingItem(Player p, OMCItem omcItem) {return getInventoryTrackedItemsForPlayer(p).contains(omcItem);}
