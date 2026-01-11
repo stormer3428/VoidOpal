@@ -24,7 +24,7 @@ import fr.stormer3428.voidOpal.plugin.OMCCore;
 
 public class OMCStructureBuildRunnable extends BukkitRunnable{
 
-	public static enum BuildMode { NEAREST, NEAREST_SUPPORTED }
+	public static enum BuildMode { NEAREST, NEAREST_SUPPORTED, FURTHEST_SUPPORTED }
 	public static enum AirMode { REPLACE_TERRAIN, IGNORE }
 	public static enum TerrainMode { REPLACE_TERRAIN, KEEP_IF_NOT_PASSABLE, KEEP }
 
@@ -33,7 +33,7 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 	private final HashMap<Vector, BlockData> leftToBuild = new HashMap<>();
 	private final TreeSet<Vector> sorted;
 	private final Location loc;
-	//	private final Location origin;
+	private final Vector origin;
 	private final Consumer<Block> blockPlaceConsumer;
 	private final Runnable onFinish;
 	private int blocksPerCycle = 16;
@@ -55,14 +55,19 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 		this.terrainMode = terrainMode;
 
 		this.loc = loc.getBlock().getLocation().add(.5,.5,.5);
+		this.origin = origin.clone();
+		
 		this.rotation = getRotationForVector(vector);
 		//		this.origin = loc.clone().add(origin.clone().rotateAroundY(rotationMap.get(rotation)));
 		this.sorted = new TreeSet<>((a,b)-> {
 			if(a.equals(b)) return 0;
-			double delta = a.lengthSquared() - b.lengthSquared();
+			double delta = a.length() - b.length();
 			double sign = Math.signum(delta);
+			if(buildMode == BuildMode.FURTHEST_SUPPORTED) sign=-sign;
 			return sign > 0 ? 1 : -1;
 		});
+
+		if(airMode == AirMode.IGNORE) for(Entry<Vector, BlockData> entry : new ArrayList<>(leftToBuild.entrySet())) if(entry.getValue().getMaterial().isAir()) leftToBuild.remove(entry.getKey());
 
 		map.forEach((bv,bd)->{
 			bd = bd.clone();
@@ -71,10 +76,8 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 				bd.rotate(rotation);
 				bv.rotateAroundY(rotationMap.get(rotation));
 			}
-			leftToBuild.put(bv, bd);
+			leftToBuild.put(bv.subtract(origin), bd);
 		});
-
-		if(airMode == AirMode.IGNORE) for(Entry<Vector, BlockData> entry : new ArrayList<>(leftToBuild.entrySet())) if(entry.getValue().getMaterial().isAir()) leftToBuild.remove(entry.getKey());
 	}
 
 	private static final Map<StructureRotation, Double> rotationMap = Map.ofEntries(
@@ -129,7 +132,7 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 			if(terrainMode == TerrainMode.KEEP_IF_NOT_PASSABLE && !present.isPassable()) options.remove(v);
 		}
 
-		if (buildMode == BuildMode.NEAREST_SUPPORTED) {
+		if (buildMode == BuildMode.NEAREST_SUPPORTED || buildMode == BuildMode.FURTHEST_SUPPORTED) {
 			for (Vector v : options) {
 				Block present = loc.clone().add(v).getBlock();
 				BlockData toPlace = leftToBuild.get(v);
