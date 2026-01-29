@@ -10,7 +10,8 @@ import org.bukkit.util.Vector;
 import fr.stormer3428.voidOpal.util.GeometryUtils;
 
 public class Circle implements Drawable{
-	
+
+	protected onDrawConsumer callback = null;
 	private Vector axis;
 	private ArrayList<Vector> points = new ArrayList<>();
 	
@@ -45,6 +46,7 @@ public class Circle implements Drawable{
 
 	@Override
 	public Circle draw(Location location, double scale) {
+		if(callback != null) callback.onDraw(this, location, scale);
 		World world = location.getWorld();
 		Vector locationVector = location.toVector();
 		for(Vector point : points) drawPoint(world, point.add(locationVector));		
@@ -117,5 +119,6 @@ public class Circle implements Drawable{
 	@Override public Circle forceRendering(boolean forceRender) {this.forceRender = forceRender;return this;}
 	@Override public boolean isForceRendering() {return forceRender;}
 	@Override public Particle getParticle() {return particle;}
+	@Override public Circle onDraw(onDrawConsumer consumer) { callback = consumer; return this; }
 
 }

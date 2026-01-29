@@ -20,4 +20,6 @@ public interface Drawable {
 	public Drawable forceRendering(boolean forceRender);
 	public boolean isForceRendering();
 	
+	public Drawable onDraw(onDrawConsumer consumer);
+	
 }

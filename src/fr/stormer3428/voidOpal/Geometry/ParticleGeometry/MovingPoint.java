@@ -10,6 +10,7 @@ import fr.stormer3428.voidOpal.plugin.OMCCore;
 
 public class MovingPoint implements Drawable{
 
+	protected onDrawConsumer callback = null;
 	private Vector location = new Vector();
 	private Particle particle = Particle.CRIT;
 	private Object particleData = null;
@@ -24,6 +25,7 @@ public class MovingPoint implements Drawable{
 	public void draw(Location location) { draw(location, 1.0); }
 	@Override public MovingPoint draw(Location location, double scale) {
 		if(Math.random() > drawChance) return this;
+		if(callback != null) callback.onDraw(this, location, scale);
 		World world = location.getWorld();
 		Location particleLoc = location.clone().add(this.location.clone().multiply(scale));
 		
@@ -105,4 +107,5 @@ public class MovingPoint implements Drawable{
 	@Override public MovingPoint particleData(Object particleData) { this.particleData = particleData; return this; }
 	@Override public MovingPoint particleSpeed(float particleSpeed) { this.particleDirection.normalize().multiply(particleSpeed); return this; }
 	@Override public MovingPoint forceRendering(boolean forceRender) {this.forceRender = forceRender;return this;}
+	@Override public MovingPoint onDraw(onDrawConsumer consumer) { callback = consumer; return this; }
 }

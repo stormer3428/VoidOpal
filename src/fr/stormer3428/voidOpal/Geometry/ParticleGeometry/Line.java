@@ -11,7 +11,8 @@ import fr.stormer3428.voidOpal.util.providers.OMCProvider;
 import fr.stormer3428.voidOpal.util.providers.OMCProviderImpl;
 
 public class Line implements Drawable{
-	
+
+	protected onDrawConsumer callback = null;
 	private OMCProvider<Vector> a;
 	private OMCProvider<Vector> b;
 	private Particle particle = Particle.CRIT;
@@ -38,6 +39,7 @@ public class Line implements Drawable{
 
 	@Override
 	public Line draw(Location location, double scale) {
+		if(callback != null) callback.onDraw(this, location, scale);
 		World world = location.getWorld();
 		Vector locationVector = location.toVector();
 		for(Vector point : getInterpolatedPoints(a.getData().clone().multiply(scale), b.getData().clone().multiply(scale))) drawPoint(world, point.add(locationVector));		
@@ -115,5 +117,6 @@ public class Line implements Drawable{
 	@Override public Line forceRendering(boolean forceRender) {this.forceRender = forceRender; return this;}
 	@Override public boolean isForceRendering() {return forceRender;}
 	@Override public Particle getParticle() {return particle;}
+	@Override public Line onDraw(onDrawConsumer consumer) { callback = consumer; return this; }
 
 }

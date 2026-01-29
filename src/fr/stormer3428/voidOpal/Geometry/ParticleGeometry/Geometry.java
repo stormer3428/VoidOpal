@@ -12,6 +12,7 @@ import fr.stormer3428.voidOpal.util.GeometryUtils;
 
 public class Geometry implements Drawable{
 
+	protected onDrawConsumer callback = null;
 	protected ArrayList<Drawable> drawables = new ArrayList<>();
 	protected Vector direction = GeometryUtils.VERTICAL.clone();
 	protected Vector relativeUp = new Vector(-1,0,0);
@@ -29,6 +30,7 @@ public class Geometry implements Drawable{
 	
 	@Override
 	public Geometry draw(Location location, double scale) {
+		if(callback != null) callback.onDraw(this, location, scale);
 		for(Drawable drawable : drawables) drawable.draw(location, scale);
 		return this;
 	}
@@ -172,4 +174,6 @@ public class Geometry implements Drawable{
 		if(getDrawables().isEmpty()) return false;
 		return getDrawables().get(0).isForceRendering();
 	}
+
+	@Override public Geometry onDraw(onDrawConsumer consumer) { callback = consumer; return this; }
 }

@@ -10,6 +10,7 @@ import fr.stormer3428.voidOpal.plugin.OMCCore;
 
 public class Point implements Drawable{
 
+	protected onDrawConsumer callback = null;
 	protected Vector location = new Vector();
 	protected Particle particle = Particle.CRIT;
 	protected Object particleData = null;
@@ -25,6 +26,7 @@ public class Point implements Drawable{
 	@Override
 	public Point draw(Location location, double scale) {
 		if(Math.random() > drawChance) return this;
+		if(callback != null) callback.onDraw(this, location, scale);
 		World world = location.getWorld();
 		Location particleLoc = location.clone().add(this.location.clone().multiply(scale));
 		if(delay <= 0) {
@@ -64,5 +66,6 @@ public class Point implements Drawable{
 	@Override public Point rotateAroundAxis(Vector axis, double radians) {location.rotateAroundAxis(axis, radians); return this;}
 	@Override public boolean isForceRendering() {return forceRender;}
 	@Override public Particle getParticle() {return particle;}
+	@Override public Point onDraw(onDrawConsumer consumer) { callback = consumer; return this; }
 
 }
