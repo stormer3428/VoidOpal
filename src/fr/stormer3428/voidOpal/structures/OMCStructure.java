@@ -9,7 +9,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import fr.stormer3428.voidOpal.plugin.OMCCore;
@@ -25,12 +24,12 @@ public class OMCStructure {
 	private final HashMap<Material, Integer> materialsCount = new HashMap<>();
 	protected Vector origin = new Vector();
 
-	public BukkitRunnable build(Location loc, BuildMode buildMode, AirMode airMode, TerrainMode terrainMode, int interval) { return  build(loc, buildMode, airMode, terrainMode, interval, new Vector(1,0,0), O -> {}); }
-	public BukkitRunnable build(Location loc, BuildMode buildMode, AirMode airMode, TerrainMode terrainMode, int interval, Vector vector) { return  build(loc, buildMode, airMode, terrainMode, interval, vector, O -> {}); }
-	public BukkitRunnable build(Location loc, BuildMode buildMode, AirMode airMode, TerrainMode terrainMode, int interval, Vector vector, Consumer<Block> blockPlaceConsumer) { return  build(loc, buildMode, airMode, terrainMode, interval, vector, blockPlaceConsumer, ()->{});}
-	public BukkitRunnable build(Location loc, BuildMode buildMode, AirMode airMode, TerrainMode terrainMode, int interval, Vector vector, Consumer<Block> blockPlaceConsumer, Runnable onFinish) { 
-		BukkitRunnable runnable = new OMCStructureBuildRunnable(loc, origin, buildMode, airMode, terrainMode, vector, map, blockPlaceConsumer, onFinish);
-		runnable.runTaskTimerAsynchronously(OMCCore.getJavaPlugin(), 0, interval); 
+	public OMCStructureBuildRunnable build(Location loc, BuildMode buildMode, AirMode airMode, TerrainMode terrainMode) { return  build(loc, buildMode, airMode, terrainMode, new Vector(1,0,0), O -> {}); }
+	public OMCStructureBuildRunnable build(Location loc, BuildMode buildMode, AirMode airMode, TerrainMode terrainMode, Vector orientation) { return  build(loc, buildMode, airMode, terrainMode, orientation, O -> {}); }
+	public OMCStructureBuildRunnable build(Location loc, BuildMode buildMode, AirMode airMode, TerrainMode terrainMode, Vector orientation, Consumer<Block> blockPlaceConsumer) { return  build(loc, buildMode, airMode, terrainMode, orientation, blockPlaceConsumer, ()->{});}
+	public OMCStructureBuildRunnable build(Location loc, BuildMode buildMode, AirMode airMode, TerrainMode terrainMode, Vector orientation, Consumer<Block> blockPlaceConsumer, Runnable onFinish) { 
+		OMCStructureBuildRunnable runnable = new OMCStructureBuildRunnable(loc, origin, buildMode, airMode, terrainMode, orientation, map, blockPlaceConsumer, onFinish);
+		runnable.runTaskAsynchronously(OMCCore.getJavaPlugin()); 
 		return runnable;
 	}
 

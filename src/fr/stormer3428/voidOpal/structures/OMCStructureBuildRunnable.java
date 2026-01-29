@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeSet;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
@@ -24,16 +24,17 @@ import fr.stormer3428.voidOpal.plugin.OMCCore;
 
 public class OMCStructureBuildRunnable extends BukkitRunnable{
 
-	public static enum BuildMode { NEAREST, NEAREST_SUPPORTED, FURTHEST_SUPPORTED }
+	public static enum BuildMode { NEAREST, NEAREST_SUPPORTED, FURTHEST_SUPPORTED, FURTHEST }
 	public static enum AirMode { REPLACE_TERRAIN, IGNORE }
 	public static enum TerrainMode { REPLACE_TERRAIN, KEEP_IF_NOT_PASSABLE, KEEP }
 
 	private static final Collection<BlockFace> ORTHOGONAL = Arrays.asList(BlockFace.DOWN, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.UP, BlockFace.WEST);
 
 	private final HashMap<Vector, BlockData> leftToBuild = new HashMap<>();
-	private final TreeSet<Vector> sorted;
+//	private final HashMap<Vector, BlockData> ImmutableBlockDataMap = new HashMap<>();
+	private final ConcurrentSkipListSet<Vector> sorted;
 	private final Location loc;
-	private final Vector origin;
+	private Vector origin;
 	private final Consumer<Block> blockPlaceConsumer;
 	private final Runnable onFinish;
 	private int blocksPerCycle = 16;
@@ -45,9 +46,9 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 	private final TerrainMode terrainMode;
 	private final StructureRotation rotation;
 
-	public OMCStructureBuildRunnable(Location loc, Vector origin, BuildMode buildMode, AirMode airMode, TerrainMode terrainMode, Vector vector, HashMap<Vector, BlockData> map) { this(loc, origin, buildMode, airMode, terrainMode, vector, map, O -> {}); }
-	public OMCStructureBuildRunnable(Location loc, Vector origin, BuildMode buildMode, AirMode airMode, TerrainMode terrainMode, Vector vector, HashMap<Vector, BlockData> map, Consumer<Block> blockPlaceConsumer) { this(loc, origin, buildMode, airMode, terrainMode, vector, map, blockPlaceConsumer, () -> {}); }
-	public OMCStructureBuildRunnable(Location loc, Vector origin, BuildMode buildMode, AirMode airMode, TerrainMode terrainMode, Vector vector, HashMap<Vector, BlockData> map, Consumer<Block> blockPlaceConsumer, Runnable onFinish) {
+	public OMCStructureBuildRunnable(Location loc, Vector origin, BuildMode buildMode, AirMode airMode, TerrainMode terrainMode, Vector orientation, HashMap<Vector, BlockData> map) { this(loc, origin, buildMode, airMode, terrainMode, orientation, map, O -> {}); }
+	public OMCStructureBuildRunnable(Location loc, Vector origin, BuildMode buildMode, AirMode airMode, TerrainMode terrainMode, Vector orientation, HashMap<Vector, BlockData> map, Consumer<Block> blockPlaceConsumer) { this(loc, origin, buildMode, airMode, terrainMode, orientation, map, blockPlaceConsumer, () -> {}); }
+	public OMCStructureBuildRunnable(Location loc, Vector origin, BuildMode buildMode, AirMode airMode, TerrainMode terrainMode, Vector orientation, HashMap<Vector, BlockData> map, Consumer<Block> blockPlaceConsumer, Runnable onFinish) {
 		this.blockPlaceConsumer = blockPlaceConsumer;
 		this.onFinish = onFinish;
 		this.buildMode = buildMode;
@@ -55,28 +56,34 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 		this.terrainMode = terrainMode;
 
 		this.loc = loc.getBlock().getLocation().add(.5,.5,.5);
-		this.origin = origin.clone();
+		this.origin = origin.toLocation(loc.getWorld()).getBlock().getLocation().add(.5,.5,.5).toVector();
 		
-		this.rotation = getRotationForVector(vector);
-		//		this.origin = loc.clone().add(origin.clone().rotateAroundY(rotationMap.get(rotation)));
-		this.sorted = new TreeSet<>((a,b)-> {
+		this.rotation = getRotationForVector(orientation);
+		this.sorted = new ConcurrentSkipListSet<>((a,b)-> {
 			if(a.equals(b)) return 0;
+
 			double delta = a.length() - b.length();
+//			double delta = a.clone().add(this.origin).length() - b.clone().add(this.origin).length();
 			double sign = Math.signum(delta);
-			if(buildMode == BuildMode.FURTHEST_SUPPORTED) sign=-sign;
+			if(buildMode == BuildMode.FURTHEST_SUPPORTED || buildMode == BuildMode.FURTHEST) sign=-sign;
 			return sign > 0 ? 1 : -1;
 		});
 
-		if(airMode == AirMode.IGNORE) for(Entry<Vector, BlockData> entry : new ArrayList<>(leftToBuild.entrySet())) if(entry.getValue().getMaterial().isAir()) leftToBuild.remove(entry.getKey());
+		if(airMode == AirMode.IGNORE) for(Entry<Vector, BlockData> entry : new ArrayList<>(map.entrySet())) if(entry.getValue().getMaterial().isAir()) map.remove(entry.getKey());
 
 		map.forEach((bv,bd)->{
+			if(bv == null || bd == null) {
+				OMCLogger.error("Didnt include null entry : " + bv + " : " + bd);
+				return;
+			}
 			bd = bd.clone();
-			bv = bv.clone();
+			bv = bv.clone().subtract(this.origin).add(new Vector(.5,.5,.5));
 			if(rotation != null) {
 				bd.rotate(rotation);
 				bv.rotateAroundY(rotationMap.get(rotation));
 			}
-			leftToBuild.put(bv.subtract(origin), bd);
+			leftToBuild.put(bv, bd);
+//			ImmutableBlockDataMap.put(bv.clone().subtract(origin), bd);
 		});
 	}
 
@@ -100,16 +107,30 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 	}
 
 	@Override public void run() {
-		OMCLogger.systemNormal(leftToBuild.size() + "");
 		for(int i = 0; i < blocksPerCycle; i++) {
 			if(!sortedRespectsConstraints) sorted.clear();
 			Vector blockVector = getNextBlock();
 			if(blockVector == null) {
-				onFinish.run();
-				cancel();
+				Bukkit.getScheduler().runTask(OMCCore.getJavaPlugin(), ()->{
+					onFinish.run();
+				});
 				return;
 			}
+			/*
+			BlockData fromLeftToBuild = leftToBuild.remove(blockVector);
+			BlockData data = ImmutableBlockDataMap.get(blockVector);
+			if(fromLeftToBuild == null) {
+				OMCLogger.systemError("Found fromLeftToBuild null blockdata value");
+			}
+			/*/
 			BlockData data = leftToBuild.remove(blockVector);
+			//*/
+			
+			if(data == null) {
+				OMCLogger.systemError("Skipped immutable null blockdata value ?????????????????????????????????????");
+				i--;
+				continue;
+			}
 
 			Location placeLoc = loc.clone().add(blockVector);
 			Bukkit.getScheduler().runTask(OMCCore.getJavaPlugin(), ()->{
@@ -118,6 +139,9 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 			});
 		}
 		sorted.clear();
+		Bukkit.getScheduler().runTaskAsynchronously(OMCCore.getJavaPlugin(), ()->{
+			run();
+		});
 	}
 
 	private Vector getNextBlock() {
@@ -125,7 +149,11 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 
 		sortedRespectsConstraints = true;
 
-		ArrayList<Vector> options = new ArrayList<>(leftToBuild.keySet());
+		ArrayList<Vector> options = new ArrayList<>();
+		leftToBuild.keySet().forEach(v->{
+			if(v!=null) options.add(v);
+			else OMCLogger.systemError("Prevented null root insertion");
+		});
 		for(Vector v : new ArrayList<>(options)) {
 			Block present = loc.clone().add(v).getBlock();
 			if(terrainMode == TerrainMode.KEEP && !present.getType().isAir()) options.remove(v);
@@ -142,7 +170,13 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 			}
 			if (sorted.isEmpty()) sortedRespectsConstraints = false;
 		}
-		if (sorted.isEmpty()) sorted.addAll(options);
+		if (sorted.isEmpty()) {
+			sorted.clear();
+			options.forEach(v->{
+				if(v!=null) sorted.add(v);
+				else OMCLogger.systemError("Prevented null root insertion");
+			});
+		}
 		return sorted.pollFirst();
 	}
 
@@ -154,4 +188,13 @@ public class OMCStructureBuildRunnable extends BukkitRunnable{
 		}
 		return false; 
 	}
+	
+	public void setBlocksPerCycle(int blocksPerCycle) { this.blocksPerCycle = blocksPerCycle; }
+	public void setOrigin(Vector origin) { this.origin = origin; }
 }
+
+
+
+
+
+
