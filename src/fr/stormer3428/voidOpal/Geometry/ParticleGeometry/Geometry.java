@@ -16,6 +16,7 @@ public class Geometry implements Drawable{
 	protected ArrayList<Drawable> drawables = new ArrayList<>();
 	protected Vector direction = GeometryUtils.VERTICAL.clone();
 	protected Vector relativeUp = new Vector(-1,0,0);
+	protected double drawChance = 1;
 
 	public Geometry() {}
 	
@@ -30,6 +31,7 @@ public class Geometry implements Drawable{
 	
 	@Override
 	public Geometry draw(Location location, double scale) {
+		if(Math.random() > drawChance) return this;
 		if(callback != null) callback.onDraw(this, location, scale);
 		for(Drawable drawable : drawables) drawable.draw(location, scale);
 		return this;
@@ -176,4 +178,7 @@ public class Geometry implements Drawable{
 	}
 
 	@Override public Geometry onDraw(onDrawConsumer consumer) { callback = consumer; return this; }
+
+	public double getDrawChance() { return drawChance; }
+	public Geometry drawChance(double drawChance) {this.drawChance = drawChance; return this;}
 }
