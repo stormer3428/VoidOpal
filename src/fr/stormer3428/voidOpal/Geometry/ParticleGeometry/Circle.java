@@ -49,7 +49,7 @@ public class Circle implements Drawable{
 		if(callback != null) callback.onDraw(this, location, scale);
 		World world = location.getWorld();
 		Vector locationVector = location.toVector();
-		for(Vector point : points) drawPoint(world, point.add(locationVector));		
+		for(Vector point : points) drawPoint(world, point.clone().multiply(scale).add(locationVector));		
 		return this;
 	}
 
@@ -120,5 +120,4 @@ public class Circle implements Drawable{
 	@Override public boolean isForceRendering() {return forceRender;}
 	@Override public Particle getParticle() {return particle;}
 	@Override public Circle onDraw(onDrawConsumer consumer) { callback = consumer; return this; }
-
 }
