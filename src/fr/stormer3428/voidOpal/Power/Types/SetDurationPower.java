@@ -20,7 +20,7 @@ public abstract class SetDurationPower extends UnsetDurationPower{
 	public boolean empower(ItemStack it, Player p, Map<String, Object> metadata) {
 		if(!cast(it, p, metadata)) return false;
 		empowered.add(p.getUniqueId());
-		Bukkit.getScheduler().scheduleSyncDelayedTask(OMCCore.getJavaPlugin(), () -> putOnCooldown(p), getDuration());
+		Bukkit.getScheduler().runTaskLater(OMCCore.getJavaPlugin(), () -> putOnCooldown(p), getDuration());
 		return true;
 	}
 }
