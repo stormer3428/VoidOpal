@@ -43,4 +43,6 @@ public class OMCNamedListenerManager implements Listener, PluginTied{
 		for(OMCNamedListener power : registeredListeners) if(power.getRegistryName().equals(registryName)) return power;
 		return null;
 	}
+	
+	public ArrayList<OMCNamedListener> getRegisteredListeners() { return registeredListeners; }
 }
