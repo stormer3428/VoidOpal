@@ -20,6 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.stormer3428.voidOpal.Item.OMCItemManager;
 import fr.stormer3428.voidOpal.Item.Types.OMCItem;
+import fr.stormer3428.voidOpal.Listener.OMCNamedListenerManager;
 import fr.stormer3428.voidOpal.Power.OMCPowerManager;
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
 import fr.stormer3428.voidOpal.Tickeable.OMCTickeableManager;
@@ -249,6 +250,7 @@ public class OMCPremadeCommandFactory {
 			,
 			new OMCCommand(root + " debug%%%d cmd %V%", true) {
 
+				@SuppressWarnings("deprecation")
 				@Override
 				public boolean execute(CommandSender sender, ArrayList<String> vars) {
 					if(!(sender instanceof Player p)) return OMCLogger.error(sender, OMCLang.ERROR_PLAYERONLY.toString());
@@ -301,6 +303,16 @@ public class OMCPremadeCommandFactory {
 			new OMCCommand(root + " debug%%%d printTickeableRegistry", true) { @Override public boolean execute(CommandSender sender, ArrayList<String> vars) {
 				OMCLogger.normal(sender, "<Printing Tickeable Registry>\n");
 				for (OMCNameable nameable : tickeableManager.getRegisteredTickables()) OMCLogger.normal(sender, nameable.getRegistryName());
+				return OMCLogger.normal(sender, "\n");
+			}}
+		};
+	}
+
+	public static OMCCommand[] printNamedListenersRegistry(OMCNamedListenerManager listenerManager, String root) {
+		return new OMCCommand[] { 
+			new OMCCommand(root + " debug%%%d printNamedListenersRegistry", true) { @Override public boolean execute(CommandSender sender, ArrayList<String> vars) {
+				OMCLogger.normal(sender, "<Printing NamedListener Registry>\n");
+				for (OMCNameable nameable : listenerManager.getRegisteredListeners()) OMCLogger.normal(sender, nameable.getRegistryName());
 				return OMCLogger.normal(sender, "\n");
 			}}
 		};
