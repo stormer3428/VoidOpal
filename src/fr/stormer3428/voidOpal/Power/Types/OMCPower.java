@@ -37,7 +37,6 @@ public abstract class OMCPower extends OMCNamedListener implements OMCTickeable{
 			Entry<UUID, Integer> entry = iterator.next();
 			UUID uuid = entry.getKey();
 			int cooldown = entry.getValue();
-//			Bukkit.broadcastMessage(Bukkit.getPlayer(uuid).getName() + " " + getRegistryName() + " " + cooldown);
 			cooldown --;
 			if(cooldown > 0) {
 				entry.setValue(cooldown);
@@ -52,7 +51,6 @@ public abstract class OMCPower extends OMCNamedListener implements OMCTickeable{
 
 	public boolean tryCast(ItemStack it, Player p) {return tryCast(it, p, new HashMap<String, Object>());}
 	public boolean tryCast(ItemStack it, Player p, Map<String, Object> metadata) {
-//		Bukkit.broadcastMessage("trycast " + getRegistryName() + " enabled " + isEnabled() + " cd " + isOnCooldown(p));
 		if(!isEnabled())return false;
 		if(isOnCooldown(p)) return false;
 		empower(it, p, metadata);
@@ -60,9 +58,7 @@ public abstract class OMCPower extends OMCNamedListener implements OMCTickeable{
 	}
 
 	public boolean empower(ItemStack it, Player p, Map<String, Object> metadata) {
-//		Bukkit.broadcastMessage("empower " + getRegistryName());
 		if(!cast(it, p, metadata)) return false;
-//		Bukkit.broadcastMessage("putOnCooldown " + getRegistryName());
 		putOnCooldown(p);
 		return true;
 	}
@@ -72,7 +68,7 @@ public abstract class OMCPower extends OMCNamedListener implements OMCTickeable{
 	public HashMap<UUID, Integer> getCooldownMap() { return onCooldown; }
 	public boolean isOnCooldown(Player p) {return isOnCooldown(p.getUniqueId());}
 	public boolean isOnCooldown(UUID uuid) {return onCooldown.containsKey(uuid);}
-	public void putOnCooldown(Player p) {putOnCooldown(p, getCooldown());}
+	public void putOnCooldown(Player p) {putOnCooldown(p.getUniqueId());}
 	public void putOnCooldown(Player p, int abilityCooldown) {putOnCooldown(p.getUniqueId(), abilityCooldown);}
 	public void putOnCooldown(UUID uuid) {putOnCooldown(uuid, getCooldown());}
 	public void putOnCooldown(UUID uuid, int abilityCooldown) {onCooldown.put(uuid, Math.max(getCooldown(uuid), abilityCooldown));}
