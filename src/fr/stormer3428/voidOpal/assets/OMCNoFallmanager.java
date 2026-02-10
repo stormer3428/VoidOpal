@@ -1,6 +1,6 @@
 package fr.stormer3428.voidOpal.assets;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.UUID;
 
 import org.bukkit.entity.LivingEntity;
@@ -17,7 +17,7 @@ public class OMCNoFallmanager extends OMCNamedListener{
 
 	public OMCNoFallmanager() { super("omcNoFallManager"); }
 
-	private static final ArrayList<UUID> noFalllist = new ArrayList<>();
+	private static final HashSet<UUID> noFalllist = new HashSet<>();
 	
 	public static void run(LivingEntity p) { noFalllist.add(p.getUniqueId()); }
 
