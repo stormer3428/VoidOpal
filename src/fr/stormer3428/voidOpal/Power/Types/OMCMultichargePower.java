@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 public abstract class OMCMultichargePower extends OMCPower{
 
-	private final HashMap<UUID, Integer> ON_COOLDOWN_CHARGES = new HashMap<>(); // inverted so that players without that power are simply not in the map
+	protected final HashMap<UUID, Integer> ON_COOLDOWN_CHARGES = new HashMap<>(); // inverted so that players without that power are simply not in the map
 
 	public OMCMultichargePower(String registryName) { super(registryName); }
 
@@ -61,4 +61,8 @@ public abstract class OMCMultichargePower extends OMCPower{
 			onCooldownEnd(p);
 		}
 	}
+
+	public int getCharges(Player p) { return getCharges(p.getUniqueId()); }
+	public int getCharges(UUID uuid) { return getMaxCharges() - ON_COOLDOWN_CHARGES.getOrDefault(uuid, 0); }
+	
 }
