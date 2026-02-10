@@ -199,8 +199,7 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 		PersistentDataContainer pdc = meta.getPersistentDataContainer();
 		if(pdc == null) return false;
 		String voidOpalId = pdc.get(getNSK(VOIDOPAL_ITEM_ID), PersistentDataType.STRING);
-		if(voidOpalId != registryName) return false;
-		return true;
+		return registryName.equals(voidOpalId);
 	}
 
 }
