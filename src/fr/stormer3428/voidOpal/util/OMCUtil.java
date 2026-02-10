@@ -3,6 +3,7 @@ package fr.stormer3428.voidOpal.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -266,6 +267,7 @@ public class OMCUtil {
 	public static double randDouble(double a, double b) { return Math.random() * (b - a) + a; }
 	public static float randFloat(double a, double b) { return (float) randDouble(a, b); }
 	public static int randInt(int a, int b) { return new Random().nextInt(a, b); }
+	public static <T> T pickRandomFrom(List<T> list) { return list.get(randInt(0, list.size())); }
 }
 
 
