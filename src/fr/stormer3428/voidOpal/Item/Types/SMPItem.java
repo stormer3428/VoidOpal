@@ -1,7 +1,6 @@
 package fr.stormer3428.voidOpal.Item.Types;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,10 +16,10 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import fr.stormer3428.voidOpal.Item.SerializableCMD;
 import fr.stormer3428.voidOpal.Listener.OMCNamedListener;
 import fr.stormer3428.voidOpal.Power.Types.OMCPower;
 import fr.stormer3428.voidOpal.Tickeable.OMCTickeable;
@@ -31,10 +30,20 @@ import fr.stormer3428.voidOpal.data.OMCTickeableHolder;
 import fr.stormer3428.voidOpal.logging.OMCLogger;
 import fr.stormer3428.voidOpal.plugin.OMCCore;
 import fr.stormer3428.voidOpal.util.OMCUtil;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.CustomModelData;
 
 public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder, OMCTickeableHolder {
+	
+	private static final String VOIDOPAL_ITEM_ID = "VoidOpalItemID";
 
-	public SMPItem(String registryName) { this.registryName = registryName; }
+	public SMPItem(String registryName) { 
+		this.registryName = registryName; 
+		data.put(PersistentDataType.STRING, Map.of(VOIDOPAL_ITEM_ID, registryName));
+		customModelData = new SerializableCMD(CustomModelData.customModelData()
+			.addString(registryName)
+			.build());
+	}
 
 	protected Material material = Material.BOOK;
 	protected String displayName = null;
@@ -46,8 +55,9 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 	protected final ArrayList<OMCNamedListener> listeners = new ArrayList<>();
 	protected final ArrayList<OMCNameable> passives = new ArrayList<>();
 	protected HashMap<Enchantment, Integer> enchants = new HashMap<>();
-	protected HashMap<PersistentDataType<Object, ? extends Object>, HashMap<String, Object>> data = new HashMap<>();
+	protected HashMap<PersistentDataType<?, ?>, Map<String, Object>> data = new HashMap<>();
 	protected boolean unbreakeable = false;
+	protected SerializableCMD customModelData;
 
 	@Override public String getRegistryName() { return registryName;}
 	@Override public List<OMCPower> getOmcPowers() {return omcPowers;}
@@ -57,12 +67,13 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 	public String getDisplayName(){return displayName;}
 	public List<String> getLore(){return lore;}
 	public List<ItemFlag> getItemFlags(){return itemFlags;}
-//	public CustomModelData getCustomModelData() { return customModelData; }
+	public CustomModelData getCustomModelData() { return customModelData.getData(); }
 	public Map<Enchantment,Integer> getEnchants(){return enchants;}
 
 	public SMPItem setMaterial(Material material){ this.material = material; return this;}
 	public SMPItem setDisplayname(String displayname){ this.displayName = displayname; return this;}
-//	public SMPItem setCustomModelData(CustomModelData customModelData) { this.customModelData = customModelData; return this; }
+	public SMPItem setCustomModelData(CustomModelData customModelData) { return setCustomModelData(new SerializableCMD(customModelData)); }
+	public SMPItem setCustomModelData(SerializableCMD customModelData) { this.customModelData = customModelData; return this; }
 	public SMPItem setLore(List<String> lore){ this.lore.clear(); this.lore.addAll(lore); return this;}
 	public SMPItem setItemflags(List<ItemFlag> itemflags){ this.itemFlags.clear(); this.itemFlags.addAll(itemflags); return this;}
 	public SMPItem setEnchants(HashMap<Enchantment,Integer> enchants){ this.enchants = enchants; return this;}
@@ -85,7 +96,7 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 		YamlConfiguration config = new YamlConfiguration();
 		config.addDefault("material", material.name());
 		config.addDefault("displayname", displayName);
-//		config.addDefault("customModelData", customModelData);
+		config.addDefault("customModelData", customModelData);
 		config.addDefault("lore", lore);
 		config.addDefault("itemflags", itemFlags.parallelStream().map(f -> f.name()).collect(Collectors.toList()));
 		for(Enchantment e : enchants.keySet()) config.addDefault("enchants." + e.getKey(), enchants.get(e));
@@ -99,11 +110,12 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 		if(mat == null) OMCLogger.systemError("Tried to set material of " + registryName + " to invalid material, " + materialString);
 		else setMaterial(mat);
 		setDisplayname(config.getString("displayname"));
-//		try {
-//			setCustomModelData((CustomModelData) config.get("customModelData"));
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		try {
+			SerializableCMD customModelData = (SerializableCMD) config.get("customModelData");
+			if(customModelData != null) setCustomModelData(customModelData);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		setLore(config.getStringList("lore"));
 		setItemflags(config.getStringList("itemflags").parallelStream().map(s -> {
 			try {
@@ -144,11 +156,6 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 		if(itm != null) {
 			if(displayName != null) itm.setDisplayName(ChatColor.RESET + OMCUtil.translateChatColor(displayName));
 			
-			CustomModelDataComponent component = itm.getCustomModelDataComponent();
-			component.setStrings(Arrays.asList(registryName));
-			component.setFloats(Arrays.asList(0f)); //Backward compat for plugins that retrieve the number value after checking whether the item has any CMD
-			itm.setCustomModelDataComponent(component);
-			
 			if(!lore.isEmpty()) {
 				ArrayList<String> translated = new ArrayList<>();
 				for(String s : lore) translated.add(OMCUtil.translateChatColor(s));
@@ -159,10 +166,10 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 			if(unbreakeable) itm.setUnbreakable(true);
 			if(!data.isEmpty()) {
 				PersistentDataContainer dataContainer = itm.getPersistentDataContainer();
-				for(Entry<PersistentDataType<Object, ? extends Object>, HashMap<String, Object>> dataTypeEntry : data.entrySet()) {
+				for(Entry<PersistentDataType<?, ?>, Map<String, Object>> dataTypeEntry : data.entrySet()) {
 					@SuppressWarnings("unchecked")
 					PersistentDataType<Object, Object> dataType = (PersistentDataType<Object, Object>) dataTypeEntry.getKey();
-					HashMap<String, Object> valueMap = dataTypeEntry.getValue();
+					Map<String, Object> valueMap = dataTypeEntry.getValue();
 					if(valueMap.isEmpty()) continue;
 					for(Entry<String, Object> entry : valueMap.entrySet()) {
 						String name = entry.getKey();
@@ -174,6 +181,7 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 			}
 			it.setItemMeta(itm);
 		}
+		it.setData(DataComponentTypes.CUSTOM_MODEL_DATA, customModelData.getData());
 		return it;
 	}
 
@@ -188,11 +196,11 @@ public class SMPItem implements OMCItem, OMCPowerHolder, OMCNamedListenerHolder,
 		if(other.getType() != getMaterial()) return false;
 		ItemMeta meta = other.getItemMeta();
 		if(meta == null) return false;
-		if(!meta.hasCustomModelData()) return false;
-//		if(meta.getCustomModelData() != getCMD()) return false;
-		CustomModelDataComponent component = meta.getCustomModelDataComponent();
-		if(component.getStrings().isEmpty()) return false;
-		return component.getStrings().get(0).equals(registryName);
+		PersistentDataContainer pdc = meta.getPersistentDataContainer();
+		if(pdc == null) return false;
+		String voidOpalId = pdc.get(getNSK(VOIDOPAL_ITEM_ID), PersistentDataType.STRING);
+		if(voidOpalId != registryName) return false;
+		return true;
 	}
 
 }
