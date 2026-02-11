@@ -9,6 +9,7 @@ public class TerrainAdaptingPoint extends Point{
 
 	private final Vector displacementAxis;
 	private final double maxDisplacement;
+	private boolean passIfMiss = false;
 
 	public TerrainAdaptingPoint(Vector displacementAxis, double maxDisplacement) {
 		this.displacementAxis = displacementAxis.normalize();
@@ -42,8 +43,11 @@ public class TerrainAdaptingPoint extends Point{
 		
 		RayTraceResult rtr = world.rayTraceBlocks(raySource, displacementAxis, effectiveMaxDisplacement);
 		if(rtr != null) return rtr.getHitPosition().toLocation(world);
+		else if(passIfMiss) return null;
 		
 		return location;
 	}
+
+	public TerrainAdaptingPoint passIfMiss() { passIfMiss = true; return this; }
 
 }
