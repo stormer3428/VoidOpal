@@ -154,7 +154,7 @@ public class GeometryUtils {
 	<br>
 	[1;0] star
 	*/
-	public static ArrayList<Vector> superEllipse(double xstretch, double ystretch, int points, double s) {
+	public static ArrayList<Vector> getSuperEllipseVectors(double xstretch, double ystretch, int points, double s) {
 		ArrayList<Vector> list = new ArrayList<>();
         for (int i = 0; i < points; i++) {
             double theta = 2 * Math.PI * i / points;
@@ -169,4 +169,13 @@ public class GeometryUtils {
         }
         return list;
     }
+	
+	public static ArrayList<Vector> getArcVectors(double angle, int points){
+		ArrayList<Vector> vectors = new ArrayList<>();
+		double delta = angle/points;
+		Vector v = new Vector(0,1,0);
+		v.rotateAroundX(-angle/2);
+		for(int i = points; i > 0; i--) vectors.add(v.rotateAroundX(delta).clone());
+		return vectors;
+	}
 }
