@@ -11,16 +11,16 @@ import fr.stormer3428.voidOpal.plugin.OMCCore;
 public class MovingPoint implements Drawable{
 
 	protected onDrawConsumer callback = null;
-	private Vector location = new Vector();
-	private Particle particle = Particle.CRIT;
-	private Object particleData = null;
-	private Vector particleDirection = new Vector(0,0,0);
-	private Vector particleOffdirection = new Vector(0,0,0);
+	protected Vector location = new Vector();
+	protected Particle particle = Particle.CRIT;
+	protected Object particleData = null;
+	protected Vector particleDirection = new Vector(0,0,0);
+	protected Vector particleOffdirection = new Vector(0,0,0);
 	protected int delay = 0;
 	protected double drawChance = 1;
-	private boolean forceRender = true;
-	private boolean staticDirection = false;
-	private boolean scaleSpeed = false;
+	protected boolean forceRender = true;
+	protected boolean staticDirection = false;
+	protected boolean scaleSpeed = false;
 
 	public void draw(Location location) { draw(location, 1.0); }
 	@Override public MovingPoint draw(Location location, double scale) {
