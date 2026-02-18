@@ -11,7 +11,7 @@ public class OMCProviderImpl<T> implements OMCProvider<T>{
 	}
 
 	@Override
-	public T getData() {
+	public T getData(Object ... ctx) {
 		return data;
 	}
 

@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.util.Vector;
 
 import fr.stormer3428.voidOpal.util.GeometryUtils;
+import fr.stormer3428.voidOpal.util.providers.OMCProvider;
 
 public class Circle implements Drawable{
 
@@ -39,9 +40,9 @@ public class Circle implements Drawable{
 		points.addAll(getInterpolatedPoints(axis.clone(), radius, resolution));
 	}
 
-	public void drawPoint(World world, Vector location) {
+	public void drawPoint(World world, Vector location, double scale) {
 		if(Math.random() > drawChance) return;
-		world.spawnParticle(particle, location.getX(), location.getY(), location.getZ(), particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData, forceRender);
+		world.spawnParticle(particle, location.getX(), location.getY(), location.getZ(), particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData instanceof OMCProvider<?> prov ? prov.getData(this, location, scale) : particleData, forceRender);
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class Circle implements Drawable{
 		if(callback != null) callback.onDraw(this, location, scale);
 		World world = location.getWorld();
 		Vector locationVector = location.toVector();
-		for(Vector point : points) drawPoint(world, point.clone().multiply(scale).add(locationVector));		
+		for(Vector point : points) drawPoint(world, point.clone().multiply(scale).add(locationVector), scale);		
 		return this;
 	}
 

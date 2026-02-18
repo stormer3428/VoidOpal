@@ -1,9 +1,12 @@
 package fr.stormer3428.voidOpal.Geometry.ParticleGeometry;
 
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+
+import fr.stormer3428.voidOpal.util.providers.OMCProvider;
 
 public class TerrainAdaptingPoint extends Point{
 
@@ -21,7 +24,7 @@ public class TerrainAdaptingPoint extends Point{
 		World world = location.getWorld();
 		Location particleLoc = location.clone().add(this.location.clone().multiply(scale));
 		particleLoc = displace(particleLoc);
-		if(particleLoc != null) world.spawnParticle(particle, particleLoc, particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData, forceRender);
+		if(particleLoc != null) world.spawnParticle(particle, particleLoc, particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData instanceof OMCProvider<?> prov ? prov.getData(this, location, scale) : particleData, forceRender);
 		return this;
 	}
 	
@@ -43,7 +46,7 @@ public class TerrainAdaptingPoint extends Point{
 		
 		//Either we're in air, or have been moved into air
 		
-		RayTraceResult rtr = world.rayTraceBlocks(raySource, displacementAxis, effectiveMaxDisplacement);
+		RayTraceResult rtr = world.rayTraceBlocks(raySource, displacementAxis, effectiveMaxDisplacement, FluidCollisionMode.NEVER, true);
 		if(rtr != null) { // we hit a block!
 			return rtr.getHitPosition().toLocation(world).add(displacementAxis.clone().multiply(-.1));
 		}

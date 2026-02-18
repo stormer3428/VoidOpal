@@ -17,7 +17,7 @@ public class LocationProvider implements OMCProvider<Location>{
 	}
 
 	@Override
-	public Location getData() {
+	public Location getData(Object ... ctx) {
 		return location == null ? entity.getLocation() : location.clone();
 	}
 

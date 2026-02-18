@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.util.Vector;
 
 import fr.stormer3428.voidOpal.plugin.OMCCore;
+import fr.stormer3428.voidOpal.util.providers.OMCProvider;
 
 public class MovingPoint implements Drawable{
 
@@ -35,7 +36,7 @@ public class MovingPoint implements Drawable{
 				particleDirection.getX() + particleOffdirection.getX(),
 				particleDirection.getY() + particleOffdirection.getY(),
 				particleDirection.getZ() + particleOffdirection.getZ(),
-				particleDirection.clone().add(particleOffdirection).length()*(scaleSpeed ? scale : 1), particleData, forceRender);
+				particleDirection.clone().add(particleOffdirection).length()*(scaleSpeed ? scale : 1), particleData instanceof OMCProvider<?> prov ? prov.getData(this, location, scale) : particleData, forceRender);
 			return this;
 		}
 		Bukkit.getScheduler().runTaskLater(OMCCore.getJavaPlugin(), ()->{
@@ -44,7 +45,7 @@ public class MovingPoint implements Drawable{
 				particleDirection.getX() + particleOffdirection.getX(),
 				particleDirection.getY() + particleOffdirection.getY(),
 				particleDirection.getZ() + particleOffdirection.getZ(),
-				particleDirection.clone().add(particleOffdirection).length()*(scaleSpeed ? scale : 1), particleData, forceRender);
+				particleDirection.clone().add(particleOffdirection).length()*(scaleSpeed ? scale : 1), particleData instanceof OMCProvider<?> prov ? prov.getData(this, location, scale) : particleData, forceRender);
 		}, delay);
 		return this;
 	}

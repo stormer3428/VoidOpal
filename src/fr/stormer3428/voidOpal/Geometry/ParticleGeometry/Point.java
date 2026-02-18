@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.util.Vector;
 
 import fr.stormer3428.voidOpal.plugin.OMCCore;
+import fr.stormer3428.voidOpal.util.providers.OMCProvider;
 
 public class Point implements Drawable{
 
@@ -30,11 +31,11 @@ public class Point implements Drawable{
 		World world = location.getWorld();
 		Location particleLoc = location.clone().add(this.location.clone().multiply(scale));
 		if(delay <= 0) {
-			world.spawnParticle(particle, particleLoc, particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData, forceRender);
+			world.spawnParticle(particle, particleLoc, particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData instanceof OMCProvider<?> prov ? prov.getData(this, location, scale) : particleData, forceRender);
 			return this;
 		}
 		Bukkit.getScheduler().runTaskLater(OMCCore.getJavaPlugin(), ()->{
-			world.spawnParticle(particle, particleLoc, particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData, forceRender);
+			world.spawnParticle(particle, particleLoc, particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData instanceof OMCProvider<?> prov ? prov.getData(this, location, scale) : particleData, forceRender);
 		}, delay);
 		return this;
 	}

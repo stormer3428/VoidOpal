@@ -25,6 +25,7 @@ public class Line implements Drawable{
 	private double resolution = 0.1d;
 	private double drawChance = 1;
 	private boolean forceRender = true;
+	public Location lastDrawnLocation;
 
 	public Line(Vector a, Vector b) {this(new OMCProviderImpl<>(a), new OMCProviderImpl<>(b));}
 	public Line(OMCProvider<Vector> a, OMCProvider<Vector> b) {
@@ -32,17 +33,18 @@ public class Line implements Drawable{
 		this.b = b;
 	}
 	
-	public void drawPoint(World world, Vector location) {
+	public void drawPoint(World world, Vector location, double scale) {
 		if(Math.random() > drawChance) return;
-		world.spawnParticle(particle, location.getX(), location.getY(), location.getZ(), particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData, forceRender);
+		world.spawnParticle(particle, location.getX(), location.getY(), location.getZ(), particleAmount, particleSpreadX, particleSpreadY, particleSpreadZ, particleSpeed, particleData instanceof OMCProvider<?> prov ? prov.getData(this, location.toLocation(world), scale) : particleData, forceRender);
 	}
 
 	@Override
 	public Line draw(Location location, double scale) {
 		if(callback != null) callback.onDraw(this, location, scale);
+		lastDrawnLocation = location.clone();
 		World world = location.getWorld();
 		Vector locationVector = location.toVector();
-		for(Vector point : getInterpolatedPoints(a.getData().clone().multiply(scale), b.getData().clone().multiply(scale))) drawPoint(world, point.add(locationVector));		
+		for(Vector point : getInterpolatedPoints(a.getData().clone().multiply(scale), b.getData().clone().multiply(scale))) drawPoint(world, point.add(locationVector), scale);		
 		return this;
 	}
 
